@@ -1,7 +1,7 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import cors from 'cors';
-const corsHandler = cors({ origin: true });
+import functions = require("firebase-functions");
+import admin = require("firebase-admin");
+import * as corsLib from "cors";
+const cors = corsLib({origin: true});
 
 admin.initializeApp();
 
@@ -58,7 +58,7 @@ exports.removeAdminRole = functions.https.onCall(async (data) => {
 });
 
 exports.listAllUsers = functions.https.onRequest((req, res) => {
-  corsHandler(req, res, async () => {
+  cors(req, res, async () => {
     try {
       const listUsers = await admin.auth().listUsers();
       res.status(200).send(listUsers);
