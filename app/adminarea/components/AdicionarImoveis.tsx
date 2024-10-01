@@ -43,7 +43,7 @@ export const AdicionarImoveis = () => {
 
     const curUser = auth.currentUser
 
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState<any>();
 
     function adicionarInformacoesImovel() {
         setInformacoesImovel([
@@ -499,7 +499,11 @@ export const AdicionarImoveis = () => {
                 <div className="mt-20 space-y-4">
                         <h1 className="text-3xl">Adicionar imagens</h1>
 
-                        <input type="file" name="" id="" onChange={(e) => setFile(e.target.files[0])}/>
+                        <input type="file" name="" id="" onChange={(e) => {
+                            if(e.target.files) {
+                                {setFile(e.target.files[0])}
+                            }
+                        }}/>
                         <button onClick={handleUpload}
                         className="bg-customPrimary text-white w-28 h-8 rounded-md border-[1px] border-customPrimary
                         hover:bg-white hover:text-customPrimary transition-colors mt-16 ">Fazer upload</button>
