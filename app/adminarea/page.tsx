@@ -32,7 +32,7 @@ function adminarea () {
         if (user) {
           user.getIdTokenResult()
             .then((idTokenResult) => {
-              console.log('usuario logado com sucesso!')
+              console.log('usuario logado!')
             })
             .catch((error) => {
               console.error("Erro ao obter custom claims:");
