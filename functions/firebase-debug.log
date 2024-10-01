@@ -1,0 +1,236 @@
+[debug] [2024-09-25T13:19:40.108Z] ----------------------------------------------------------------------
+[debug] [2024-09-25T13:19:40.115Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\romer\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js functions:shell
+[debug] [2024-09-25T13:19:40.115Z] CLI Version:   13.18.0
+[debug] [2024-09-25T13:19:40.115Z] Platform:      win32
+[debug] [2024-09-25T13:19:40.115Z] Node Version:  v20.13.1
+[debug] [2024-09-25T13:19:40.116Z] Time:          Wed Sep 25 2024 10:19:40 GMT-0300 (Brasilia Standard Time)
+[debug] [2024-09-25T13:19:40.116Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-09-25T13:19:40.170Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-09-25T13:19:40.170Z] > authorizing via signed-in user (romerobruno788@gmail.com)
+[debug] [2024-09-25T13:19:40.170Z] [iam] checking project dfatto-a05ca for permissions ["firebase.projects.get"]
+[debug] [2024-09-25T13:19:40.172Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/dfatto-a05ca:testIamPermissions [none]
+[debug] [2024-09-25T13:19:40.173Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/dfatto-a05ca:testIamPermissions x-goog-quota-user=projects/dfatto-a05ca
+[debug] [2024-09-25T13:19:40.173Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dfatto-a05ca:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-09-25T13:19:42.913Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/dfatto-a05ca:testIamPermissions 200
+[debug] [2024-09-25T13:19:42.913Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dfatto-a05ca:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-09-25T13:19:42.924Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-09-25T13:19:42.927Z] defaultcredentials: writing to file C:\Users\romer\AppData\Roaming\firebase\romerobruno788_gmail_com_application_default_credentials.json
+[debug] [2024-09-25T13:19:42.930Z] DEBUG: Setting GAC to C:\Users\romer\AppData\Roaming\firebase\romerobruno788_gmail_com_application_default_credentials.json
+[debug] [2024-09-25T13:19:42.930Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dfatto-a05ca/adminSdkConfig [none]
+[debug] [2024-09-25T13:19:44.380Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dfatto-a05ca/adminSdkConfig 200
+[debug] [2024-09-25T13:19:44.380Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dfatto-a05ca/adminSdkConfig {"projectId":"dfatto-a05ca","storageBucket":"dfatto-a05ca.appspot.com","locationId":"southamerica-east1"}
+[debug] [2024-09-25T13:19:44.398Z] [functions] Watching "C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions" for Cloud Functions...
+[debug] [2024-09-25T13:19:44.407Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2024-09-25T13:19:46.660Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.5.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-09-25T13:19:46.660Z] Building nodejs source
+[debug] [2024-09-25T13:19:46.660Z] Failed to find version of module node: reached end of search path C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-09-25T13:19:46.663Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-09-25T13:19:46.671Z] Found firebase-functions binary at 'C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8627
+
+[debug] [2024-09-25T13:19:47.610Z] Got response from /__/functions.yaml {"endpoints":{"adicionarAdmin":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"adicionarAdmin"},"addSuperAdminRole":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"addSuperAdminRole"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-09-25T13:19:52.636Z] [functions] Loaded functions definitions from source: adicionarAdmin, addSuperAdminRole.
+[debug] [2024-09-25T13:19:52.637Z] [functions[us-central1-adicionarAdmin]] http function initialized (http://127.0.0.1:5000/dfatto-a05ca/us-central1/adicionarAdmin).
+[debug] [2024-09-25T13:19:52.638Z] [functions[us-central1-addSuperAdminRole]] http function initialized (http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole).
+[info] i  functions: Loaded functions: adicionarAdmin, addSuperAdminRole 
+[warn] !  functions: The following emulators are not running, calls to these services will affect production: firestore, database, pubsub, storage, eventarc, tasks 
+[debug] [2024-09-25T13:20:23.799Z] >>> [apiv2][query] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ [none]
+[debug] [2024-09-25T13:20:23.799Z] >>> [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"data":{"email":"romerobruno788@gmail.com@gmail.com"}}
+[debug] [2024-09-25T13:20:23.804Z] [work-queue] {"queuedWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:20:23.804Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:20:23.804Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:20:23.804Z"],"workRunningCount":1}
+[debug] [2024-09-25T13:20:23.805Z] Accepted request POST /dfatto-a05ca/us-central1/addSuperAdminRole/ --> us-central1-addSuperAdminRole
+[debug] [2024-09-25T13:20:23.807Z] DEBUG: [functions] Runtime ready! Sending request!
+[debug] [2024-09-25T13:20:23.807Z] DEBUG: [functions] Got req.url=/dfatto-a05ca/us-central1/addSuperAdminRole/, mapping to path=/
+[debug] [2024-09-25T13:20:23.820Z] DEBUG: [worker-pool] addWorker(us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:20:23.821Z] DEBUG: [worker-pool] Adding worker with key us-central1-addSuperAdminRole, total=1
+[debug] [2024-09-25T13:20:25.290Z] DEBUG: [runtime-status] [19488] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.5.0","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2024-09-25T13:20:25.291Z] DEBUG: [runtime-status] [19488] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.1.1","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-09-25T13:20:25.291Z] DEBUG: [runtime-status] [19488] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}]
+[debug] [2024-09-25T13:20:25.292Z] DEBUG: [runtime-status] [19488] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.1.1","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-09-25T13:20:25.623Z] DEBUG: [runtime-status] [19488] Checked functions.config() {"config":{}}
+[debug] [2024-09-25T13:20:25.624Z] DEBUG: [runtime-status] [19488] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"5.1.1","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}}
+[debug] [2024-09-25T13:20:25.624Z] DEBUG: [runtime-status] [19488] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.1.1","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-09-25T13:20:25.626Z] DEBUG: [runtime-status] [19488] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.5.0","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2024-09-25T13:20:25.629Z] DEBUG: [runtime-status] [19488] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.1.1","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-09-25T13:20:25.629Z] DEBUG: [runtime-status] [19488] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.5.0","resolution":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions\\node_modules\\firebase-admin\\lib\\index.js"}}
+[debug] [2024-09-25T13:20:25.631Z] DEBUG: [runtime-status] [19488] initializeApp(DEFAULT) {"storageBucket":"dfatto-a05ca.appspot.com","projectId":"dfatto-a05ca"}
+[debug] [2024-09-25T13:20:25.635Z] DEBUG: [runtime-status] [19488] Functions runtime initialized. {"cwd":"C:\\Users\\romer\\OneDrive\\Documentos\\projetosVS\\projeto_imoveis\\projeto-dfatto\\functions","node_version":"20.13.1"}
+[debug] [2024-09-25T13:20:25.635Z] DEBUG: [runtime-status] [19488] Listening to port: \\?\pipe\fire_emu_09e6b6a9fe8b0782
+[debug] [2024-09-25T13:20:25.682Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: IDLE
+[debug] [2024-09-25T13:20:25.682Z] DEBUG: [worker-pool] submitRequest(triggerId=us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:20:25.682Z] [functions] Beginning execution of "us-central1-addSuperAdminRole"
+[debug] [2024-09-25T13:20:25.682Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: BUSY
+[info] >  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-addSuperAdminRole"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"MISSING\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[debug] [2024-09-25T13:20:25.701Z] DEBUG: [runtime-status] [19488] No callable functions auth found
+[warn] !  functions: The Firebase Authentication emulator is not running, so calls to Firebase Authentication will affect production. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-addSuperAdminRole"},"extension":{},"message":"The Firebase Authentication emulator is not running, so calls to Firebase Authentication will affect production."}}
+[debug] [2024-09-25T13:20:25.706Z] DEBUG: Finishing up request with event=pause
+[debug] [2024-09-25T13:20:25.706Z] [functions] Finished "us-central1-addSuperAdminRole" in 23.7511ms
+[debug] [2024-09-25T13:20:25.706Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: IDLE
+[debug] [2024-09-25T13:20:25.706Z] DEBUG: Finishing up request with event=finish
+[debug] [2024-09-25T13:20:25.706Z] DEBUG: Finishing up request with event=close
+[debug] [2024-09-25T13:20:25.706Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:20:25.707Z] <<< [apiv2][status] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ 200
+[debug] [2024-09-25T13:20:25.707Z] <<< [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"result":{"error":{"errorInfo":{"code":"auth/invalid-email","message":"The email address is improperly formatted."},"codePrefix":"auth"}}}
+[debug] [2024-09-25T13:20:25.810Z] >>> [apiv2][query] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ [none]
+[debug] [2024-09-25T13:20:25.810Z] >>> [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"data":{"email":"romerobruno788@gmail.com@gmail.com"}}
+[debug] [2024-09-25T13:20:25.813Z] [work-queue] {"queuedWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:20:25.813Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:20:25.813Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:20:25.813Z"],"workRunningCount":1}
+[debug] [2024-09-25T13:20:25.813Z] Accepted request POST /dfatto-a05ca/us-central1/addSuperAdminRole/ --> us-central1-addSuperAdminRole
+[debug] [2024-09-25T13:20:25.814Z] DEBUG: [functions] Runtime ready! Sending request!
+[debug] [2024-09-25T13:20:25.814Z] DEBUG: [functions] Got req.url=/dfatto-a05ca/us-central1/addSuperAdminRole/, mapping to path=/
+[debug] [2024-09-25T13:20:25.814Z] DEBUG: [worker-pool] submitRequest(triggerId=us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:20:25.814Z] [functions] Beginning execution of "us-central1-addSuperAdminRole"
+[debug] [2024-09-25T13:20:25.814Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: BUSY
+[info] >  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-addSuperAdminRole"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"MISSING\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[debug] [2024-09-25T13:20:25.816Z] DEBUG: [runtime-status] [19488] No callable functions auth found
+[debug] [2024-09-25T13:20:25.818Z] DEBUG: Finishing up request with event=pause
+[debug] [2024-09-25T13:20:25.818Z] [functions] Finished "us-central1-addSuperAdminRole" in 3.8732ms
+[debug] [2024-09-25T13:20:25.818Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: IDLE
+[debug] [2024-09-25T13:20:25.818Z] DEBUG: Finishing up request with event=finish
+[debug] [2024-09-25T13:20:25.818Z] DEBUG: Finishing up request with event=close
+[debug] [2024-09-25T13:20:25.818Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:20:25.819Z] <<< [apiv2][status] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ 200
+[debug] [2024-09-25T13:20:25.819Z] <<< [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"result":{"error":{"errorInfo":{"code":"auth/invalid-email","message":"The email address is improperly formatted."},"codePrefix":"auth"}}}
+[debug] [2024-09-25T13:21:01.141Z] >>> [apiv2][query] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ [none]
+[debug] [2024-09-25T13:21:01.141Z] >>> [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"data":{"email":"romerobruno788@mail.com"}}
+[debug] [2024-09-25T13:21:01.143Z] [work-queue] {"queuedWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:21:01.143Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:21:01.143Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:21:01.143Z"],"workRunningCount":1}
+[debug] [2024-09-25T13:21:01.143Z] Accepted request POST /dfatto-a05ca/us-central1/addSuperAdminRole/ --> us-central1-addSuperAdminRole
+[debug] [2024-09-25T13:21:01.144Z] DEBUG: [functions] Runtime ready! Sending request!
+[debug] [2024-09-25T13:21:01.144Z] DEBUG: [functions] Got req.url=/dfatto-a05ca/us-central1/addSuperAdminRole/, mapping to path=/
+[debug] [2024-09-25T13:21:01.145Z] DEBUG: [worker-pool] submitRequest(triggerId=us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:21:01.145Z] [functions] Beginning execution of "us-central1-addSuperAdminRole"
+[debug] [2024-09-25T13:21:01.145Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: BUSY
+[info] >  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-addSuperAdminRole"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"MISSING\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[debug] [2024-09-25T13:21:01.148Z] DEBUG: [runtime-status] [19488] No callable functions auth found
+[debug] [2024-09-25T13:21:01.793Z] DEBUG: Finishing up request with event=pause
+[debug] [2024-09-25T13:21:01.793Z] [functions] Finished "us-central1-addSuperAdminRole" in 648.2781ms
+[debug] [2024-09-25T13:21:01.793Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: IDLE
+[debug] [2024-09-25T13:21:01.793Z] DEBUG: Finishing up request with event=finish
+[debug] [2024-09-25T13:21:01.793Z] DEBUG: Finishing up request with event=close
+[debug] [2024-09-25T13:21:01.793Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:21:01.794Z] <<< [apiv2][status] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ 200
+[debug] [2024-09-25T13:21:01.794Z] <<< [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"result":{"error":{"errorInfo":{"code":"auth/user-not-found","message":"There is no user record corresponding to the provided identifier."},"codePrefix":"auth"}}}
+[debug] [2024-09-25T13:21:30.618Z] >>> [apiv2][query] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ [none]
+[debug] [2024-09-25T13:21:30.618Z] >>> [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"data":{"email":"romerobruno788@gmailcom"}}
+[debug] [2024-09-25T13:21:30.623Z] [work-queue] {"queuedWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:21:30.623Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:21:30.623Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:21:30.623Z"],"workRunningCount":1}
+[debug] [2024-09-25T13:21:30.623Z] Accepted request POST /dfatto-a05ca/us-central1/addSuperAdminRole/ --> us-central1-addSuperAdminRole
+[debug] [2024-09-25T13:21:30.626Z] DEBUG: [functions] Runtime ready! Sending request!
+[debug] [2024-09-25T13:21:30.626Z] DEBUG: [functions] Got req.url=/dfatto-a05ca/us-central1/addSuperAdminRole/, mapping to path=/
+[debug] [2024-09-25T13:21:30.626Z] DEBUG: [worker-pool] submitRequest(triggerId=us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:21:30.626Z] [functions] Beginning execution of "us-central1-addSuperAdminRole"
+[debug] [2024-09-25T13:21:30.626Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: BUSY
+[info] >  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-addSuperAdminRole"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"MISSING\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[debug] [2024-09-25T13:21:30.629Z] DEBUG: [runtime-status] [19488] No callable functions auth found
+[debug] [2024-09-25T13:21:30.968Z] DEBUG: Finishing up request with event=pause
+[debug] [2024-09-25T13:21:30.968Z] [functions] Finished "us-central1-addSuperAdminRole" in 341.7768ms
+[debug] [2024-09-25T13:21:30.968Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: IDLE
+[debug] [2024-09-25T13:21:30.968Z] DEBUG: Finishing up request with event=finish
+[debug] [2024-09-25T13:21:30.968Z] DEBUG: Finishing up request with event=close
+[debug] [2024-09-25T13:21:30.968Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:21:30.970Z] <<< [apiv2][status] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ 200
+[debug] [2024-09-25T13:21:30.970Z] <<< [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"result":{"error":{"errorInfo":{"code":"auth/user-not-found","message":"There is no user record corresponding to the provided identifier."},"codePrefix":"auth"}}}
+[debug] [2024-09-25T13:21:46.448Z] >>> [apiv2][query] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ [none]
+[debug] [2024-09-25T13:21:46.448Z] >>> [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"data":{"email":"romerobruno788@gmail.com"}}
+[debug] [2024-09-25T13:21:46.451Z] [work-queue] {"queuedWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:21:46.451Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:21:46.451Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/dfatto-a05ca/us-central1/addSuperAdminRole/-2024-09-25T13:21:46.451Z"],"workRunningCount":1}
+[debug] [2024-09-25T13:21:46.451Z] Accepted request POST /dfatto-a05ca/us-central1/addSuperAdminRole/ --> us-central1-addSuperAdminRole
+[debug] [2024-09-25T13:21:46.452Z] DEBUG: [functions] Runtime ready! Sending request!
+[debug] [2024-09-25T13:21:46.453Z] DEBUG: [functions] Got req.url=/dfatto-a05ca/us-central1/addSuperAdminRole/, mapping to path=/
+[debug] [2024-09-25T13:21:46.453Z] DEBUG: [worker-pool] submitRequest(triggerId=us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:21:46.453Z] [functions] Beginning execution of "us-central1-addSuperAdminRole"
+[debug] [2024-09-25T13:21:46.453Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: BUSY
+[info] >  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-addSuperAdminRole"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"MISSING\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[debug] [2024-09-25T13:21:46.455Z] DEBUG: [runtime-status] [19488] No callable functions auth found
+[debug] [2024-09-25T13:21:47.212Z] DEBUG: Finishing up request with event=pause
+[debug] [2024-09-25T13:21:47.213Z] [functions] Finished "us-central1-addSuperAdminRole" in 760.0457ms
+[debug] [2024-09-25T13:21:47.213Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: IDLE
+[debug] [2024-09-25T13:21:47.213Z] DEBUG: Finishing up request with event=finish
+[debug] [2024-09-25T13:21:47.213Z] DEBUG: Finishing up request with event=close
+[debug] [2024-09-25T13:21:47.213Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-09-25T13:21:47.214Z] <<< [apiv2][status] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ 200
+[debug] [2024-09-25T13:21:47.214Z] <<< [apiv2][body] POST http://127.0.0.1:5000/dfatto-a05ca/us-central1/addSuperAdminRole/ {"result":{"message":"Superadmin adicionado com sucesso: romerobruno788@gmail.com"}}
+[debug] [2024-09-25T13:30:08.200Z] DEBUG: File C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions\src\index.ts changed, reloading triggers
+[debug] [2024-09-25T13:30:08.268Z] DEBUG: File C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions\src\index.ts changed, reloading triggers
+[debug] [2024-09-25T13:30:09.286Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2024-09-25T13:30:11.431Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.5.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-09-25T13:30:11.434Z] Building nodejs source
+[debug] [2024-09-25T13:30:11.436Z] Failed to find version of module node: reached end of search path C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-09-25T13:30:11.454Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-09-25T13:30:11.486Z] Found firebase-functions binary at 'C:\Users\romer\OneDrive\Documentos\projetosVS\projeto_imoveis\projeto-dfatto\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8202
+
+[debug] [2024-09-25T13:30:12.813Z] Got response from /__/functions.yaml {"endpoints":{"adicionarAdmin":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"adicionarAdmin"},"addSuperAdminRole":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"addSuperAdminRole"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-09-25T13:30:17.846Z] [functions] Loaded functions definitions from source: adicionarAdmin, addSuperAdminRole.
+[debug] [2024-09-25T13:30:17.847Z] DEBUG: [worker-pool] Shutting down IDLE worker (us-central1-addSuperAdminRole)
+[debug] [2024-09-25T13:30:17.847Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: FINISHING
+[debug] [2024-09-25T13:30:17.858Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: exited
+[debug] [2024-09-25T13:30:17.858Z] DEBUG: [worker-us-central1-addSuperAdminRole-5f5657cf-26a9-47a9-ab51-0f5b9a8a53b9]: FINISHED
