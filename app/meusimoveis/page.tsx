@@ -25,6 +25,7 @@ function meusimoveis() {
               id: doc.id,
               ...doc.data(),
             }));
+            // @ts-ignore
             setImoveis(imoveisData);
             setLoading(false);
           }
@@ -39,6 +40,7 @@ function meusimoveis() {
                 id: doc.id,
                 ...doc.data(),
               }));
+              // @ts-ignore
               setConstrucoes(imoveisData);
               setLoading(false);
             }
@@ -53,6 +55,7 @@ function meusimoveis() {
                 id: doc.id,
                 ...doc.data(),
               }));
+              // @ts-ignore
               setMinhaConstrutora(imoveisData)
               setLoading(false);
             }
@@ -166,7 +169,7 @@ function meusimoveis() {
                 {
                     minhaConstrutora && minhaConstrutora.map((con) => (
                       <div className='flex flex-col justify-center items-center'>
-                        <FaRegTrashAlt onClick={() => deleteConstrutora(con.id)}/>
+                        <FaRegTrashAlt onClick={() => deleteConstrutora(con.nome)}/>
                         <h1>Construtora: {con.nome}</h1>
                       </div>
                     ))

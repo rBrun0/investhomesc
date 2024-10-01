@@ -61,6 +61,7 @@ const deleteConstrucaoPorCampo = async (id: string) => {
       id: doc.id,
       ...doc.data(),
     }));
+    // @ts-ignore
     setConstrucoesFiltradas(imoveisFiltrados);
   };
 

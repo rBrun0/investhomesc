@@ -61,6 +61,7 @@ const deleteImovelPorCampo = async (id: string) => {
       id: doc.id,
       ...doc.data(),
     }));
+    // @ts-ignore
     setApartamentosFiltrados(imoveisFiltrados);
   };
 
