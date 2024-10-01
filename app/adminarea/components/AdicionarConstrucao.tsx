@@ -6,7 +6,6 @@ import { ChangeEvent, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/app/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
-import { Trash, Video } from "lucide-react";
 
 export const AdicionarConstrucao = () => {
 
@@ -31,7 +30,6 @@ export const AdicionarConstrucao = () => {
     const [areaDeLazer, setAreaDeLazer] = useState<string[]>([]);
     const [areaDeLazerInput, setAreaDeLazerInput] = useState("")
     const [dataEntregaEmpreendimento, setDataEntregaEmpreendimento] = useState('')
-    const [dataEntregaEmpreendimentoInput, setDataEntregaEmpreendimentoInput] = useState('')
     const [quartos, setQuartos] = useState<string>('')
 
     const [uploadedImages, setUploadedImages] = useState<string[]>([])  
@@ -118,7 +116,7 @@ export const AdicionarConstrucao = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Você pode monitorar o progresso do upload aqui
+
       },
       (error) => {
         console.error("Erro ao enviar imagem: ", error);

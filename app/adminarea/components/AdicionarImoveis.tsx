@@ -5,7 +5,6 @@ import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ChangeEvent, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa"
-import { uid } from 'uid';
 
 export const AdicionarImoveis = () => {
 

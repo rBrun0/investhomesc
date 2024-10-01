@@ -3,7 +3,6 @@
 import Image from "next/image"
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox"
-import { ImagesPops } from "./MainGallery"
 
 type ImagesProps = {
     src: string

@@ -11,13 +11,10 @@ import Link from "next/link";
 import { HamburguerContent } from "./components/HamburguerContent";
 import Image from "next/image";
 import { Entre } from "./components/Entre";
-import useSuperAdmin from '@/app/Hooks/useSuperAdmin';
 import useAdmin from '@/app/Hooks/useAdmin';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export const Header = () => {
 
-    const {isSuperAdmin} = useSuperAdmin()
     const isAdmin = useAdmin()
 
     const [comprarModal, setComprarModal] = useState(false)
@@ -41,11 +38,7 @@ export const Header = () => {
     }
 
     // const [isAdmin, setIsAdmin] = useState(false);
-  const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-
-  }, []);
     
     
 

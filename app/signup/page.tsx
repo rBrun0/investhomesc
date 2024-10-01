@@ -2,7 +2,6 @@
 
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, User } from "firebase/auth";
 import { useEffect, useState } from "react"
-
 import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
 import { auth } from "../firebaseConfig";

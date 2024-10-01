@@ -1,7 +1,4 @@
-import { PlaceCard } from "./components/PlaceCard/PlaceCard";
-
-import { VscSettings } from "react-icons/vsc";
-import { IoIosSearch } from "react-icons/io";
+import React from "react";
 import InicialPage from "./inicialPage/page";
 
 

@@ -5,7 +5,7 @@ import { FaRulerCombined } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CardDialog } from "./CardDialog";
 
 
@@ -27,8 +27,8 @@ type PlaceCardProps = {
     direcionamento: string
 }
 
-export const PlaceCard = ({id, preco, imagemUrl, descricao, areaPrivativa, codigo, dataEntregaEmpreendimento, suites, quartos, bairro, 
-    cidade, numeroRua, numeroLocal, vagas, direcionamento}: PlaceCardProps) => {
+export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, suites, quartos, bairro, 
+    cidade, numeroRua, vagas, direcionamento}: PlaceCardProps) => {
     return (
         <div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] shadow-lg overflow-hidden">
             <Link href={`/${direcionamento}/${codigo}`}>

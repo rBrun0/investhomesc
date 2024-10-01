@@ -8,7 +8,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaCameraRetro } from "react-icons/fa";
 import { PlaceCard } from "@/app/components/PlaceCard/PlaceCard";
-import { ImagesPops, MainGallery } from "../components/MainGallery";
+import { MainGallery } from "../components/MainGallery";
 import { CompleteGallery } from "../components/CompleteGallery";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
@@ -21,7 +21,6 @@ import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import {FacebookShareButton, FacebookShareCount, WhatsappShareButton} from "react-share"
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { PropertyArquiteture } from "../components/PropertyArquiteture";
 
 type ApartmentGalleryProps = {
     params: {
@@ -49,8 +48,6 @@ export default function apartmentgallery({params}: ApartmentGalleryProps) {
         }
     )
 }
-
-    const images = Array.from({length: searchedApartment?.imagensUrl.length || 0}).fill({src: searchedApartment?.imagensUrl})
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',

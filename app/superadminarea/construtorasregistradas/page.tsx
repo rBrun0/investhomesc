@@ -1,7 +1,6 @@
 'use client'
 
-import { ConstructionsType, ConstructorsType } from "@/app/@Types/types";
-import { PlaceCard } from "@/app/components/PlaceCard/PlaceCard";
+import { ConstructorsType } from "@/app/@Types/types";
 import { db } from "@/app/firebaseConfig";
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";

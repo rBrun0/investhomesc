@@ -1,13 +1,11 @@
 "use client"
 
-import { FaRegTrashAlt } from "react-icons/fa";
 import { AdicionarImoveis } from "./components/AdicionarImoveis";
 import { AdicionarConstrucao } from "./components/AdicionarConstrucao";
 import { AdicionarConstrutora } from "./components/AdicionarConstrutora";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import useAdmin from "../Hooks/useAdmin";
-import useSuperAdmin from "../Hooks/useSuperAdmin";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import { useEffect } from "react";
@@ -23,10 +21,6 @@ function adminarea () {
            console.log(auth.currentUser)
         }
     })
-
-
-
-    const {isSuperAdmin} = useSuperAdmin()
 
     const usuario = useSelector((state:RootState) => state.userSlice)
     const {displayName} = usuario

@@ -66,20 +66,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-const isAdmin = useAdmin();
-
-    // onAuthStateChanged(auth, (user) => {
-    //     if (user) {
-    //       user.getIdTokenResult().then((idTokenResult) => {
-    //         if (!!idTokenResult.claims.superadmin) {
-    //           console.log('Usuário é superadmin');
-    //         } else {
-    //           console.log('Usuário não é superadmin');
-    //         }
-    //       });
-    //     }
-    //   });
-
     const {isSuperAdmin} = useSuperAdmin()
 
     const [adminEmail, setAdminEmail] = useState('')

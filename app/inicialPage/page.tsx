@@ -4,15 +4,13 @@ import Image from "next/image"
 import { PlaceCard } from "../components/PlaceCard/PlaceCard"
 import { FaWaze } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
-
-
+import React from "react";
 import office from "@/app/assets/office.avif"
 import { MyAccordion } from "./components/MyAccordion";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { CondominumsType, ConstructorsType, PropertyType } from "../@Types/types";
-import { formatToBrl } from "../@Types/utils/formatToBrl";
 import Link from "next/link";
 import { OurCondominums } from "./components/OurCondominums";
 import { OurConstructionsCompanies } from "./components/OurConstructionsCompanies";
@@ -20,7 +18,6 @@ import { ActingCities } from "./components/ActingCities";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterValues } from "../features/filterValues/filterValuesSlice";
 import { FastSearch } from "./components/FastSearch";
-import { Header } from "../components/Header/Header";
 import { MainPanel } from "../components/MainPanel/MainPanel";
 import { RootState } from "../store";
 
