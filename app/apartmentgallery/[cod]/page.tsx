@@ -1,5 +1,6 @@
 'use client'
 
+import React from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaCarAlt } from "react-icons/fa";
 import { FaBed } from "react-icons/fa";
@@ -18,7 +19,7 @@ import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
 import { CallABroker } from "../components/CallABroker";
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
-import {FacebookShareButton, FacebookShareCount, WhatsappShareButton} from "react-share"
+import {FacebookShareButton, WhatsappShareButton} from "react-share"
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
