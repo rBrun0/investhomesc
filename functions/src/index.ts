@@ -1,7 +1,7 @@
-import functions = require("firebase-functions");
-import admin = require("firebase-admin");
-import * as corsLib from "cors";
-const cors = corsLib({origin: true});
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const cors = require("cors");
+const corsHandler = cors({ origin: true });
 
 admin.initializeApp();
 
@@ -21,7 +21,7 @@ exports.adicionarAdmin = functions.https.onCall(async (data: any) => {
 });
 
 
-exports.addAdminRole = functions.https.onCall(async (data) => {
+exports.addAdminRole = functions.https.onCall(async (data: any) => {
   try {
     const user = await admin.auth().getUserByEmail(data.email);
     await admin.auth().setCustomUserClaims(user.uid, {
@@ -32,7 +32,7 @@ exports.addAdminRole = functions.https.onCall(async (data) => {
     return {error: error};
   }
 });
-exports.addSuperAdminRole = functions.https.onCall(async (data) => {
+exports.addSuperAdminRole = functions.https.onCall(async (data: any) => {
   try {
     const user = await admin.auth().getUserByEmail(data.email);
     await admin.auth().setCustomUserClaims(user.uid, {
@@ -45,7 +45,7 @@ exports.addSuperAdminRole = functions.https.onCall(async (data) => {
   }
 });
 
-exports.removeAdminRole = functions.https.onCall(async (data) => {
+exports.removeAdminRole = functions.https.onCall(async (data:any) => {
   try {
     const user = await admin.auth().getUserByEmail(data.email);
     await admin.auth().setCustomUserClaims(user.uid, {
@@ -57,7 +57,8 @@ exports.removeAdminRole = functions.https.onCall(async (data) => {
   }
 });
 
-exports.listAllUsers = functions.https.onRequest((req, res) => {
+
+exports.listAllUsers = functions.https.onRequest((req:any, res: any) => {
   cors(req, res, async () => {
     try {
       const listUsers = await admin.auth().listUsers();
@@ -68,7 +69,7 @@ exports.listAllUsers = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.checkSuperAdmin = functions.auth.user().onCreate(async (user) => {
+exports.checkSuperAdmin = functions.auth.user().onCreate(async (user: any) => {
   const ownerEmail = "propinveste01@gmail.com";
   if (user.email === ownerEmail) {
     try {
