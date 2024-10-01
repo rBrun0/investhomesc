@@ -10,8 +10,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import { useEffect } from "react";
 
-
-
 function adminarea () {
 
     const user = auth.currentUser
@@ -34,7 +32,7 @@ function adminarea () {
         if (user) {
           user.getIdTokenResult()
             .then((idTokenResult) => {
-              console.log('usuario logado!')
+              console.log('usuario logado com sucesso!')
             })
             .catch((error) => {
               console.error("Erro ao obter custom claims:");
