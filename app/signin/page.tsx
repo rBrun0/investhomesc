@@ -37,7 +37,7 @@ function signin() {
 
         signInWithEmailAndPassword(auth, email, password)
        .then((userCredential) => {
-        console.log("usuario logado com sucesso!", userCredential)
+        console.log("Usuario logado com sucesso!", userCredential)
        }).catch((error: Error) => {
         alert(error.message)
        })
