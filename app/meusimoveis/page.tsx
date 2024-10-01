@@ -71,7 +71,7 @@ function meusimoveis() {
       const deleteImovelPorCampo = async (id: string) => {
         const imoveisRef = collection(db, "imoveis");
   
-        // Criar uma query para encontrar o documento com base no campo nomeImovel
+        // Criar uma query para encontrar o documento desejado com base no campo nomeImovel
         const q = query(imoveisRef, where("id", "==", id));
         
         const querySnapshot = await getDocs(q);
