@@ -21,8 +21,8 @@ export const Footer = () => {
     }
 
     return (
-        <footer className="bg-customPrimary w-full text-white flex justify-center items-start mt-12 flex-wrap">
-            <main className="w-11/12 h-[700px] flex justify-between items-start flex-wrap pt-6 px-20 md:px-32 space-y-8">
+        <footer className="bg-customPrimary w-full text-white flex justify-center items-start mt-12 flex-wrap py-3">
+            <main className="w-11/12 min-h-[300px] flex justify-between items-start flex-wrap pt-6 px-12 md:px-32 space-y-8 bg-customPrimary">
 
             <section className="flex flex-col items-center justify-center md:translate-y-7">
                 <div className="flex flex-col justify-center items-center border-2 border-solid border-white w-72 h-16 rounded-md">

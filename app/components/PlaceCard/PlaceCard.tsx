@@ -63,21 +63,21 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
 
                     <div className="mx-auto md:w-1/2 lg:w-10/12 h-[1px] bg-zinc-500"/>
 
-                    <div className="flex justify-between items-center px-4 space-x-5 max-w-full py-6 md:py-2 gap-2">
+                    <div className="flex flex-col md:flex-row justify-between items-center px-4 space-x-5 max-w-full py-10 md:py-2 gap-6">
                             <span className="rounded-md w-36 h-8 text-sm border-[2px] border-black border-solid
                             flex justify-center items-center"
                             >Cod: {codigo}
                             </span>
 
-                            <div className="flex justify-center items-center space-x-4 md:space-x-3">
+                            <div className="flex justify-center items-center space-x-10 md:space-x-3">
                                     <Link href={"https://wa.me/9999999"} target="blank">
-                                    <span className=" cursor-pointer w-10 h-10 lg:w-14 lg:h-14 text-white bg-green-400 rounded-full flex items-center
+                                    <span className=" cursor-pointer w-12 h-12 lg:w-14 lg:h-14 text-white bg-green-400 rounded-full flex items-center
                                      justify-center "><FaWhatsapp/></span>
                                     </Link>
 
                                     <Dialog>
                                         <DialogTrigger  className="bg-customPrimary text-white font-medium rounded-md 
-                                        w-28 h-8 md:w-32 md:h-10 lg:w-40 lg:h-12 
+                                         w-32 h-10 lg:w-40 lg:h-12 
                                         cursor-pointer">
                                             Mensagem
                                         </DialogTrigger>

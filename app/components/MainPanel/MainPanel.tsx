@@ -14,7 +14,7 @@ export const MainPanel = () => {
     <main className="w-full relative h-[600px] md:h-[460px] flex justify-center items-center text-white">
         <Image src={beachImage} alt="imagem-praia" fill objectFit="cover" className="absolute -z-50"/>
 
-        <section className="w-5/6 h-[34rem] md:h-[24rem] lg:h-96 rounded-md flex flex-col justify-start items-center space-y-6 relative">
+        <section className="w-11/12 h-[34rem] md:h-[24rem] lg:h-96 rounded-md flex flex-col justify-start items-center space-y-6 relative">
 
             <div className="absolute left-0 top-0 bg-black w-full h-full -z-10 opacity-60"/>
 

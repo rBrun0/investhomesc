@@ -78,7 +78,7 @@ export default function apartmentgallery({params}: ApartmentGalleryProps) {
 
             <p className="text-center md:text-start text-2xl text-customPrimary font-semibold">Cód: {cod}</p>
 
-            <div className="flex flex-wrap space-x-2 w-full md:w-auto gap-3 md:gap-0 mt-8 md:mt-0">
+            <div className="flex justify-center flex-wrap space-x-2 w-full md:w-auto gap-6 md:gap-0 mt-8 md:mt-0">
 
                 <div className="flex flex-col justify-center items-center md:border-r-[1px] md:border-zinc-600 pr-3">
                     <span className="text-xs">venda</span> <span className="font-semibold text-zinc-600">
@@ -122,8 +122,8 @@ export default function apartmentgallery({params}: ApartmentGalleryProps) {
 
             </div>
 
-            <nav className="w-full min-h-24 bg-zinc-100 flex flex-col md:flex-row justify-between items-center md:px-48 mt-8 space-y-5 md:space-y-0 py-2">
-                <div className="flex  justify-center items-center space-x-14 md:space-x-8 text-customPrimary font-semibold ">
+            <nav className="w-full min-h-24 bg-zinc-100 flex flex-col md:flex-row justify-between items-center md:px-48 mt-8 space-y-10 md:space-y-0 py-2">
+                <div className="flex  justify-center items-center space-x-14 md:space-x-8 text-customPrimary font-semibold px-2">
                     <Link href={'#description'}>
                     <span className="cursor-pointer">DESCRICAO</span>
                     </Link>
@@ -138,7 +138,7 @@ export default function apartmentgallery({params}: ApartmentGalleryProps) {
 
                 <div className="flex space-x-2">
                     {/* <FaFacebook className="text-blue-400 w-8 h-8 md:w-16 md:h-16"/> */}
-                    <FacebookShareButton url={path} hashtag="olha esse imovel!! #DFATTO">
+                    <FacebookShareButton url={path} hashtag="olha esse imovel!! #INVESTE&HOME">
                         <FaFacebook className="text-blue-400 w-8 h-8 md:w-16 md:h-16"/>
                     </FacebookShareButton>
                     <WhatsappShareButton url={path}>

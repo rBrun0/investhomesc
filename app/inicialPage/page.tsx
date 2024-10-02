@@ -127,7 +127,7 @@ function InicialPage () {
             <FastSearch/>
 
 
-            <section className="w-full md:w-11/12 lg:w-10/12 pt-14 px-20 md:px-20 lg:px-28 bg-zinc-100">
+            <section className="w-full md:w-11/12 lg:w-10/12 pt-14 px-20 md:px-20 lg:px-28 bg-zinc-100 overflow-x-hidden">
                 <h3 className="text-xl md:text-2xl">CONHECA A MELHOR IMOBILIARIA DE</h3>
                 <h1 className="text-primary text-5xl lg:text-6xl font-extrabold tracking-wide">Itapema/SC</h1>
 
@@ -140,7 +140,7 @@ function InicialPage () {
                 <div className="flex flex-col lg:flex-row items-center lg:justify-around mt-7">
 
                     <div>
-                        <h1 className="text-3xl font-semibold">(47) 3268-3996 - (47) 3268-6320</h1>
+                        <h1 className="text-xl md:text-3xl font-semibold">(47) 3268-3996 - (47) 3268-6320</h1>
                         <p className="text-center tracking-wider font-light text-lg" >Segunda Avenida 292 - Sala 1, 2, 4 <br />
                         Esq Rua 278, Meia Praia - Itapema / SC
                         </p>
@@ -149,11 +149,11 @@ function InicialPage () {
 
                     <div className="w-[1px] h-28 bg-black hidden lg:block"></div>
 
-                    <div className="flex space-x-24 justify-center items-center">
-                        <h1 className="text-blue-400">Tenha acesso a <br /> localização <br /> clicando nos ícones</h1>
+                    <div className="flex space-x-24 justify-center items-center py-6">
+                        <h1 className="text-blue-400 text-sm md:text-base">Tenha acesso a <br /> localização <br /> clicando nos ícones</h1>
 
-                        <FaWaze className="w-20 h-20"/>
-                        <CiLocationOn className="w-20 h-20 text-yellow-400"/>
+                        <FaWaze className="w-12 h-12 md:w-20 md:h-20"/>
+                        <CiLocationOn className="w-12 h-12 md:w-20 md:h-20 text-yellow-400"/>
                     </div>
 
                 </div>
