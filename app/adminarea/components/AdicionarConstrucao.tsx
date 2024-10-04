@@ -6,6 +6,7 @@ import { ChangeEvent, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/app/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 export const AdicionarConstrucao = () => {
 
@@ -142,7 +143,7 @@ async function adicionarConstrucao() {
             areaPrivativa: areaPrivativa,
             caracteristicasCondominio: cbCondominio,
             caracteristicasImovel: checkboxVal,
-            codigo: String(Date.now()),
+            codigo: uuidv4().slice(0,8),
             dataEntregaEmpreendimento: dataEntregaEmpreendimento,
             descricao: descricao,
             dormitorios: quartos,

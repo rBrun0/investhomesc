@@ -18,7 +18,7 @@ export const CallABroker = () => {
     }
 
     return (
-        <div className="md:w-56 md:h-64 flex flex-col justify-center items-center shadow-lg rounded-md bg-zinc-100 py-2">
+        <div className="md:w-72 md:h-80 flex flex-col justify-center items-center shadow-lg rounded-md bg-zinc-100 py-2 gap-1">
                     <h1 className="text-customPrimary font-semibold">CHAMAR UM CORRETOR</h1>
                     <p className="text-zinc-700 font-medium">(47) 999212-9052</p>
 

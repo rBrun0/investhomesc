@@ -5,6 +5,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ChangeEvent, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa"
+import { v4 as uuidv4 } from 'uuid';
 
 export const AdicionarImoveis = () => {
 
@@ -165,7 +166,7 @@ export const AdicionarImoveis = () => {
             created: new Date(),
             dataEntregaEmpreenimento: dataEntregaEmpreendimento,
             descricao: descricao,
-            id: String(Date.now()),
+            id: uuidv4().slice(0,8),
             imagensPlanta: uploadedImages,
             imagensUrl: uploadedImages,
             informacoesEmpreendimento: informacoesEmpreendimento,

@@ -62,7 +62,7 @@ export const Footer = () => {
                 
             </section>
 
-            <section className="w-72 flex flex-col items-center justify-center pt-8 border-t-2 border-zinc-200 border-solid">
+            {/* <section className="w-72 flex flex-col items-center justify-center pt-8 border-t-2 border-zinc-200 border-solid">
                 <Link href={"/advancedsearch"} className="font-thin">A Imobiliaria</Link>
                 <Link href={"https://wa.me/999999999"} className="font-thin">Contato</Link>
             </section>
@@ -87,7 +87,7 @@ export const Footer = () => {
                 <button className="bg-yellow-200 hover:bg-yellow-300 transition-colors font-semibold w-20 rounded-md">Calcular</button>
                 </div>
 
-            </section>
+            </section> */}
 
             <section className="pt-4 border-t-[1px] border-t-white w-72 space-y-2">
                 <div className="w-72 h-12 border-white border-[1px] rounded-md flex justify-center items-center">

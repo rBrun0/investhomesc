@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaInstagram } from "react-icons/fa";
 import { FaCarAlt } from "react-icons/fa";
 import { FaBed } from "react-icons/fa";
 import { TbZoomInArea } from "react-icons/tb";
@@ -19,7 +19,7 @@ import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
 import { CallABroker } from "../components/CallABroker";
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
-import {FacebookShareButton, WhatsappShareButton} from "react-share"
+import {FacebookShareButton, WhatsappShareButton, InstapaperShareButton} from "react-share"
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -136,14 +136,17 @@ export default function apartmentgallery({params}: ApartmentGalleryProps) {
                     </Link>
                 </div>
 
-                <div className="flex space-x-2">
+                <div className="flex gap-6">
                     {/* <FaFacebook className="text-blue-400 w-8 h-8 md:w-16 md:h-16"/> */}
                     <FacebookShareButton url={path} hashtag="olha esse imovel!! #INVESTE&HOME">
-                        <FaFacebook className="text-blue-400 w-8 h-8 md:w-16 md:h-16"/>
+                        <FaFacebook className="text-blue-400 w-8 h-8 md:w-12 md:h-12"/>
                     </FacebookShareButton>
                     <WhatsappShareButton url={path}>
-                    <FaWhatsapp className="text-green-600 w-8 h-8 md:w-16 md:h-16"/>
+                    <FaWhatsapp className="text-green-600 w-8 h-8 md:w-12 md:h-12"/>
                     </WhatsappShareButton>
+                    <InstapaperShareButton url={path}>
+                        <FaInstagram className="text-red-400 w-8 h-8 md:w-12 md:h-12"/>
+                    </InstapaperShareButton>
                 </div>
             </nav>
 
@@ -212,20 +215,6 @@ export default function apartmentgallery({params}: ApartmentGalleryProps) {
                 {/* complete Gallery */}
 
                 <CompleteGallery imagesReceived={searchedApartment?.imagensUrl}/>
-
-                {/* <PropertyArquiteture imagesReceived={searchedApartment?.imagensPlanta}/> */}
-
-                <div className="flex flex-col justify-center items-start mt-8">
-                    <h1 className="text-zinc-600 text-xl">Video</h1>
-
-                    <div className="flex space-x-3">
-
-                        {
-                            searchedApartment && searchedApartment.video && <iframe src={searchedApartment.video}></iframe> 
-                        }
-
-                    </div>
-                </div>
 
                 <div className="flex flex-col justify-center items-start mt-16">
                     <h1 className="text-2xl font-medium text-zinc-600" id="mapa-local">MAPA</h1>

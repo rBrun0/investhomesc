@@ -20,18 +20,6 @@ export const MainPanel = () => {
 
             <h1 className="text-white text-center text-2xl md:text-3xl tracking-wider lg:text-4xl px-3 pt-6 font-semibold">Somente Vendas! Não trabalhamos com aluguel</h1>
 
-            <div className="bg-white w-96 h-16 rounded-3xl hidden lg:flex items-center justify-center">
-            {/* <button className="bg-customPrimary font-bold rounded-3xl px-6 py-3 border-[2px] border-solid border-customPrimary
-            hover:scale-95 transition-transform">
-                COMPRAR
-            </button> */}
-
-            <Link href={"/investimentoemconstrucao"} className="bg-customPrimary font-bold rounded-3xl px-6 py-3 border-[2px] border-solid border-customPrimary
-            hover:scale-95 transition-transform">
-                INVESTIMENTO EM CONSTRUCAO
-            </Link>
-            </div>
-
             <div className="flex flex-wrap justify-center w-[90%] gap-2 md:gap-4 lg:gap-8  ">
 
             <SelectCamp/>

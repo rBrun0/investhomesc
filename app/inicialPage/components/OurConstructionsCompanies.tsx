@@ -1,5 +1,6 @@
 'use client'
 
+import React from "react"
 import { ConstructorsType } from "@/app/@Types/types"
 import { useState } from "react"
 
@@ -13,7 +14,7 @@ export const OurConstructionsCompanies = ({construtoras}: ConstructionsProps) =>
 
     return (
         <>
-        <ul className="w-full marker:text-orange-400 list-disc flex  flex-wrap  justify-start gap-4 px-8 space-x-10 text-sm font-medium">
+        <ul className="w-full marker:text-amber-900 list-disc flex  flex-wrap  justify-start items-start gap-12 text-sm font-medium">
 
             {
                 !seeAllConstructors && construtoras?.slice(0,9).map((c: ConstructorsType, index: number) => (
