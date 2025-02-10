@@ -11,16 +11,22 @@ import {
 import { collection, getDocs } from "firebase/firestore"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import EntreHamburguer from "./EntreHamburguer"
-import useAdmin from "@/app/Hooks/useAdmin"
-import useSuperAdmin from "@/app/Hooks/useSuperAdmin"
+// import useAdmin from "@/app/Hooks/useAdmin"
+// import useSuperAdmin from "@/app/Hooks/useSuperAdmin"
+import { RootState } from "@/app/store"
+import { Roles } from "@/lib/utils"
   
 
 export const HamburguerContent = () => {
 
-  const isAdmin = useAdmin()
-  const {isSuperAdmin} = useSuperAdmin()
+  // const isAdmin = useAdmin()
+  // const {isSuperAdmin} = useSuperAdmin()
+
+  const selector = useSelector
+
+  const userProfile = selector((state: RootState) => state.userSlice)
 
 
   const dispatch = useDispatch()
@@ -96,7 +102,7 @@ useEffect(() => {
             <Link href={"advancedsearch"} onClick={() => addFilter("sala comercial", "", "")}>Sala comercial em Itapema</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("casa", "", "")}>Casas em Itapema</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("plaza iate club")}>Casas em Itapema - Plaza Iate Club</Link>
-            <Link href={"advancedsearch"} onClick={() => addFilter("chacara flora", "", "")}>Casas em Itapema - Chacara Flora</Link>
+            <Link href={"advancedsearch"} onClick={() => addFilter("chacara flora", "", "")}>Casas em Itapema - Chácara Flora</Link>
         </AccordionContent>
       </AccordionItem>
 
@@ -138,11 +144,12 @@ useEffect(() => {
 
     <div className="flex flex-col space-y-3 mt-3">
     <Link href="https://wa.me" className="border-b-[1px] border-b-zinc-200 pb-4">Contato</Link>
-    <Link href="/advancedsearch" className="border-b-[1px] border-b-zinc-200 pb-4">Lancamentos</Link>
+    <Link href="/advancedsearch" className="border-b-[1px] border-b-zinc-200 pb-4">Lançamentos</Link>
     <EntreHamburguer/>
     {
-      isAdmin || isSuperAdmin && <Link href="/paineladministrativo" className="border-b-[1px] border-b-zinc-200 pb-4">
-        painel
+      (userProfile.role == Roles.ADMIN ||
+       userProfile.role == Roles.CORRETOR) && <Link href="/paineladministrativo" className="border-b-[1px] border-b-zinc-200 pb-4">
+        Painel
         </Link>
     }
 

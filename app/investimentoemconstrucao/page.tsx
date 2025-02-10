@@ -14,7 +14,7 @@ import { resetFilterValues } from "../features/filterValues/filterValuesSlice";
 import { ConstructionFilterDialog } from "./components/ConstructionFilterDialog";
 import { RootState } from "../store";
 
-function investimentoEmConstrucao() {
+function InvestimentoEmConstrucao() {
 
     function comparaArrays(arr1: string[], arr2: string[]) {
         const maiorArray = arr1.length > arr2.length ? arr1 : arr2
@@ -76,7 +76,7 @@ function investimentoEmConstrucao() {
     return (
         <>
 
-        <h1 className="text-center text-4xl mt-14">INVESTIMENTO EM CONSTRUCAO</h1>
+        <h1 className="text-center text-4xl mt-14">INVESTIMENTO EM CONSTRUÇÃO</h1>
 
             <div className="flex space-x-2 pb-4 mt-8 ml-44 pl-3">
 
@@ -109,20 +109,22 @@ function investimentoEmConstrucao() {
 
 
             {   
-                filteredData && filteredData.length > 0 ? filteredData.map((con) => {
+                filteredData && filteredData.length > 0 ? filteredData.map((con, index) => {
                     return (
                         <PlaceCard areaPrivativa={con.areaPrivativa} bairro={con.bairro} cidade={con.cidade} codigo={con.codigo} dataEntregaEmpreendimento={con.dataEntregaEmpreendimento}
                         descricao={con.descricao} id={con.id} imagemUrl={con.imagens} numeroLocal={con.numeroLocal} numeroRua={con.rua} preco={con.preco} quartos={con.suites}
-                        suites={JSON.stringify(con.suites)} vagas={con.vagas} direcionamento="investimentoemconstrucao/galeriaconstrucao"/>
+                        suites={JSON.stringify(con.suites)} vagas={con.vagas} direcionamento="investimentoemconstrucao/galeriaconstrucao"
+                        key={index}/>
                     )
                 }) 
                 :
 
-                constructions && constructions.map((con) => {
+                constructions && constructions.map((con, index) => {
                     return (
                         <PlaceCard areaPrivativa={con.areaPrivativa} bairro={con.bairro} cidade={con.cidade} codigo={con.codigo} dataEntregaEmpreendimento={con.dataEntregaEmpreendimento}
                         descricao={con.descricao} id={con.id} imagemUrl={con.imagens} numeroLocal={con.numeroLocal} numeroRua={con.rua} preco={con.preco} quartos={con.suites}
-                        suites={JSON.stringify(con.suites)} vagas={con.vagas} direcionamento="investimentoemconstrucao/galeriaconstrucao"/>
+                        suites={JSON.stringify(con.suites)} vagas={con.vagas} direcionamento="investimentoemconstrucao/galeriaconstrucao"
+                        key={index}/>
                     )
                 })
 
@@ -130,11 +132,12 @@ function investimentoEmConstrucao() {
             }
 
         {   
-                !filteredData && constructions.map((con) => {
+                !filteredData && constructions.map((con, index) => {
                     return (
                         <PlaceCard areaPrivativa={con.areaPrivativa} bairro={con.bairro} cidade={con.cidade} codigo={con.codigo} dataEntregaEmpreendimento={con.dataEntregaEmpreendimento}
                         descricao={con.descricao} id={con.id} imagemUrl={con.imagens} numeroLocal={con.numeroLocal} numeroRua={con.rua} preco={con.preco} quartos={con.suites}
-                        suites={JSON.stringify(con.suites)} vagas={con.vagas} direcionamento="investimentoemconstrucao/galeriaconstrucao"/>
+                        suites={JSON.stringify(con.suites)} vagas={con.vagas} direcionamento="investimentoemconstrucao/galeriaconstrucao"
+                        key={index}/>
                     )
                 })
             }
@@ -143,4 +146,4 @@ function investimentoEmConstrucao() {
     )
 }
 
-export default investimentoEmConstrucao;
+export default InvestimentoEmConstrucao;

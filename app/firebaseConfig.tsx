@@ -8,13 +8,13 @@ import { getFunctions } from "firebase/functions";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCl5oshnpWv3O0cMnHA32acw4jbkQc1OcE",
-  authDomain: "dfatto-a05ca.firebaseapp.com",
-  projectId: "dfatto-a05ca",
-  storageBucket: "dfatto-a05ca.appspot.com",
-  messagingSenderId: "426411354472",
-  appId: "1:426411354472:web:24a889e7358e121ee6cedd",
-  measurementId: "G-7ZN4M5BCVG"
+  apiKey: "AIzaSyBm8TPJ7TA44sUfYmyBGX-CMy7dhgs_13U",
+  authDomain: "invest-home-b3281.firebaseapp.com",
+  projectId: "invest-home-b3281",
+  storageBucket: "invest-home-b3281.firebasestorage.app",
+  messagingSenderId: "293868287767",
+  appId: "1:293868287767:web:a8096b0bba275b4a0b2952",
+  measurementId: "G-83H9B0GY14"
 };
 
 

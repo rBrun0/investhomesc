@@ -24,7 +24,7 @@ function SearchedPage({params}: SearchedPageProps) {
 
         <div className="flex flex-col w-10/12 items-start px-14 space-y-4">
 
-          <h1 className="text-3xl font-semibold" >BUSCA AVANCADA</h1>
+          <h1 className="text-3xl font-semibold" >BUSCA AVANÇADA</h1>
 
 
 
@@ -65,11 +65,11 @@ function SearchedPage({params}: SearchedPageProps) {
             </p>
             <select name="" id="" className="w-48 h-10 px-3 py-2 outline-none border-[1px] border-zinc-700 rounded-md
             cursor-pointer">
-              <option value="maior preco">Maior Preco</option>
-              <option value="relevancia">Relevancia</option>
-              <option value="menor preco">Menor Preco</option>
-              <option value="maior area privada">Maior Area Privada</option>
-              <option value="mais recentes">Mais Recentes</option>
+              <option value="maior preco">Maior preço</option>
+              <option value="relevancia">Relevância</option>
+              <option value="menor preco">Menor preço</option>
+              <option value="maior area privada">Maior área privada</option>
+              <option value="mais recentes">Mais recentes</option>
             </select>
           </div>
 

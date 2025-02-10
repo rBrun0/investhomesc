@@ -7,7 +7,7 @@ export type PropertyType = {
     construtoraVal: string,
     dataEntregaEmpreendimento: string,
     descricao: string,
-    id: number,
+    uid: string,
     imagensUrl: string[],
     informacoesEmpreendimento: string[],
     informacoesImovel: string[],
@@ -15,11 +15,11 @@ export type PropertyType = {
     localizacaoMaps: string,
     mobiliado: boolean,
     nomeCondominio?: string,
-    numeroAnunciante: string[],
+    numeroAnunciante: string,
     nomeCondominioVal?: "",
     numeroRua: string,
     preco: number,
-    quartos: number,
+    dormitorios: number,
     suites: number,
     tipoDoImovel: string,
     video: string,
@@ -27,16 +27,18 @@ export type PropertyType = {
     vagas: number,
     bairroVal: string,
     cidadeVal: string,
+    estado: string,
     numeroLocal: number,
     imagensPlanta: string[],
     bathrooms: number,
     caracteristicasCondominio: string[],
     caracteristicasImovel: string[],
-    localizacao: {
-        latitude: number,
-        longitude: number
-    },
+    latitude: string,
+    longitude: string,
     createdBy: string
+    facebookLink?: string,
+    instagramLink?: string,
+    whatsappLink?: string
 }
 
 export type ConstructionsType = {
@@ -67,20 +69,17 @@ export type ConstructionsType = {
     vagas: number,
     video: string,
     createdBy: string
+    facebookLink?: string,
+    instagramLink?: string,
+    whatsappLink?: string
 }
 
 export type CondominumsType = {
     nome: string,
-    nomeVal: string
 }
 
 export type ConstructorsType = {
-    nome: string,
-    nomeVal: string
-}
-
-export type Construtora = {
-    nome: string,
-    nomeVal: string,
-    createdBy: string
+    id: string,
+    createdBy: string,
+    name: string,
 }

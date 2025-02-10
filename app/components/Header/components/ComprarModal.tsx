@@ -2,26 +2,25 @@
 
 import { setFilterValues } from "@/app/features/filterValues/filterValuesSlice"
 import Link from "next/link"
-import { ReactNode } from "react"
 import { useDispatch } from "react-redux"
 
 
 
-export const ComprarModal = ({isModalOpen, children}: {isModalOpen: boolean, children?: ReactNode}) => {
+export const ComprarModal = () => {
 
     const dispatch = useDispatch()
 
     function addFilter(perfil = "", tipo = "", bairro = "") {
         dispatch(setFilterValues({
             propertyProfile: perfil,
-            cities: 'itapema',
+            cities: 'Itapema',
             propertyType: tipo,
             neighborhood: bairro
         }))
     }
 
     return (
-        <div className={`absolute bg-customPrimary text-white w-80 h-96 ${isModalOpen ? ' z-50 opacity-100' : '-z-50 opacity-0'} transition-all
+        <div className={`absolute bg-customPrimary text-white w-80 h-96 transition-all
         top-11 -left-1 overflow-x-hidden overflow-y-auto rounded-md flex flex-col justify-start items-start p-2 font-thin py-2 text-xs gap-3`}>
             <Link href={"advancedsearch"} onClick={() => addFilter()}>Apartamentos em Itapema</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("", "", "meia praia")}>Apartamentos em Itapema - Meia Praia</Link>

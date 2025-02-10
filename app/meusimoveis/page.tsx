@@ -1,183 +1,313 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { db, auth } from '../firebaseConfig';
-import useAdmin from "../Hooks/useAdmin";
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { db } from '../firebaseConfig';
+import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { PlaceCard } from '../components/PlaceCard/PlaceCard';
-import { ConstructionsType, Construtora, PropertyType } from '../@Types/types';
+import { ConstructorsType, PropertyType } from '../@Types/types';
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { Roles } from '@/lib/utils';
+import { 
+   AlertDialog, AlertDialogAction, AlertDialogCancel,
+   AlertDialogContent, AlertDialogDescription,
+   AlertDialogFooter, AlertDialogHeader,
+   AlertDialogTitle, AlertDialogTrigger
+  }
+ from '@/components/ui/alert-dialog';
+import Modal from './mybuilding/Modal';
+import ConstructorModal from './myconstructor/ConstructorModal'
+import { toast, Toaster } from 'sonner';
 
 
-function meusimoveis() {
+function Meusimoveis() {
   
-    const [minhaConstrutora, setMinhaConstrutora] = useState<Construtora[]>([])
+    const [minhaConstrutora, setMinhaConstrutora] = useState<ConstructorsType[]>([])
+    const [imoveis, setImoveis] = useState<PropertyType[]>([]);
 
-    const user = auth.currentUser;
+    const [searchValue, setSearchValue] = useState('')
 
-    useEffect(() => {
-        const fetchImoveis = async () => {
-          if (user) {
-            const q = query(collection(db, 'imoveis'), where('createdBy', '==', user.uid));  // Filtra os imóveis do corretor logado
-            const querySnapshot = await getDocs(q);
-    
-            const imoveisData = querySnapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
-            // @ts-ignore
-            setImoveis(imoveisData);
-            setLoading(false);
-          }
-        };
+    const selector = useSelector
+    const userProfile = selector((state: RootState) => state.userSlice)
 
-        const fetchConstrucao = async () => {
-            if (user) {
-              const q = query(collection(db, 'construcao'), where('createdBy', '==', user.uid));  // Filtra os imóveis do corretor logado
-              const querySnapshot = await getDocs(q);
+    const fetchImoveis = async () => {
+        const q = query(collection(db, 'imoveis'), where('createdBy', '==', userProfile.uid));
+        const querySnapshot = await getDocs(q);
+
+        const temp = []
+
+        querySnapshot.forEach((i) => {
+          temp.push(i.data())
+        })
+
+        setImoveis(temp);
       
-              const imoveisData = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-              }));
-              // @ts-ignore
-              setConstrucoes(imoveisData);
-              setLoading(false);
-            }
-          };
+    };
 
-          const fetchConstrutora = async() => {
-            if (user) {
-              const q = query(collection(db, 'construtoras'), where('createdBy', '==', user.uid));  // Filtra os imóveis do corretor logado
-              const querySnapshot = await getDocs(q);
-      
-              const imoveisData = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-              }));
-              // @ts-ignore
-              setMinhaConstrutora(imoveisData)
-              setLoading(false);
-            }
-          }
-    
-        fetchImoveis();
-        fetchConstrucao();
-        fetchConstrutora()
+    const fetchConstrutora = async() => {
+        const q = query(collection(db, 'construtoras'), where('createdBy', '==', userProfile.uid)); 
+        const querySnapshot = await getDocs(q);
 
-      
-      }, []);
+        const temp = []
 
-      const deleteImovelPorCampo = async (id: string) => {
+        querySnapshot.forEach(doc => {
+          temp.push(doc.data())
+        });
+
+        setMinhaConstrutora(temp)
+    }
+
+      const deleteImovelPorCampo = async (uid: string) => {
         const imoveisRef = collection(db, "imoveis");
-  
-        // Criar uma query para encontrar o documento desejado com base no campo nomeImovel
-        const q = query(imoveisRef, where("id", "==", id));
-        
-        const querySnapshot = await getDocs(q);
-        
-        querySnapshot.forEach(async (doc) => {
-          // Excluir o documento encontrado
-          await deleteDoc(doc.ref);
-          console.log(`Imóvel ${id} deletado com sucesso!`);
-        });
-      };
 
-      const deleteConstrucaoPorCampo = async (id: string) => {
-        const imoveisRef = collection(db, "construcao");
+        toast.success(uid)
   
-        // Criar uma query para encontrar o documento com base no campo nomeImovel
-        const q = query(imoveisRef, where("id", "==", id));
+        const q = query(imoveisRef, where("uid", "==", uid));
         
         const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          toast.error("Nenhuma construtora encontrada!");
+          return;
+        }
         
         querySnapshot.forEach(async (doc) => {
           // Excluir o documento encontrado
           await deleteDoc(doc.ref);
-          console.log(`Imóvel ${id} deletado com sucesso!`);
+          toast.success("imovel deletado com sucesso!")
+          console.log(`Imóvel ${uid} deletado com sucesso!`);
         });
-      }
+
+        fetchImoveis()
+      };
 
       const deleteConstrutora = async (id: string) => {
         try {
-          await deleteDoc(doc(db, 'construtoras', id));
-          alert('construtora excluida com sucesso');
+          const imoveisRef = collection(db, "construtoras");
+          const q = query(imoveisRef, where("id", "==", id));
+          const querySnapshot = await getDocs(q);
+      
+          if (querySnapshot.empty) {
+            toast.error("Nenhuma construtora encontrada!");
+            return;
+          }
+      
+          await Promise.all(
+            querySnapshot.docs.map(async (doc) => {
+              console.log("Construtora encontrada:", doc.data());
+              await deleteDoc(doc.ref);
+              console.log(`Construtora ${id} deletada com sucesso!`);
+              toast.success("Construtora excluída com sucesso!" + JSON.stringify(doc.data()));
+            })
+          );
+      
+          // toast.success("Construtora excluída com sucesso!");
         } catch (error) {
-          console.error('Erro ao excluir imóvel: ', error);
+          console.error("Erro ao excluir construtora:", error);
+          toast.error("Erro ao excluir construtora!");
         }
       };
 
-    const [imoveis, setImoveis] = useState<PropertyType[]>([]);
-    const [loading, setLoading] = useState(true);
 
-    const [construcoes, setConstrucoes] = useState<ConstructionsType[]>([])
 
-    const isAdmin = useAdmin()
+      useEffect(() => {
+        fetchImoveis();
+        fetchConstrutora()
+      }, []);
+
+   
+
     
-    if(!isAdmin) {
+    if(!(userProfile.role === Roles.ADMIN || userProfile.role === Roles.CORRETOR)) {
         return <p className="text-center text-3xl mt-4">Você não possui permissão para acessar essa página.</p>
     }
 
     return (
+      <>
         <main className="w-full min-h-screen">
-            <div className="flex flex-wrap justify-center items-center h-full">
-                <div className="w-full md:w-1/2 p-6 space-y-2">
+            <div className="flex flex-wrap justify-center items-center">
+                <div className="w-full md:w-1/2 p-6 space-y-2 flex flex-col items-center">
                     <h1 className="text-3xl font-bold text-center">Meus imóveis</h1>
                     <p className="text-gray-600 text-center">Veja todos os seus imóveis cadastrados no sistema.</p>
+                    <input type="text" 
+                    className='w-96 h-10 border rounded-md px-2 outline-none'
+                    placeholder='Filtrar por código'
+                    value={searchValue} onChange={(e) => setSearchValue(e.target.value)}
+                    />
+
                 </div>
             </div>
             
-            {/* Listar imóveis aqui */}
 
-            <div className='w-full flex flex-col justify-center items-center space-y-8d'>
+            <div className='w-full flex flex-col justify-center items-center space-y-8'>
+
+              {
+                searchValue.length >= 1 && (
+                  imoveis && imoveis.filter((im) => {
+                    return im.codigoImovel.includes(searchValue)
+                  }).map((imovel, index) => (
+                    <div className='flex flex-col items-center relative' key={index}>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                    <FaRegTrashAlt className='w-14 h-6 py-1 bg-customPrimary text-white rounded-md my-2 absolute z-10 right-2
+                    cursor-pointer'
+                      />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Tem certeza de que deseja excluir ?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Esta ação não pode ser desfeita.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+
+
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction className='bg-red-500 text-white px-4 py-2 rounded-md'
+                          onClick={() => deleteImovelPorCampo(imovel.uid)}>
+                            Excluir
+                          </AlertDialogAction>
+
+
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+
+                    <Modal
+                    codigoImovel={imovel.codigoImovel} 
+                    fetchImoveis={fetchImoveis}
+                    fetchConstrutora={fetchConstrutora}
+                    />
+
+                    <PlaceCard 
+                    areaPrivativa={imovel.areaPrivativa} bairro={imovel.bairro} cidade={imovel.cidade}
+                    codigo={imovel.codigoImovel} dataEntregaEmpreendimento={imovel.dataEntregaEmpreendimento}
+                    descricao={imovel.descricao}
+                    direcionamento='apartmentgallery' id={String(imovel.uid)}
+                    imagemUrl={imovel.imagensUrl} numeroLocal={imovel.numeroLocal} numeroRua={imovel.numeroRua} preco={imovel.preco}
+                    quartos={imovel.dormitorios}
+                    suites={imovel.suites} vagas={imovel.vagas} key={index} numeroAnunciante={imovel.numeroAnunciante}
+                    />
+
+                </div>
+                ))
+                                  
+                )
+              }
+
                 {
                     
-                    imoveis && imoveis.map((imovel, index) => (
-                        <div className='flex flex-col items-center'>
-                        <FaRegTrashAlt className='w-20 h-6 bg-slate-500 text-white rounded-md my-2' onClick={() => deleteImovelPorCampo(JSON.stringify(imovel.codigoImovel))}/>
-                        <PlaceCard areaPrivativa={imovel.areaPrivativa} bairro={imovel.bairro} cidade={imovel.cidade} codigo={imovel.codigoImovel}
-                    dataEntregaEmpreendimento={imovel.dataEntregaEmpreendimento} descricao={imovel.descricao} direcionamento='/apartmentgallery' id={imovel.id}
-                    imagemUrl={imovel.imagensUrl} numeroLocal={imovel.numeroLocal} numeroRua={imovel.numeroRua} preco={imovel.preco} quartos={imovel.quartos}
-                    suites={JSON.stringify(imovel.suites)} vagas={imovel.vagas} key={index}/>
+                    searchValue.length < 1 && imoveis && imoveis.map((imovel, index) => (
+                        <div className='flex flex-col items-center relative' key={index}>
+
+                        <AlertDialog>
+                          <AlertDialogTrigger>
+                        <FaRegTrashAlt className='w-14 h-6 py-1 bg-customPrimary text-white rounded-md my-2 absolute z-10 right-2
+                        cursor-pointer'
+                          />
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Tem certeza de que deseja excluir ?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Esta ação não pode ser desfeita.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+
+
+                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                              <AlertDialogAction className='bg-red-500 text-white px-4 py-2 rounded-md'
+                              onClick={() => deleteImovelPorCampo(imovel.uid)}>
+                                Excluir
+                              </AlertDialogAction>
+
+
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+
+                        <Modal
+                        codigoImovel={imovel.codigoImovel} 
+                        fetchImoveis={fetchImoveis}
+                        fetchConstrutora={fetchConstrutora}
+                        />
+
+                        <PlaceCard 
+                        areaPrivativa={imovel.areaPrivativa} bairro={imovel.bairro} cidade={imovel.cidade}
+                        codigo={imovel.codigoImovel} dataEntregaEmpreendimento={imovel.dataEntregaEmpreendimento}
+                        descricao={imovel.descricao}
+                        direcionamento='apartmentgallery' id={String(imovel.uid)}
+                        imagemUrl={imovel.imagensUrl} numeroLocal={imovel.numeroLocal} numeroRua={imovel.numeroRua} preco={imovel.preco}
+                        quartos={imovel.dormitorios}
+                        suites={imovel.suites} vagas={imovel.vagas} key={index} numeroAnunciante={imovel.numeroAnunciante}
+                        />
+
                     </div>
                     ))
                     
                 }
             </div>
 
-            <h1 className='text-center text-4xl mt-20 '>Construcoes</h1>
+            <h1 className='text-center text-4xl mt-20 '>Construtoras</h1>
 
-            <div className='w-full flex flex-col justify-center items-center space-y-8 mt-12'>
+            <div className='w-full flex flex-wrap justify-start items-center gap-4 mt-12 mb-4'>
                 {
-                    construcoes && construcoes.map((imovel, index) => (
-                    <div className='flex flex-col items-center'>
-                    <FaRegTrashAlt onClick={() => deleteConstrucaoPorCampo(imovel.id)} className='text-xl text-customPrimary
-                    cursor-pointer '>remover construcao</FaRegTrashAlt>
-                    <PlaceCard areaPrivativa={imovel.areaPrivativa} bairro={imovel.bairro} cidade={imovel.cidade} codigo={imovel.codigo}
-                    dataEntregaEmpreendimento={imovel.dataEntregaEmpreendimento} descricao={imovel.descricao} direcionamento='/apartmentgallery' id={imovel.id}
-                    imagemUrl={imovel.imagens} numeroLocal={imovel.numeroLocal} numeroRua={JSON.stringify(imovel.numeroLocal)} preco={imovel.preco} quartos={imovel.dormitorios}
-                    suites={JSON.stringify(imovel.suites)} vagas={imovel.vagas} key={index}/>
-                    
-                    </div>
-                    ))
-                }
-            </div>
+                    minhaConstrutora && minhaConstrutora.map((con, index) => (
+                      <div className='w-96 h-24  relative border rounded-md px-8 flex items-start justify-center' key={index}>
+                        <AlertDialog>
+                          <AlertDialogTrigger>
+                        <FaRegTrashAlt className='w-14 h-6 py-1 bg-customPrimary text-white rounded-md my-2 absolute z-10 right-2 bottom-0
+                        cursor-pointer'
+                          />
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Tem certeza de que deseja excluir ?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Esta ação não pode ser desfeita.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
 
-            <h1 className='text-center text-4xl mt-20 '>Construtora</h1>
 
-            <div className='w-full flex flex-col justify-center items-center space-y-8 mt-12'>
-                {
-                    minhaConstrutora && minhaConstrutora.map((con) => (
-                      <div className='flex flex-col justify-center items-center'>
-                        <FaRegTrashAlt onClick={() => deleteConstrutora(con.nome)}/>
-                        <h1>Construtora: {con.nome}</h1>
+                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                              <AlertDialogAction className='bg-red-500 text-white px-4 py-2 rounded-md'
+                              onClick={() => {
+                                console.log(con.name)
+                                deleteConstrutora(con.id)
+                                fetchConstrutora()
+                              }}>
+                                Excluir
+                              </AlertDialogAction>
+
+
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+
+                        <ConstructorModal 
+                        construtora={con}
+                        fetchConstrutora={fetchConstrutora}
+                        />
+                        <div className='w-full flex flex-col items-start'>
+                        <h1><span>Construtora:</span></h1>
+                        <h1 className='text-xl font-semibold'>{con.name}</h1>
+
+                        </div>
                       </div>
                     ))
                 }
             </div>
 
         </main>
+
+        <Toaster/>
+        </>
     )
 }
 
-export default meusimoveis;
+export default Meusimoveis;

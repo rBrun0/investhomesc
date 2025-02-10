@@ -59,9 +59,8 @@ useEffect(() => {
     return (<>
     {
         actualUser && (
-            <div className="md:px-2 md:py-1 lg:px-4 lg:py-1 rounded-md bg-customPrimary text-white font-medium border-[2px]
-            border-white border-solid hover:bg-white hover:border-customPrimary hover:text-customPrimary transition-colors
-            cursor-pointer" onClick={logout}>
+            <div className="md:px-2 md:py-1 lg:px-4 lg:py-1 rounded-md text-customPrimary font-medium 
+             transition-colors border border-white hover:border-gray-300 cursor-pointer" onClick={logout}>
                Sair
             </div> 
         )
@@ -70,11 +69,10 @@ useEffect(() => {
 
         {
             !actualUser && (
-                <Link href="/signup" className="md:px-2 md:py-1 lg:px-4 lg:py-1 rounded-md bg-customPrimary text-white font-medium border-[2px]
-            border-white border-solid hover:bg-white hover:border-customPrimary hover:text-customPrimary transition-colors
-            cursor-pointer"
+                <Link href="/signup" className="md:px-2 md:py-1 lg:px-4 lg:py-1 text-customPrimary font-medium
+                 transition-colors cursor-pointer hover:border"
             >
-               Junte-se
+               Júnte-se
             </Link> 
             )
         }

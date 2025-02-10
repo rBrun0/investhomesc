@@ -9,9 +9,9 @@ import { useDispatch } from "react-redux";
 
 
 
-export const CondominiosModal = ({isModalOpen, children}: {isModalOpen: boolean, children?: ReactNode}) => {
+export const CondominiosModal = () => {
 
-    const [condominios, setCondominios] = useState<any>([])
+    const [condominios, setCondominios] = useState([])
 
     const fetchData = async () => {
         //   const querySnapshot = await getDocs(collection(db,"predios"));
@@ -40,7 +40,7 @@ function addFilter(cond: any) {
     }, [])
 
     return (
-        <div className={`absolute bg-customPrimary text-white w-80 h-96 ${isModalOpen ? ' z-50 opacity-100' : '-z-50 opacity-0'} transition-all
+        <div className={`absolute bg-customPrimary text-white w-80 h-96 z-50 opacity-100 transition-all
             top-11 -left-1 overflow-x-hidden overflow-y-auto rounded-md flex flex-col justify-start items-start p-2 font-thin py-2 text-xs gap-3`}>
                 {
                     condominios && condominios.map((cond: string, index: number) => (

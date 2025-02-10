@@ -13,7 +13,8 @@ type InitialState = {
     constructionCompany: string,
     condominums: string,
     condominumInformations: string[],
-    constructorInformations: string[]
+    constructorInformations: string[],
+    codeSearch: string
 }
 
 const initialState: InitialState = {
@@ -29,7 +30,8 @@ const initialState: InitialState = {
     constructionCompany: '',
     condominums: '',
     condominumInformations: [],
-    constructorInformations: []
+    constructorInformations: [],
+    codeSearch: ""
 }
 
 const filterValuesSlice = createSlice({
@@ -39,7 +41,7 @@ const filterValuesSlice = createSlice({
         setFilterValues: (state, action: PayloadAction<Partial<InitialState>>) => {
             return {...state,...action.payload }
         },
-        resetFilterValues: (state) => initialState,
+        resetFilterValues: () => initialState,
     }
 })
 

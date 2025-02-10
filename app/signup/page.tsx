@@ -1,18 +1,23 @@
 'use client'
 
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, User } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react"
 import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Header } from "../components/Header/Header";
+import { collection, getDocs, query } from "firebase/firestore";
+import { toast, Toaster } from "sonner"
 
 
-function signup() {
+
+function Signup() {
 
     const router = useRouter()
 
+    const [existingUsers, setExistingUsers] = useState<User[]>();
     const [usuario, setUsuario] = useState<User>()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,17 +26,40 @@ function signup() {
 
     const provider = new GoogleAuthProvider();
 
-    function handleSignIn() {
-        signInWithPopup(auth, provider).then((result) => {
-            console.log("User signed in successfully!", result);
-            console.log(result.user)
-            setUsuario(result.user)
-        }).catch(() => {
-            console.log("Error signing in with popup");
-        })
+    async function listUsers() {
+        const q = query(collection(db, 'users'))
+        const querySnapshot = await getDocs(q)
+        const tempUsers = []
+
+        querySnapshot.forEach((u) => {
+            tempUsers.push(u.data())
+        } )
+
+        setExistingUsers(tempUsers)
+        console.log(existingUsers)
     }
+    
+    console.log(existingUsers)
+
+    // function handleSignIn() {
+    //     signInWithPopup(auth, provider).then((result) => {
+    //         console.log("User signed in successfully!", result);
+    //         console.log(result.user)
+    //         setUsuario(result.user)
+    //     }).catch(() => {
+    //         console.log("Error signing in with popup");
+    //     })
+    // }
 
     function handleCreateUser() {
+
+        if(existingUsers.some(u => u.email === email)) {
+            toast('Já existe um usuário com este email!', {
+                description: "Usuário já encontrado!",
+            })
+            return
+        }
+
         if(!email || !password) {
             alert('Todos os campos são obrigatórios!')
             return
@@ -58,6 +86,7 @@ function signup() {
     }
 
     useEffect(() => {
+        listUsers()
         if(user) {
             router.push('/')
         }
@@ -65,8 +94,11 @@ function signup() {
 
     return (
 
+        <>
+        <Header/>
+
         <main className="w-full min-h-screen">
-        <h1 className="text-center font-semibold text-2xl md:text-3xl mt-7">Olá , você e um corretor e deseja poder divulgar imóveis? Registre-se!</h1>
+        <h1 className="text-center font-semibold text-2xl md:text-3xl mt-7">Olá , você é um corretor e deseja poder divulgar imóveis? Registre-se!</h1>
     
         <div className="min-w-[25rem] w-3/5 h-96 shadow-lg mx-auto mt-8 flex flex-col gap-3">
             <div className="flex flex-col justify-center gap-4 mt-20 mx-auto">
@@ -80,7 +112,7 @@ function signup() {
                 {
                     showPassword? <IoMdEyeOff className="absolute right-3 top-3" 
                     onClick={() => setShowPassword(!showPassword)}/> : <FaEye className="absolute right-3 top-3"
-                     onClick={() => setShowPassword(!showPassword)}/>
+                    onClick={() => setShowPassword(!showPassword)}/>
                 }   
                 </div>
 
@@ -95,10 +127,11 @@ function signup() {
                 </div>
             </div>
 
-
+        <Toaster />
         </div>
         </main>
+    </>
     )
 }
 
-export default signup
+export default Signup

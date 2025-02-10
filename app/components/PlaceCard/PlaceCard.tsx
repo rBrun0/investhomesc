@@ -7,9 +7,10 @@ import Link from "next/link";
 import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CardDialog } from "./CardDialog";
+import { HTMLAttributes } from "react";
 
 
-type PlaceCardProps = {
+type PlaceCardProps = HTMLAttributes<HTMLDivElement> & {
     id: number | string,
     preco: number | string,
     imagemUrl: string[],
@@ -17,7 +18,7 @@ type PlaceCardProps = {
     areaPrivativa: string,
     codigo: string,
     dataEntregaEmpreendimento: string,
-    suites: string,
+    suites: number,
     quartos: number, 
     vagas: number
     bairro: string,
@@ -25,16 +26,19 @@ type PlaceCardProps = {
     numeroRua: string,
     numeroLocal: number,
     direcionamento: string
+    numeroAnunciante: string
 }
 
 export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, suites, quartos, bairro, 
-    cidade, numeroRua, vagas, direcionamento}: PlaceCardProps) => {
+    cidade, numeroRua, vagas, direcionamento, numeroAnunciante, ...props}: PlaceCardProps) => {
     return (
-        <div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] shadow-lg overflow-hidden">
+        <div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] border shadow-sm rounded-md overflow-hidden" {...props}>
             <Link href={`/${direcionamento}/${codigo}`}>
             <div className="mx-auto w-[24.4rem] min-h-40 lg:min-w-[600px] lg:min-h-[340px] relative overflow-hidden object-cover">
                 {
-                    imagemUrl[0] && <Image src={imagemUrl[0]} fill objectFit="cover" alt="imagem" className="hover:scale-105 duration-200 transition-transform"/> 
+                    imagemUrl?.length >= 1 &&
+                     imagemUrl[0] && <Image src={imagemUrl[0]} fill objectFit="cover" alt="imagem" className="hover:scale-105 duration-200 transition-transform"
+                     /> 
                 }
             </div>
             </Link>
@@ -46,19 +50,32 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
                     {descricao}
                 </p>
 
-                
 
-                <p className="text-sm">{numeroRua} - {bairro} - {cidade} /SC</p>
+                <p className="text-sm">
+                    {numeroRua && `${numeroRua} - `} {bairro && `${bairro} - `} {cidade && `${cidade} - `} /SC
+                </p>
 
                     <div className="flex space-x-3">
+                        <div className="flex-col justify-center items-start text-xs lg:text-lg">
+                            <span className="flex justify-center items-center space-x-1"><FaBed className="font-semibold"/> 
+                            <span>{quartos ?? 0}</span></span> <span className="text-xs">
+                                Dorm.
+                            </span>
+                        </div>
 
-                        <div className="flex-col justify-center items-start text-xs lg:text-lg"><span className="flex justify-center items-center space-x-1"><FaBed className="font-semibold"/> <span>{quartos}</span></span> <span className="text-xs">Dorm.</span></div>
+                        <div className="flex-col justify-center items-start text-xs lg:text-lg">
+                            <span className="flex justify-center items-center space-x-1">
+                                <FaBed className="font-semibold"/>
+                                <span>
+                                    {suites ?? 0}
+                                </span>
+                                </span> 
+                                <span className="text-xs">Suítes</span>
+                        </div>
 
-                        <div className="flex-col justify-center items-start text-xs lg:text-lg"><span className="flex justify-center items-center space-x-1"><FaBed className="font-semibold"/> <span>{suites}</span></span> <span className="text-xs">Suites</span></div>
+                        <div className="flex-col justify-center items-start text-xs lg:text-lg"><span className="flex justify-center items-center space-x-1"><FaCar className="font-semiboldl"/> <span>{vagas ?? 0}</span></span> <span className="text-xs">Vagas</span></div>
 
-                        <div className="flex-col justify-center items-start text-xs lg:text-lg"><span className="flex justify-center items-center space-x-1"><FaCar className="font-semiboldl"/> <span>{vagas}</span></span> <span className="text-xs">Vagas</span></div>
-
-                        <div className="flex-col justify-center items-start text-xs lg:text-lg"><span className="flex justify-center items-center space-x-1"><FaRulerCombined className="font-semibold"/> <span>{areaPrivativa}m2</span></span> <span className="text-xs"   >Area Administrativa</span></div>
+                        <div className="flex-col justify-center items-start text-xs lg:text-lg"><span className="flex justify-center items-center space-x-1"><FaRulerCombined className="font-semibold"/> <span>{areaPrivativa}m²</span></span> <span className="text-xs"   >Area Administrativa</span></div>
                     </div>
 
                     <div className="mx-auto md:w-1/2 lg:w-10/12 h-[1px] bg-zinc-500"/>
@@ -66,11 +83,11 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
                     <div className="flex flex-col md:flex-row justify-between items-center px-4 space-x-5 max-w-full py-10 md:py-2 gap-6">
                             <span className="rounded-md w-36 h-8 text-sm border-[2px] border-black border-solid
                             flex justify-center items-center"
-                            >Cod: {codigo}
+                            >Cód: {codigo}
                             </span>
 
                             <div className="flex justify-center items-center space-x-10 md:space-x-3">
-                                    <Link href={"https://wa.me/9999999"} target="blank">
+                                    <Link href={`https://wa.me/${numeroAnunciante}`} target="blank">
                                     <span className=" cursor-pointer w-12 h-12 lg:w-14 lg:h-14 text-white bg-green-400 rounded-full flex items-center
                                      justify-center "><FaWhatsapp/></span>
                                     </Link>
@@ -82,7 +99,7 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
                                             Mensagem
                                         </DialogTrigger>
 
-                                        <CardDialog codigoDoImovel={codigo}/>
+                                        <CardDialog codigoDoImovel={codigo} numeroAnunciante={numeroAnunciante}/>
                                     </Dialog>
                         
                                     

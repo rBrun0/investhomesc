@@ -1,29 +1,26 @@
 'use client'
 
+import { ConstructorsType } from "@/app/@Types/types";
 import { setFilterValues } from "@/app/features/filterValues/filterValuesSlice";
 import { db } from "@/app/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
-import { ReactNode, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 
-export const ConstrutorasModal = ({isModalOpen, children}: {isModalOpen: boolean, children?: ReactNode}) => {
+export const ConstrutorasModal = () => {
 
-    const [construtora, setConstrutora] = useState<any>([])
+    const [construtora, setConstrutora] = useState<ConstructorsType[]>([])
     const dispatch = useDispatch()
 
     const fetchData = async () => {
-        //   const querySnapshot = await getDocs(collection(db,"predios"));
-        //   const items = querySnapshot.docs.map(doc => ({
-        //     id: doc.id,
-        //     ...doc.data()
-        //   }));
-        //   setSaleApartments(items);
         const querySnapshot = await getDocs(collection(db,"construtoras"))
+        const result = []
         querySnapshot.forEach((doc) => {
-            setConstrutora((prev: any) =>  [...prev,doc.data().nome])
+            result.push(doc.data())
         }
     )
+    setConstrutora(result)
 };
 
     function searchProperty(c: string) {
@@ -37,13 +34,13 @@ export const ConstrutorasModal = ({isModalOpen, children}: {isModalOpen: boolean
     }, [])
 
     return (
-        <div className={`absolute bg-customPrimary text-white w-80 h-96 ${isModalOpen ? ' z-50  opacity-100' : '-z-50 opacity-0'} transition-all
+        <div className={`absolute bg-customPrimary text-white w-80 h-96 z-50 opacity-100 transition-all
         top-11 -left-1 overflow-x-hidden overflow-y-auto rounded-md flex flex-col    justify-start items-start p-2 font-thin py-2 text-xs gap-3`}>
             {
-                construtora && construtora.map((c: any, index: number) => (
+                construtora && construtora.map((c, index: number) => (
                     <div className="flex" key={index}>
-                    <Link href="/advancedsearch" className="" onClick={() => searchProperty(c)}>
-                        {c}
+                    <Link href="/advancedsearch" className="" onClick={() => searchProperty(c.name)}>
+                        {c.name}
                     </Link>
                     </div>
                 ))

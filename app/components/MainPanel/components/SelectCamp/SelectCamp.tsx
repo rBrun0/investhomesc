@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux"
 
 export const SelectCamp = () => {
 
+    const filterValues = useSelector((state: RootState) => state.filterValuesSlice)
+
+
 
     
     const cityCampList = [
@@ -18,19 +21,19 @@ export const SelectCamp = () => {
         },
         {
             label: 'Itapema',
-            value: 'itapema',
+            value: 'Itapema',
         },
         {
             label: 'Balneário Camboriú',
-            value: 'balneario camboriu',
+            value: 'Balneário Camboriú',
         },
         {
             label: 'Camboriú',
-            value: 'camboriu',
+            value: 'Camboriú',
         },
         {
             label: 'Porto Belo',
-            value: 'porto belo',
+            value: 'Porto Belo',
         },
     ]
 
@@ -43,10 +46,10 @@ export const SelectCamp = () => {
             label: 'Alto São Bento',
             value: 'alto sao bento',
         },
-        {
-            label: 'Casa Branca',
-            value: 'casa branca',
-        },
+        // {
+        //     label: 'Casa Branca',
+        //     value: 'casa branca',
+        // },
         {
             label: 'Ilhota',
             value: 'ilhota',
@@ -76,19 +79,19 @@ export const SelectCamp = () => {
         },
         {
             label: 'Barra Norte',
-            value: 'barra norte',
+            value: 'Barra Norte',
         },
         {
             label: 'Barra Sul',
-            value: 'barra sul',
+            value: 'Barra Sul',
         },
         {
             label: 'Centro',
-            value: 'centro',
+            value: 'Centro',
         },
         {
             label: 'Pioneiros',
-            value:'pioneiros',
+            value:'Pioneiros',
         },
     ]
 
@@ -99,11 +102,11 @@ export const SelectCamp = () => {
         },
         {
             label: 'Centro',
-            value: 'centro',
+            value: 'Centro',
         },
         {
             label: 'Perequê',
-            value: 'pereque',
+            value: 'Pereque',
         }
     ]
 
@@ -114,15 +117,16 @@ export const SelectCamp = () => {
         },
         {
             label: 'Centro',
-            value: 'centro',
+            value: 'Centro',
         }
     ]
 
     // city and neighborhood states
 
     const [cityCamp, setCityCamp] = useState("")
-
     const [selectedNeighorhood, setSelectedNeighborhood] = useState('')
+    const [selectedPropertyType, setSelectedPropertyType] = useState('')
+    const [selectedPropertyProfile, setSelectedPropertyProfile] = useState('')
 
     const dispatch = useDispatch()
     const filters = useSelector((state: RootState) => state.filterValuesSlice)
@@ -131,20 +135,18 @@ export const SelectCamp = () => {
         setCityCamp(e.target.value)
     }
 
-
-
-    // property Type states 
-
-    const [selectedPropertyType, setSelectedPropertyType] = useState('')
-
-    // property profile states
-
-    const [selectedPropertyProfile, setSelectedPropertyProfile] = useState('')
+    useEffect(() => {
+        filterValues.cities && setCityCamp(filterValues.cities)
+        filterValues.neighborhood && setSelectedNeighborhood(filterValues.neighborhood)
+        filterValues.propertyType && setCityCamp(filterValues.propertyType)
+        filterValues.propertyProfile && setCityCamp(filterValues.propertyProfile)
+    }, [])
 
     
     useEffect(() => {
+        console.log({filterValues})
         dispatch(setFilterValues({
-            cities: cityCamp,
+            cities: cityCamp ,
             neighborhood: selectedNeighorhood,
             propertyType: selectedPropertyType,
             propertyProfile: selectedPropertyProfile,
@@ -153,7 +155,7 @@ export const SelectCamp = () => {
 
     return (
         <>
-            <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" onChange={(e) => chooseCity(e)}>
+            <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" value={cityCamp} onChange={(e) => chooseCity(e)}>
 
                 {
                     cityCampList.map((vl) => (
@@ -163,10 +165,11 @@ export const SelectCamp = () => {
 
             </select>
 
+
             {
 
-            cityCamp === "" &&  <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" onChange={(e) => setSelectedNeighborhood(e.target.value)}>
-                                    <option value="">Todos Bairros...</option>
+            cityCamp === "" &&  <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" value={selectedNeighorhood} onChange={(e) => setSelectedNeighborhood(e.target.value)}>
+                                    <option>Todos Bairros...</option>
                                 </select>
 
             }
@@ -218,14 +221,14 @@ export const SelectCamp = () => {
 
 
 
-            <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" onClick={(e: any) => setSelectedPropertyType(e.target.value)}>
+            <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" value={selectedPropertyType} onClick={(e: any) => setSelectedPropertyType(e.target.value)}>
                 <option value="">Todos os tipos</option>
                 <option value="apartamento">Apartamento</option>
                 <option value="casa">Casa</option>
                 <option value="sala comercial">Sala Comercial</option>
             </select>
 
-            <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" onClick={(e: any) => setSelectedPropertyProfile(e.target.value)}>
+            <select className="w-56 h-10 rounded-md cursor-pointer text-zinc-600 pl-2" value={selectedPropertyProfile} onClick={(e: any) => setSelectedPropertyProfile(e.target.value)}>
                 <option value="">Todos os perfis</option>
                 <option value="chacara flora">Chacara Flora</option>
                 <option value="frente avenida">Frente Avenida</option>

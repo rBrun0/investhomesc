@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "dfatto-a05ca"
-  }
+    "default": "dfatto-a05ca",
+    "investdev": "invest-home-b3281"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

@@ -1,27 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "firebase/auth";
+import { db, auth } from "@/app/firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, doc, getDoc, getDocs, query } from "firebase/firestore";
 
-import { UserMetadata } from 'firebase/auth';
+// import { UserMetadata } from 'firebase/auth';
 
-// Cria um mock do objeto `User`
+export interface User {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  role: string | null;
+}
+
 const initialState: User = {
   uid: '',
   displayName: null,
   email: null,
-  emailVerified: false,
-  photoURL: null,
-  phoneNumber: null,
-  providerData: [],
-  isAnonymous: false,
-  tenantId: null,
-  refreshToken: '',
-  metadata: {} as UserMetadata,  // Mock do metadata
-  delete: async () => {},  // Mock do método delete
-  getIdToken: async () => '',  // Mock do método getIdToken
-  getIdTokenResult: async () => ({ token: '' } as any),  // Mock do getIdTokenResult
-  reload: async () => {},  // Mock do reload
-  toJSON: () => ({}),  // Mock do toJSON
-  providerId: "", // Mock do providerId
+  role: null,
 };
 
 export const userReducer = createSlice({
@@ -34,11 +29,49 @@ export const userReducer = createSlice({
       },
       
       // Reseta o estado ao valor inicial (logout)
-      clearUser: (state) => {
+      clearUser: () => {
         return initialState;
       },
     },
 })
+
+export const fetchUser = () => async (dispatch: any) => {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+       const tempU = []
+        const authUser = auth.currentUser
+        const fireStoreUsers = query(collection(db, 'users'))
+        const gotUsers = await getDocs(fireStoreUsers)
+      
+        gotUsers.forEach((doc) => {
+          if(doc.data().email == user.email) {
+            dispatch(
+              setUser({
+                uid: user.uid,
+                displayName: doc.data().displayName || null,
+                email: user.email,
+                role: doc.data().role || null,
+              })
+            );
+          }
+        })
+
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+
+      console.log('aaaaaaaaaa', user.email, tempU)
+
+      // if (docSnap.exists()) {
+      //   const userData = docSnap.data();
+
+      // } else {
+      //   console.error('Usuário não encontrado no Firestore');
+      // }
+    } else {
+      dispatch(clearUser());
+    }
+  });
+};
 
 export const { setUser, clearUser } = userReducer.actions
 export default userReducer.reducer

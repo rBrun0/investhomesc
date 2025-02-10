@@ -1,38 +1,93 @@
-"use client"
+"use client"    
 
 import { auth, db } from "@/app/firebaseConfig"
-import { addDoc, collection } from "firebase/firestore"
-import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore"
+import { Hammer } from "lucide-react"
+import { ConstructorSchema, useCreate } from "./schemas/construtora"
+import {toast} from 'sonner';
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 export const AdicionarConstrutora = () => {
 
-    const [name, setName] = useState("")
-    const curUser = auth.currentUser
+    const {register, handleSubmit, getValues, watch, reset, formState: {errors: formErrors } } = useCreate()
 
-    async function adicionarConstrutora() {
+    const valuesWatch = getValues()
+
+    console.log({valuesWatch})
+    console.log(watch('name'))
+
+    
+    const curUser = auth.currentUser
+    
+    async function onSubmit(data: ConstructorSchema) {
+
+        if(data.name === "") {
+            toast.error('Preencha o campo nome')
+            return
+        }
+
         try{
+            const constructorsRef = collection(db, "construtoras");
+        
+            const q = query(constructorsRef, where("nome", "==", data.name));
+
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                toast.error('Já existe uma construtora com esse nome!')
+                return; 
+              }
+
             addDoc(collection(db, "construtoras"), {
-                nome: name,
-                nomeVal: name.toLocaleLowerCase(),
+                id: uuidv4(),
+                name: data.name,
                 createdBy: curUser?.uid
             })
-            setName("");    
-        } catch(e) {
-            console.log(e)
+
+            toast.success('Construtora adicionada com sucesso!')
+        } catch(error) {
+            console.log({error})
         } finally {
             console.log("feitooo")
         }
+        reset()
     }
 
     return (
-        <div className="w-full mt-12 flex flex-col justify-center items-center outline-none">
-                <h1 className="text-xl font-semibold">adicionar construtora</h1>
+        <Dialog >
+            <DialogTrigger asChild>
+                
+                <Button className="text-xl bg-transparent text-customPrimary border border-customPrimary hover:bg-slate-100">
+                <Hammer  />
+                    Adicionar construtora
+                </Button>
 
-                <input type="text" placeholder="nome da construtora" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                value={name} onChange={(e) => setName(e.target.value)}/>
+            </DialogTrigger>
+            <DialogContent>
+            <DialogHeader>
+                <h1 className="text-xl font-semibold">Adicionar construtora</h1>
+            </DialogHeader>
 
-                <button onClick={adicionarConstrutora} className="bg-customPrimary text-white w-40 h-10 rounded-md border-[1px] border-customPrimary
-                        hover:bg-white hover:text-customPrimary transition-colors mt-8">adicionar construtora</button>
-        </div>
+            <form className="w-full mx-6 md:mx-0 mt-12 flex flex-col items-center outline-none" onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="" className="w-full">
+                    <h1 className="text-start text-sm">Nome</h1>
+
+                <input type="text" placeholder="nome da construtora" className="text-zinc-700 pl-3 w-full h-14 border rounded-md outline-none"
+                {...register('name')} />
+                {
+                    formErrors.name && <p className="w-full text-start text-xs text-red-500 ">{formErrors.name.message}</p>
+                }
+                </label>
+
+                <Button type="submit" variant="outline" className="bg-customPrimary text-white w-28 h-10 rounded-md border-[1px] border-customPrimary
+                        hover:bg-white hover:text-customPrimary transition-colors mt-8 ml-auto">Adicionar</Button>
+        </form>
+
+            </DialogContent>
+        </Dialog>
     )
 }

@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from "./components/Header/Header";
-import { Footer } from "./components/Footer/Footer";
-import { MainPanel } from "./components/MainPanel/MainPanel";
 import { ReduxProvider } from "./features/ReduxProvider";
+import UserLoader from "./components/userLoader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,14 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+        >
         <ReduxProvider>
-          <Header/>
+          {/* <Header/> */}
+          <UserLoader/>
             {children}
-          <Footer/>
+          {/* <Footer/> */}
         </ReduxProvider>
       </body>
     </html>

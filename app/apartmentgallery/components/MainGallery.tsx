@@ -60,26 +60,43 @@ export const MainGallery = ({imagesList}: {imagesList: any}) => {
             <div className="w-2/5 space-y-1">
 
                 <div className="flex gap-1">
+                    {
+                        imagesList[1] && (
                     <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
                     onClick={() => changeImageIndex(1)}><Image fill src={imagesList[1]} objectFit="cover" alt="imagem" className="hover:scale-105 duration-200"/>
                     </div>
+                        )
+                    }
+                    {
+                        imagesList[2] && (
                     <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
                     onClick={() => changeImageIndex(2)}><Image fill src={imagesList[2]} objectFit="cover" alt="imagem" className="hover:scale-105 duration-200"/>
                     </div>
+                        )
+                    }
+
+
                 </div>
 
                 <div className="flex gap-1">
-                    <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"><Image fill src={imagesList[3]} alt="imagem" objectFit="cover"
-                     className="hover:scale-105 duration-200"
-                    onClick={() => changeImageIndex(3)}/>
-                    </div>
-                    <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"><Image fill src={imagesList[4]} alt="imagem" objectFit="cover"
-                     className="hover:scale-105 duration-200"
-                    onClick={() => changeImageIndex(4)}/>
-                    </div>
-                </div>
+                    {
+                        imagesList[3] && (
+                            <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"><Image fill src={imagesList[3]} alt="imagem" objectFit="cover"
+                            className="hover:scale-105 duration-200"
+                            onClick={() => changeImageIndex(3)}/>
+                            </div>  
+                        )
+                    }
 
-                
+                    {
+                        imagesList[4] && (
+                            <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"><Image fill src={imagesList[4]} alt="imagem" objectFit="cover"
+                            className="hover:scale-105 duration-200"
+                            onClick={() => changeImageIndex(4)}/>
+                            </div>  
+                        )
+                    }
+                </div>
 
             </div>
         </section>

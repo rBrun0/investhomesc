@@ -21,7 +21,7 @@ const constructionFilterSlice = createSlice({
         setFilterValues: (state, action: PayloadAction<Partial<InitialState>>) => {
             return {...state,...action.payload }
         },
-        resetFilterValues: (state) => initialState,
+        resetFilterValues: () => initialState,
     }
 })
 

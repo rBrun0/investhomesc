@@ -21,7 +21,7 @@ export const FastSearch = () => {
 
                  <ul className="flex space-x-16 list-disc">
                     <Link href={"/advancedsearch"} className="text-xs font-semibold text-zinc-600"
-                    onClick={() => searchProperty("balneario camboriu")}>APARTAMENTOS EM BALNEARIO <br /> CAMBORIU</Link>
+                    onClick={() => searchProperty("balneario camboriu")}>APARTAMENTOS EM BALNEÁRIO <br /> CAMBORIÚ</Link>
 
                     <Link href={"/advancedsearch"} className="text-xs font-semibold text-zinc-600"
                     onClick={() => searchProperty("itapema")}>APARTAMENTOS EM ITAPEMA</Link>

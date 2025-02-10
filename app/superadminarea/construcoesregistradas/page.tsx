@@ -14,17 +14,19 @@ function construcoesRegistradas() {
     const {isSuperAdmin} = useSuperAdmin();
 
     const [constructions, setConstructions] = useState<ConstructionsType[]>([])
-    const [construcoesFiltradas, setConstrucoesFiltradas] = useState<ConstructionsType[]>([])
+    const [construcoesFiltradas, setconstrucoesFiltradas] = useState<ConstructionsType[]>([])
     const [search, setSearch] = useState('')
 
     const fetchData = async () => {
+
+        const result = [];
+
         const querySnapshot = await getDocs(collection(db,"construcao"))
         querySnapshot.forEach((doc) => {
-            setConstructions((prev: any) => {
-                return [...prev, doc.data()]
-            })
+            result.push(doc.data());
         }
     )
+    setConstructions(result)
 
 }
 
@@ -45,7 +47,7 @@ const deleteConstrucaoPorCampo = async (id: string) => {
 
   const procurarConstrucao = async () => {
     if (search.trim() === "") {
-      setConstrucoesFiltradas([]);
+      setconstrucoesFiltradas([]);
       return; // Se o input estiver vazio, não faz a consulta
     }
 
@@ -61,8 +63,9 @@ const deleteConstrucaoPorCampo = async (id: string) => {
       id: doc.id,
       ...doc.data(),
     }));
-    // @ts-ignore
-    setConstrucoesFiltradas(imoveisFiltrados);
+
+    // @ts-expect-error expected error
+    setconstrucoesFiltradas(imoveisFiltrados);
   };
 
 
@@ -83,8 +86,8 @@ useEffect(() => {
         }
 
     return (
-        <>
-        <h1 className="text-center text-4xl mt-12 text-zinc-800">Construções Registradas</h1>    
+        <div className="w-full flex flex-col mt-12 gap-4 pb-8">
+        <h1 className="text-center text-4xl mt-12 text-zinc-800">Construções registradas</h1>    
 
         <div className="flex justify-center items-center space-y-4 space-x-2 mt-6">
             <input type="text" placeholder="Pesquisar por Codigo" className="w-96 outline-none h-14 px-2 shadow-lg rounded-md"
@@ -121,7 +124,7 @@ useEffect(() => {
                 ))
             }
         </div>
-        </>
+        </div>
     )
 }
 

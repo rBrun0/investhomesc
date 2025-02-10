@@ -1,36 +1,65 @@
 "use client"
 
-import { auth, db, storage } from "@/app/firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { ChangeEvent, useState } from "react";
+import { auth, db } from "@/app/firebaseConfig";
+import { Button } from "@/components/ui/button";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { HousePlus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa"
 import { v4 as uuidv4 } from 'uuid';
+import { ImoveisType, useCreate } from "./schemas/imoveis";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { toast, Toaster } from "sonner";
+import Image from "next/image";
+
 
 export const AdicionarImoveis = () => {
 
-    const [dataEntregaEmpreendimento, setDataEntregaEmpreendimento] = useState('')
-    const [descricao, setDescricao] = useState("");
-    const [preco, setPreco] = useState("");
-    const [areaPrivativa, setAreaPrivativa] = useState("");
-    const [bairro, setBairro] = useState("");
-    const [cidade, setCidade] = useState("");
-    const [estado, setEstado] = useState("");
-    const [rua, setRua] = useState("");
-    const [numero, setNumero] = useState("");
-    const [vagas, setVagas] = useState("");
-    const [suites, setSuites] = useState("");
-    const [videoLink, setVideoLink] = useState("");
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
+
+    const [registeredConstructors, setRegisteredConstructors] = useState<{name: string}[]>()
+
+        const fetchConstructors = async () => {
+        
+            const querySnapshot = await getDocs(collection(db,"construtoras"))
+            const temp = []
+            querySnapshot.forEach((doc) => {
+                    temp.push(doc.data())
+            }
+        )
+        setRegisteredConstructors(temp)
+    }
+
+    const {register, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
+    const valuesWatch = getValues()
+
+    console.log({watch, valuesWatch})
+
+    console.log({formErrors})
+
+    // const [date, setDate] = useState<Date | undefined>()
+    
+
+    // const [dataEntregaEmpreendimento, setDataEntregaEmpreendimento] = useState('')
+    // const [descricao, setDescricao] = useState("");
+    // const [preco, setPreco] = useState("");
+    // const [areaPrivativa, setAreaPrivativa] = useState("");
+    // const [bairro, setBairro] = useState("");
+    // const [cidade, setCidade] = useState("");
+    // const [estado, setEstado] = useState("");
+    // const [rua, setRua] = useState("");
+    // const [numero, setNumero] = useState("");
+    // const [vagas, setVagas] = useState("");
+    // const [suites, setSuites] = useState("");
+    // const [videoLink, setVideoLink] = useState("");
+    // const [latitude, setLatitude] = useState("");
+    // const [longitude, setLongitude] = useState("");
+    // const [banheiros, setBanheiros] = useState("");
+    // const [dormitorios, setDormitorios] = useState(""); 
+    // const [construtora, setConstrutora] = useState("");
+    // const [numeroAnunciante, setNumeroAnunciante] = useState("");
+    
     const [areaDeLazer, setAreaDeLazer] = useState<{id: number, value: string}[]>([]);
     const [areaDeLazerInput, setAreaDeLazerInput] = useState("");
-    const [banheiros, setBanheiros] = useState("");
-    const [dormitorios, setDormitorios] = useState(""); 
-    const [construtora, setConstrutora] = useState("");
-    const [propertyType, setPropertyType] = useState("");
-    const [numeroAnunciante, setNumeroAnunciante] = useState("");
-
     const [uploadedImages, setUploadedImages] = useState<string[]>([])  
 
     const [informacoesEmpreendimentoInput, setInformacoesEmpreendimentoInput] = useState("")
@@ -38,13 +67,14 @@ export const AdicionarImoveis = () => {
 
     const [informacoesImovelInput, setInformacoesImovelInput] = useState("")
     const [informacoesImovel, setInformacoesImovel] = useState<{id: number, value: string}[]>([]);
-    const [checkboxPerfi, setCheckBoxPerfil] = useState<string[]>([])
-    const [checkboxEmpreendimento, setCheckboxEmpreendimento] = useState<string[]>([])
-    const [checkboxCondominio, setCheckboxCondominio] = useState<string[]>([])
+    // const [checkboxPerfi, setCheckBoxPerfil] = useState<string[]>([])
+    // const [checkboxCondominio, setCheckboxCondominio] = useState<string[]>([])
 
     const curUser = auth.currentUser
 
-    const [file, setFile] = useState<any>();
+    const [file, setFile] = useState<File | null>(null);
+    
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     function adicionarInformacoesImovel() {
         setInformacoesImovel([
@@ -59,10 +89,17 @@ export const AdicionarImoveis = () => {
     }
 
     function adicionarInformacoesEmpreendimento() {
-        setInformacoesEmpreendimento([
-           ...informacoesEmpreendimento,
-            {id: Math.random(), value: informacoesEmpreendimentoInput },
-        ]);
+
+        const valueEmprendimento = informacoesEmpreendimento.map((v) => v.value) 
+
+        if(!informacoesEmpreendimentoInput) return;
+
+        if(valueEmprendimento.includes(informacoesEmpreendimentoInput)) return;
+
+        setInformacoesEmpreendimento((prev) => {
+            return [...prev, {id: uuidv4(), value: informacoesEmpreendimentoInput }]
+        })
+
         setInformacoesEmpreendimentoInput("");
     }
 
@@ -82,174 +119,367 @@ export const AdicionarImoveis = () => {
         setAreaDeLazer(areaDeLazer.filter((area) => area.id!== id));
     }
 
-    const handleCheckPerfilImovel = (e: ChangeEvent<HTMLInputElement>) => {
-        const isSelected = e.target.checked
-        const value = e.target.value
+    // const handleCheckPerfilImovel = (e: ChangeEvent<HTMLInputElement>) => {
+    //     const isSelected = e.target.checked
+    //     const value = e.target.value
 
-        if(isSelected) {
-            setCheckBoxPerfil([...checkboxPerfi, value])
-        } else {
-            setCheckBoxPerfil((prev) => {
-                return prev.filter((nam) => nam != value)
-            })
-        }
+    //     if(isSelected) {
+    //         setCheckBoxPerfil([...checkboxPerfi, value])
+    //     } else {
+    //         setCheckBoxPerfil((prev) => {
+    //             return prev.filter((nam) => nam != value)
+    //         })
+    //     }
 
-        console.log(checkboxPerfi)
-    }
+    //     console.log(checkboxPerfi)
+    // }
 
-    const handleCheckImovel = (e: ChangeEvent<HTMLInputElement>) => {
-        const isSelected = e.target.checked
-        const value = e.target.value
+    // const handleCheckImovel = (e: ChangeEvent<HTMLInputElement>) => {
+    //     const isSelected = e.target.checked
+    //     const value = e.target.value
 
-        if(isSelected) {
-            setCheckboxEmpreendimento([...checkboxEmpreendimento, value])
-        } else {
-            setCheckboxEmpreendimento((prev) => {
-                return prev.filter((nam) => nam != value)
-            })
-        }
+    //     if(isSelected) {
+    //         setCheckboxEmpreendimento([...checkboxEmpreendimento, value])
+    //     } else {
+    //         setCheckboxEmpreendimento((prev) => {
+    //             return prev.filter((nam) => nam != value)
+    //         })
+    //     }
 
-        console.log(checkboxPerfi)
-    }
+    // }
 
-    const handleCheckCondominio = (e: ChangeEvent<HTMLInputElement>) => {
-        const isSelected = e.target.checked
-        const value = e.target.value
+    // const handleCheckCondominio = (e: ChangeEvent<HTMLInputElement>) => {
+    //     const isSelected = e.target.checked
+    //     const value = e.target.value
 
-        if(isSelected) {
-            setCheckboxCondominio([...checkboxCondominio, value])
-        } else {
-            setCheckboxCondominio((prev) => {
-                return prev.filter((nam) => nam != value)
-            })
-        }
+    //     if(isSelected) {
+    //         setCheckboxCondominio([...checkboxCondominio, value])
+    //     } else {
+    //         setCheckboxCondominio((prev) => {
+    //             return prev.filter((nam) => nam != value)
+    //         })
+    //     }
 
-        console.log(checkboxCondominio)
-    }
+    //     console.log(checkboxCondominio)
+    // }
 
-    const handleUpload = () => {
-      if (!file) return;
+    const cloudinaryUpload = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "presetinvesthome"); // Substitua pelo seu upload_preset
       
-      const storageRef = ref(storage, `imoveis/${JSON.stringify(Date())}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Você pode monitorar o progresso do upload aqui
-        },
-        (error) => {
-          console.error("Erro ao enviar imagem: ", error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("URL da imagem: ", downloadURL);
-            // Aqui você pode salvar a URL no Firestore junto com o imóvel
-          });
-        }
-      );
+        const response = await fetch("https://api.cloudinary.com/v1_1/dpqsn5y55/image/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        console.log('data cloudinary', data)
+        return data.secure_url;
+
+    }
+
+    const handleUpload = async () => {
+        if (!file) return;
+
+        // const timestamp = Date.now(); // Alternativa: new Date().toISOString()
+        // const fileName = `${timestamp}-${file.name}`;
+
+        const imageUrl = await cloudinaryUpload(file);
+        setUploadedImages((prev) => [...prev, imageUrl]); 
+
+        console.log({setUploadedImages})
     };
+    
+    async function onSubmit(data: ImoveisType) {
 
-    function adicionarImovel() {
-        addDoc((collection(db, "imoveis")), {
-            areaPrivativa: areaPrivativa,
-            bairro: bairro,
-            bairroVal: bairro.toLocaleLowerCase().normalize("NFC"),
-            bathrooms: banheiros,
-            caracteristicasCondominio: checkboxCondominio,
-            caracteristicasImovel: checkboxEmpreendimento,
-            cidade: cidade,
-            cidadeVal: cidade.toLocaleLowerCase().normalize("NFC"),
-            codigoImovel: String(Date.now()),
-            construtora: construtora,
-            construtoraVal: construtora.toLowerCase().normalize("NFC"),
-            created: new Date(),
-            dataEntregaEmpreenimento: dataEntregaEmpreendimento,
-            descricao: descricao,
-            id: uuidv4().slice(0,8),
-            imagensPlanta: uploadedImages,
-            imagensUrl: uploadedImages,
-            informacoesEmpreendimento: informacoesEmpreendimento,
-            informacoesImovel: informacoesImovel,
-            informacoesLazer: areaDeLazer,
-            localizacao: {latitude: latitude, longitude: longitude},
-            numeroAnunciante: numeroAnunciante,
-            numeroRua: rua,
-            perfil: checkboxPerfi,
-            preco: preco,
-            propertyVideo: videoLink,
-            quartos: dormitorios,
-            suites: suites,
-            tipoDoImovel: propertyType,
-            vagas: vagas,
-            createdBy: curUser?.uid
+        if(uploadedImages.length <= 0) {
+            toast.error('Por favor, selecione pelo menos uma imagem!')
+            return;
+        }
+        
+        try {
+
+            
+            const propertiesRef = collection(db, "imoveis");
+            
+            const q = query(propertiesRef, where("codigoImovel", "==", data.descricao));
+            
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                toast.error('Já existe uma construtora com esse nome!')
+                console.log("deu")
+                return; 
+            }
+
+            const numberWithoutSpaces = data.numeroAnunciante.split(" ").join("")
+            
+            addDoc((collection(db, "imoveis")), {
+            ...{
+                ...data,
+                uid: uuidv4(),
+                descricao: data.descricao,
+                imagensUrl: uploadedImages,
+                buildingProfile: data.buildingProfile,
+                informacoesImovel: informacoesImovel.map((emp) => emp.value),
+                informacoesLazer: areaDeLazer.map((area) => area.value),
+                informacoesEmpreendimento: informacoesEmpreendimento.map((empreendimento) => empreendimento.value),
+                createdBy: curUser.uid,
+                correctorNumber: `(${numberWithoutSpaces.slice(0,2)}) ${numberWithoutSpaces.slice(2,4)} ${numberWithoutSpaces.slice(4,9)}-${numberWithoutSpaces.slice(9,13)}`,
+                codigoImovel: `invest-${String(uuidv4()).slice(0,4)}`,
+                latitude: `${data.latitude}}`,
+                longitude: `${data.longitude}}`,
+            }
+            // areaPrivativa: areaPrivativa,
+            // bairro: bairro,
+            // bathrooms: banheiros,
+            // caracteristicasCondominio: checkboxCondominio,
+            // caracteristicasImovel: checkboxEmpreendimento,
+            // cidade: cidade,
+            // codigoImovel: `invest-${String(uuidv4).slice(0,3)}`,
+            // construtora: construtora,
+            // created: new Date(),
+            // dataEntregaEmpreenimento: dataEntregaEmpreendimento,
+            // descricao: descricao,
+            // id: uuidv4().slice(0,8),
+            // imagensPlanta: uploadedImages,
+            // imagensUrl: uploadedImages,
+            // informacoesEmpreendimento: informacoesEmpreendimento,
+            // informacoesImovel: informacoesImovel,
+            // informacoesLazer: areaDeLazer,
+            // localizacao: {latitude: latitude, longitude: longitude},
+            // numeroAnunciante: numeroAnunciante,
+            // numeroRua: rua,
+            // perfil: checkboxPerfi,
+            // preco: preco,
+            // propertyVideo: videoLink,
+            // quartos: dormitorios,
+            // suites: suites,
+            // tipoDoImovel: propertyType,
+            // vagas: vagas,
+            // createdBy: curUser?.uid
         })
+
+        setIsDialogOpen(false)
+
+        toast.success("Imovel criado com sucesso!")
+        
+        reset()
+    } catch(err) {
+        console.log({err})
+        toast.error("Erro ao criar imovel!")
     }
+    }
+
+    useEffect(() => {
+        fetchConstructors()
+    }, [])
+
+    console.log({registeredConstructors})
+
+    useEffect(() => {
+        console.log("Arquivo selecionado:", file);
+      }, [file]);
 
     return (
-        <div>
-                       
+        <>
+            <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                <Button className="text-center text-xl bg-transparent text-customPrimary border border-customPrimary hover:bg-slate-100">
+                <HousePlus />
+                    Adicionar imoveis
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-h-96 overflow-y-scroll max-w-[40rem]">
 
-            <hr className="w-4/5 mx-auto mt-12"/>
+                    <DialogHeader>
+                    <h1 className="text-xl font-semibold">Adicionar imoveis</h1>
+                    </DialogHeader>
 
-            <div className="w-full mt-16 flex flex-col justify-center items-center outline-none">
-                <h1 className="text-center text-xl font-semibold">adicionar imoveis</h1>
+                <div >
 
-                <input type="number" placeholder="preco"  className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"/>
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-16 flex flex-col justify-center items-center outline-none gap-12">
 
-                <div className="flex flex-col justify-center items-center space-y-16 w-3/5">
-                    <div className="flex flex-col items-center">
-                    <input type="text" placeholder="descricao do imovel" className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"/>
-                    <div className="">
-                        {
-                            descricao
-                        }
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6  ">Preço</h1>
+                <input type="number" id="preco" placeholder="R$"  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                {...register('preco')}/>
+                {
+                    formErrors.preco && <p className="w-full text-start text-xs text-red-500 ">{formErrors.preco.message}</p>
+                }
+                </label>
+
+                <div className="flex flex-col justify-center items-center space-y-16 w-full">
+                    <div className="flex flex-col items-center w-full">
+
+                    <label htmlFor="descricaoInput" className="w-full relative">
+                    <h1 className="absolute -top-6">Descrição do imovel</h1>
+                    <input type="text" id="descricaoInput" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('descricao')}/>
+                    {
+                    formErrors.descricao && <p className="w-full text-start text-xs text-red-500 ">{formErrors.descricao.message}</p>
+                }
+                </label>
+                        
                     </div>
-                    </div>
 
-                    <input type="number" name="" id="" placeholder="area privativa" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={preco} onChange={e => setPreco(e.target.value)}/>
+                <label htmlFor="areaPrivativaInput" className="w-full relative">
+                    <h1 className="absolute -top-6">Área privativa</h1>
+                    <input type="number" id="areaPrivativaInput" placeholder="m²" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('areaPrivativa')}/>
+                    {
+                    formErrors.areaPrivativa && <p className="w-full text-start text-xs text-red-500 ">{formErrors.areaPrivativa.message}</p>
+                }
+                </label>
 
-                    <input type="number" name="" id="" placeholder="descricao" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={descricao} onChange={(e) => setDescricao(e.target.value)}/>
+                {/* <label className="w-full relative">
+                    <h1 className="absolute -top-6">Data de entrega</h1> */}
+                {/* </label> */}
+
+        <label className="w-full text-sm font-medium text-gray-700 mb-2" htmlFor="receiveTime">
+        Tempo de entrega (em dias)
+
+        <input type="text" id="areaPrivativaInput" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('receiveTime')}/>
+                    {
+                    formErrors.receiveTime && <p className="w-full text-start text-xs text-red-500 ">{formErrors.receiveTime.message}</p>
+                }
+
+      {/* <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-[240px] justify-start text-left font-normal",
+            !date && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon />
+          {date ? format(date, "PPP",  { locale: ptBR }) : <span>Selecione uma data</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0 z-[999999] pointer-events-auto" align="start">
+        <Calendar
+          locale={ptBR}
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover> */}
+      </label>
 
 
-                    <input type="text" name="" id="" placeholder="data de entrega - 10/10/1910" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={dataEntregaEmpreendimento} onChange={(e) => setDataEntregaEmpreendimento(e.target.value)}/>
 
-                    <input type="text" placeholder="dormitorios" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={suites} onChange={(e) => setSuites(e.target.value)}/>
 
-                    <input type="number" placeholder="banheiros" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={banheiros} onChange={(e) => setBanheiros(e.target.value)}/>
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Banheiros</h1>
+                    <input type="number" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('banheiros')}/>
+                                    {
+                    formErrors.banheiros && <p className="w-full text-start text-xs text-red-500 ">{formErrors.banheiros.message}</p>
+                }
+                </label>
 
-                    <input type="text" placeholder="estado" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={estado} onChange={(e) => setEstado(e.target.value)}/>
 
-                    <input type="text" placeholder="dormitorios" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={dormitorios} onChange={(e) => setDormitorios(e.target.value)}/>
-                    <input type="text" placeholder="suites" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"/>
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Dormitorios</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                {...register('dormitorios')}/>
+                                {
+                    formErrors.dormitorios && <p className="w-full text-start text-xs text-red-500 ">{formErrors.dormitorios.message}</p>
+                }                
+                </label>
 
-                    <input type="text" placeholder="numero da propriedade"  className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"
-                    value={numero} onChange={(e) => setNumero(e.target.value)}/>
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Suites</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('suites')}/>
+                                    {
+                    formErrors.suites && <p className="w-full text-start text-xs text-red-500 ">{formErrors.suites.message}</p>
+                }
+                </label>
 
-                    <input type="text" placeholder="rua - numero ou nome"  className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"
-                    value={rua} onChange={(e) => setRua(e.target.value)}/>
+                        
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Número da propridade</h1>
+                    <input type="text" placeholder=""  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('numero')}/>
+                                    {
+                    formErrors.numero && <p className="w-full text-start text-xs text-red-500 ">{formErrors.numero.message}</p>
+                }
+                </label>
 
-                    <input type="text" placeholder="numero de vagas" className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"
-                    value={vagas} onChange={(e) =>setVagas(e.target.value)}/>
-                    <input type="text" placeholder="bairro" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={bairro} onChange={(e) => setBairro(e.target.value)}/>
-                    <input type="text" placeholder="cidade" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={cidade} onChange={(e) => setCidade(e.target.value)}/>
-                    <input type="text" placeholder="nome da construtora" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={construtora} onChange={(e) => setConstrutora(e.target.value)}/>
-                    <input type="text" placeholder="data de entrega do empreendimento" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"/>
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Vagas</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('vagas')}/>
+                {
+                    formErrors.vagas && <p className="w-full text-start text-xs text-red-500 ">{formErrors.vagas.message}</p>
+                }
+                </label>
 
-                    <div >
-                        <h1 className="text-2xl text-center">tipo do imovel</h1>
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Rua</h1>
+                    <input type="text" placeholder="numero ou nome"  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('rua')}/>
+                                    {
+                    formErrors.rua && <p className="w-full text-start text-xs text-red-500 ">{formErrors.rua.message}</p>
+                }
+                </label>
 
-                        <select name="" id="" className="text-zinc-700 pl-3 w-96 h-14 shadow-md" onChange={(e) => setPropertyType(e.target.value)}>
+
+
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Bairro</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('bairro')}/>
+                {
+                    formErrors.bairro && <p className="w-full text-start text-xs text-red-500 ">{formErrors.bairro.message}</p>
+                }
+                </label>
+
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Cidade</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('cidade')}/>
+                {
+                    formErrors.cidade && <p className="w-full text-start text-xs text-red-500 ">{formErrors.cidade.message}</p>
+                }
+                </label>
+                
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Estado</h1>
+                    <input type="text" placeholder="ex: SC" className="text-zinc-700 plut t-3 w-full h-14 border rounded-md"
+                    {...register('estado')}/>
+                                    {
+                    formErrors.estado && <p className="w-full text-start text-xs text-red-500 ">{formErrors.estado.message}</p>
+                }
+                </label>
+
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Construtora</h1>
+                    <select className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('construtora')}>
+                    {
+                        registeredConstructors?.map((c) => (
+                            <option key={c.name} value={c.name}>{c.name}</option>
+                        ))
+                    }
+                    </select>
+
+                {
+                    formErrors.construtora && <p className="w-full text-start text-xs text-red-500 ">{formErrors.construtora.message}</p>
+                }
+                </label>
+
+                    <div>
+                        <h1 className="text-2xl text-center">Tipo do imovel</h1>
+
+                        <select name="" id="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md" {...register('propertyType')}>
                             <option value="apartamento">Apartamento</option>
                             <option value="casa">Casa</option>
                             <option value="sala comercial">Sala Comercial</option>
@@ -257,32 +487,47 @@ export const AdicionarImoveis = () => {
                     </div>
 
                     <div className="flex flex-col justify-center items-center space-y-3">
-                        <h1>informacoes do imovel</h1>
+                        <h1>Informações do imovel</h1>
 
-                        <input type="text" placeholder="ex: numero de quartos" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                        value={informacoesImovelInput} onChange={(e) => setInformacoesEmpreendimentoInput(e.target.value)}/>
+                        <label htmlFor="preco" className="w-full relative">
+                        <input type="text" placeholder="ex: numero de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                        value={informacoesImovelInput} onChange={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            setInformacoesImovelInput(e.target.value)
+                        }}/>
+                </label>
+
                         <button className="bg-customPrimary text-white w-20 h-8 rounded-md border-[1px] border-customPrimary
-                        hover:bg-white hover:text-customPrimary transition-colors" onClick={adicionarInformacoesImovel}>adicionar</button>
+                        hover:bg-white hover:text-customPrimary transition-colors" onClick={adicionarInformacoesImovel}
+                        type="button">
+                            adicionar
+                        </button>
 
                         <div className="flex flex-wrap justify-between gap-4">
 
                             {
                                 informacoesImovel.map(info => (
-                                    <span className="space-x-2 flex items-center justify-center" key={info.id}> <FaRegTrashAlt onClick={() => removerInformacoesImovel(info.id)}/>
-                                    <span>{info.value}</span></span>
+                                    <span className="space-x-2 flex items-center justify-center" key={info.id}>
+                                        <FaRegTrashAlt onClick={() => removerInformacoesImovel(info.id)}/>
+                                    <span>{info.value}</span>
+                                    </span>
                                 ))
                             }
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-center items-center space-y-3">
-                        <h1>informacoes do empreendimento</h1>
+                    <div className="flex flex-col justify-center items-center gap-3">
+                        <h1 className="w-full text-center">Informações do empreendimento</h1>
 
-                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
+                        <label htmlFor="preco" className="w-full flex items-center justify-center">
+                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 full h-14 border rounded-md"
                         value={informacoesEmpreendimentoInput} onChange={(e) => setInformacoesEmpreendimentoInput(e.target.value)}/>
+                </label>
+
                         <button className="bg-customPrimary text-white w-20 h-8 rounded-md border-[1px] border-customPrimary
-                        hover:bg-white hover:text-customPrimary transition-colors" 
-                        onClick={adicionarInformacoesEmpreendimento}>adicionar</button>
+                        hover:bg-white hover:text-customPrimary transition-colors" type="button"
+                        onClick={adicionarInformacoesEmpreendimento}>Adicionar</button>
 
                         <div className="flex flex-wrap justify-between gap-4 mt-8" >
 
@@ -298,84 +543,107 @@ export const AdicionarImoveis = () => {
                     
                 </div>
 
-                    <div className="flex flex-col justify-center items-center space-y-3 mt-8">
-                        <h1>informacoes do lazer</h1>
+                    <div className="flex flex-col justify-center items-center space-y-3">
+                        <h1>Informações do lazer</h1>
 
-                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
+                        <label htmlFor="preco" className="w-full relative">
+                        <input type="text" placeholder="ex: piscina" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                         value={areaDeLazerInput} onChange={(e) => setAreaDeLazerInput(e.target.value)}/>
-                        <button className="bg-customPrimary text-white w-20 h-8 rounded-md border-[1px] border-customPrimary
-                        hover:bg-white hover:text-customPrimary transition-colors"
-                        onClick={adicionarInformacoesLazer}>adicionar</button>
+                </label>
 
-                        <div className="flex flex-wrap justify-between gap-4 w-3/5">
-                            <span className="space-x-2 flex items-center justify-center"> <FaRegTrashAlt /><span>item-1</span></span>
+                        <button className="bg-customPrimary text-white w-20 h-8 rounded-md border-[1px] border-customPrimary
+                        hover:bg-white hover:text-customPrimary transition-colors" type="button"
+                        onClick={adicionarInformacoesLazer}>Adicionar</button>
+
+                        <div className="flex flex-wrap justify-between gap-4 w-full">
                             {
                                 areaDeLazer.map((area) => (
                                     <span className="space-x-2 flex items-center justify-center" key={area.id}> 
-                                    <FaRegTrashAlt onClick={() => removerAreaDeLazer(area.id)}/>
-                                    <span>{area.value}</span></span>
+                                        <FaRegTrashAlt onClick={() => removerAreaDeLazer(area.id)}/>
+                                        <span>{area.value}</span>
+                                    </span>
                                 ))
                             }
                         </div>
                     </div>  
 
                     {
-                        propertyType == "condominio" && <input type="text" placeholder="nome do condominio" className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"/>
+                        valuesWatch.propertyType == "condominio" && <input type="text" placeholder="nome do condominio" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"/>
                     }
 
-                    <input type="text" placeholder="numero do anunciante - 55 99 999999999" className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"
-                    value={numeroAnunciante} onChange={(e) => setNumeroAnunciante(e.target.value)}/>
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6  ">Número do anunciante</h1>
+                    <input type="text" placeholder="55 99 999999999" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('numeroAnunciante')} maxLength={13}/>
+                                    {
+                    formErrors.numeroAnunciante && <p className="w-full text-start text-xs text-red-500 ">{formErrors.numeroAnunciante.message}</p>
+                }
+                </label>
 
-                    <input type="text" placeholder="link para video"  className="text-zinc-700 pl-3 w-96 h-14 shadow-md mt-8"
-                    value={videoLink} onChange={(e) => setVideoLink(e.target.value)}/>
+
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6  ">Link para vídeo</h1>
+                    <input type="text" placeholder="https://youtube.com"  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('videoLink')}/>
+                </label>
+
 
                     <div className="flex flex-col justify-center items-center space-y-4 pt-8">
 
                         <h1 className="text-2xl text-center">Perfil do imovel</h1>
 
                         <div className="flex flex-wrap w-3/5 justify-start items-center gap-8">
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Chacara Flora"} onChange={(e) => handleCheckPerfilImovel(e)}/>
-                            <span>Chacara Flora</span>
+                        <label className="flex items-center space-x-2" htmlFor="chacara-flora">
+                            <input type="checkbox" name="" id="chacara-flora" value={"Chacara Flora"}
+                            {...register("buildingProfile")}/>
+                            <span>Chácara Flora</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Frente Avenida"} onChange={(e) => handleCheckPerfilImovel(e)}/>
+                        <label className="flex items-center space-x-2" htmlFor="frente-avenida">
+                            <input type="checkbox" name="" id="frente-avenida" value={"Frente Avenida"}
+                            {...register("buildingProfile")}/>
                             <span>Frente Avenida</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Frente Mar"} onChange={(e) => handleCheckPerfilImovel(e)}/>
+                        <label className="flex items-center space-x-2" htmlFor="frente-mar">
+                            <input type="checkbox" name="" id="frente-mar" value={"Frente Mar"}
+                            {...register("buildingProfile")}/>
                             <span>Frente Mar</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Lancamentos"} onChange={(e) => handleCheckPerfilImovel(e)}/>
-                            <span>Lancamentos</span>
+                        <label className="flex items-center space-x-2" htmlFor="lancamentos">
+                            <input type="checkbox" name="" id="lancamentos" value={"Lancamentos"}
+                            {...register("buildingProfile")}/>
+                            <span>Lançamentos</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Mobiliados"} onChange={(e) => handleCheckPerfilImovel(e)}/>
+                        <label className="flex items-center space-x-2" htmlFor="mobiliados">
+                            <input type="checkbox" name="" id="mobiliados" value={"Mobiliados"}
+                            {...register("buildingProfile")}/>
                             <span>Mobiliados</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Plaza Iate Club"} onChange={(e) => handleCheckPerfilImovel(e)}/>
+                        <label className="flex items-center space-x-2" htmlFor="plaza-iate">
+                            <input type="checkbox" name="" id="plaza-iate" value={"Plaza Iate Club"}
+                            {...register("buildingProfile")}/>
                             <span>Plaza Iate Club</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Quadra do Mar"} onChange={(e) => handleCheckPerfilImovel(e)}/>
+                        <label className="flex items-center space-x-2" htmlFor="quadra-mar">
+                            <input type="checkbox" name="" id="quadra-mar" value={"Quadra do Mar"}
+                            {...register("buildingProfile")}/>
                             <span>Quadra do Mar</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Sem Mobilia"} onChange={(e) => handleCheckPerfilImovel(e)}/>
-                            <span>Sem Mobilia</span>
+                        <label className="flex items-center space-x-2" htmlFor="sem-mobilia">
+                            <input type="checkbox" name="" id="sem-mobilia" value={"Sem Mobilia"}
+                            {...register("buildingProfile")}/>
+                            <span>Sem Mobília</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="apartamento">
-                            <input type="checkbox" name="" id="apartamento" value={"Showroom"} onChange={(e) => handleCheckPerfilImovel(e)}/>
+                        <label className="flex items-center space-x-2" htmlFor="showroom">
+                            <input type="checkbox" name="" id="showroom" value={"Showroom"}
+                            {...register("buildingProfile")}/>
                             <span>Showroom</span>
                         </label>
                            
@@ -384,51 +652,51 @@ export const AdicionarImoveis = () => {
 
                     <div className="flex flex-col justify-center items-center space-y-4 pt-8">
 
-                <h1 className="text-2xl text-center">caracteristicas do imovel</h1>
+                <h1 className="text-2xl text-center">características do imovel</h1>
 
                 <div className="flex flex-wrap w-3/5 justify-start items-center gap-8">
                 <label className="flex items-center space-x-2" htmlFor="Apartamentocobertura">
-                    <input type="checkbox" name="" id="Apartamentocobertura" value={"Apartamento cobertura"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Apartamentocobertura" value={"Apartamento cobertura"} {...register("buildingInformations")}/>
                     <span>Apartamento cobertura</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Soldatarde">
-                    <input type="checkbox" name="" id="Soldatarde" value={"Sol da tarde"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Soldatarde" value={"Sol da tarde"} {...register("buildingInformations")}/>
                     <span>Sol da tarde</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Duplex">
-                    <input type="checkbox" name="" id="Duplex" value={"Duplex"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Duplex" value={"Duplex"} {...register("buildingInformations")}/>
                     <span>Duplex</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Quadramar">
-                    <input type="checkbox" name="" id="Quadramar" value={"Quadra mar"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Quadramar" value={"Quadra mar"} {...register("buildingInformations")}/>
                     <span>Quadra mar</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Semmobilia">
-                    <input type="checkbox" name="" id="Semmobilia" value={"Sem mobília"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Semmobilia" value={"Sem mobília"} {...register("buildingInformations")}/>
                     <span>Sem mobília</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="SoldaManha">
-                    <input type="checkbox" name="" id="SoldaManha" value={"Sol da Manha"} onChange={(e) => handleCheckImovel(e)}/>
-                    <span>Sol da Manha</span>
+                    <input type="checkbox" name="" id="SoldaManha" value={"Sol da manhã"} {...register("buildingInformations")}/>
+                    <span>Sol da Manhã</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Aptodiferenciado">
-                    <input type="checkbox" name="" id="Aptodiferenciado" value={"Apto diferenciado"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Aptodiferenciado" value={"Apartamento diferenciado"} {...register("buildingInformations")}/>
                     <span>Apto diferenciado</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Showroom">
-                    <input type="checkbox" name="" id="Showroom" value={"Showroom"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Showroom" value={"Showroom"} {...register("buildingInformations")}/>
                     <span>Showroom</span>
                 </label>
 
                 <label className="flex items-center space-x-2" htmlFor="Frenteavenida">
-                    <input type="checkbox" name="" id="Frenteavenida" value={"apartamento"} onChange={(e) => handleCheckImovel(e)}/>
+                    <input type="checkbox" name="" id="Frenteavenida" value={"Frente avenida"} {...register("buildingInformations")}/>
                     <span>Frente avenida</span>
                 </label>
                 </div>
@@ -437,85 +705,147 @@ export const AdicionarImoveis = () => {
 
                 <div className="flex flex-col justify-center items-center space-y-4 pt-8">
 
-                <h1 className="text-2xl text-center">caracteristicas do condominio</h1>
+                <h1 className="text-2xl text-center">características do condomínio</h1>
 
                 <div className="flex flex-wrap w-3/5 justify-start items-center gap-8">
-                                <label className="flex items-center space-x-2" htmlFor="apartamento">
-                                    <input type="checkbox" name="" id="apartamento" value={"Apartamento cobertura"} onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-apartamento">
+                                    <input type="checkbox" name="" id="c-apartamento" value={"Apartamento cobertura"} {...register("condominumInformations")}/>
                                     <span>Apartamento cobertura</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="SoldaManha">
-                                    <input type="checkbox" name="" id="SoldaManha" value={"Sol da Manha"} onChange={(e) => handleCheckCondominio(e)}/>
-                                    <span>Sol da Manha</span>
+                                <label className="flex items-center space-x-2" htmlFor="c-SoldaManha">
+                                    <input type="checkbox" name="" id="c-SoldaManha" value={"Sol da Manha"}
+                                     {...register("condominumInformations")}/>
+                                    <span>Sol da Manhã</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="Soldatarde">
-                                    <input type="checkbox" name="" id="apartamento" value={"Sol da tarde"} onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-Soldatarde">
+                                    <input type="checkbox" name="" id="c-Soldatarde" value={"Sol da tarde"}
+                                     {...register("condominumInformations")}/>
                                     <span>Sol da tarde</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="Aptodiferenciado">
-                                    <input type="checkbox" name="" id="Aptodiferenciado" value={"Apto diferenciado"} onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-Aptodiferenciado">
+                                    <input type="checkbox" name="" id="c-Aptodiferenciado" value={"Apto diferenciado"}
+                                     {...register("condominumInformations")}/>
                                     <span>Apto diferenciado</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="Duplex">
-                                    <input type="checkbox" name="" id="Duplex" value={"Duplex"}  onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-Duplex">
+                                    <input type="checkbox" name="" id="c-Duplex" value={"Duplex"}
+                                     {...register("condominumInformations")}/>
                                     <span>Duplex</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="Showroom">
-                                    <input type="checkbox" name="" id="Showroom" value={"Showroom"}  onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-Showroom">
+                                    <input type="checkbox" name="" id="c-Showroom" value={"Showroom"}
+                                     {...register("condominumInformations")}/>
                                     <span>Showroom</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="Quadramar">
-                                    <input type="checkbox" name="" id="Quadramar" value={"Quadra mar"}  onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-Quadramar">
+                                    <input type="checkbox" name="" id="c-Quadramar" value={"Quadra mar"}
+                                     {...register("condominumInformations")}/>
                                     <span>Quadra mar</span>
                                 </label>
 
                                 <label className="flex items-center space-x-2" htmlFor="Frenteavenida">
-                                    <input type="checkbox" name="" id="Frenteavenida" value={"Frente avenida"}  onChange={(e) => handleCheckCondominio(e)}/>
+                                    <input type="checkbox" name="" id="Frenteavenida" value={"Frente avenida"}
+                                     {...register("condominumInformations")}/>
                                     <span>Frente avenida</span>
                                 </label>
 
-                                <label className="flex items-center space-x-2" htmlFor="Semmobilia">
-                                    <input type="checkbox" name="" id="Semmobilia" value={"Sem mobilia"}  onChange={(e) => handleCheckCondominio(e)}/>
+                                <label className="flex items-center space-x-2" htmlFor="c-Semmobilia">
+                                    <input type="checkbox" name="" id="c-Semmobilia" value={"Sem mobilia"}
+                                     {...register("condominumInformations")}/>
                                     <span>Sem mobília</span>
                                 </label>
                                 
                                 </div>
                 </div>
 
-                <div className="flex flex-col justify-center items-center gap-4 mt-12">
-                    <h1 className="text-3xl">localizacao</h1>
+                <div className="flex flex-col justify-center items-center gap-12 mt-12 ">
+                    <h1 className="text-2xl">Localização</h1>
+                    <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Latitude</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('latitude')}/>
 
-                    <input type="text" placeholder="latitude " className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={latitude} onChange={(e) => setLatitude(e.target.value)}/>
-                    <input type="text" placeholder="longitude" className="text-zinc-700 pl-3 w-96 h-14 shadow-md"
-                    value={longitude} onChange={(e) => setLongitude(e.target.value)}/>
+                    {
+                    formErrors.latitude && <p className="w-full text-start text-xs text-red-500 ">{formErrors.latitude.message}</p>
+                    }
+                </label>
+
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Longitude</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('longitude')}/>
+
+                    {
+                    formErrors.longitude && <p className="w-full text-start text-xs text-red-500 ">{formErrors.longitude.message}</p>
+                    }
+                </label>
+
                 </div>
 
                 <div className="mt-20 space-y-4">
-                        <h1 className="text-3xl">Adicionar imagens</h1>
+                        <h1 className="text-2xl">Adicionar imagens</h1>
 
-                        <input type="file" name="" id="" onChange={(e) => {
-                            if(e.target.files) {
-                                {setFile(e.target.files[0])}
+                        <input type="file" name="" id="" onChange={async (e) => {
+                            if(e.target.files && e.target.files.length > 0) {
+                                const selectedFile = e.target.files[0];
+                                setFile(selectedFile)
+                                console.log({file})
+
                             }
                         }}/>
+                        <div className="flex items-center justify-center gap-2 w-full">
                         <button onClick={handleUpload}
                         className="bg-customPrimary text-white w-28 h-8 rounded-md border-[1px] border-customPrimary
-                        hover:bg-white hover:text-customPrimary transition-colors mt-16 ">Fazer upload</button>
+                        hover:bg-white hover:text-customPrimary transition-colors mt-16 " type="button">
+                            Fazer upload
+                        </button>
+
+                        <button onClick={() => {
+                            if(uploadedImages.length <= 0) return;
+                            const popImage = uploadedImages.pop()
+
+                            console.log(popImage)
+
+                            setUploadedImages([...uploadedImages])
+                            
+                            toast.success("Imagem removida!")
+                        }}
+                        className="bg-customPrimary text-white w-32 h-8 rounded-md border-[1px] border-customPrimary
+                        hover:bg-white hover:text-customPrimary transition-colors mt-16 " type="button"
+                        >
+                            Remover última
+                        </button>
+                        </div>
+
+                        {
+                            uploadedImages.length > 0 && <div className="flex flex-wrap gap-4 justify-center items-center w-full">
+                                {
+                                    uploadedImages.map((img) => (
+                                        <div className="relative w-20 h-20" key={img}>
+                                            <Image src={img} alt="imagem" objectFit="cover" fill/>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        }
 
                     </div>
 
                 <button className="bg-customPrimary text-white w-40 h-12 rounded-md border-[1px] border-customPrimary
                         hover:bg-white hover:text-customPrimary transition-colors mt-16 font-semibold"
-                        onClick={adicionarImovel}>adicionar imovel</button>
+                        type="submit">Criar imovel</button>
 
-            </div>
+            </form>
         </div>
+        </DialogContent>
+    </Dialog>
+    <Toaster/>
+    </>
     )
 }
