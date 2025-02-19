@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image"
 import { FaBed } from "react-icons/fa";
 import { FaCar } from "react-icons/fa";
@@ -7,10 +9,11 @@ import Link from "next/link";
 import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CardDialog } from "./CardDialog";
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useRef } from "react";
+import { HTMLMotionProps, motion, useInView } from "framer-motion";
 
 
-type PlaceCardProps = HTMLAttributes<HTMLDivElement> & {
+type PlaceCardProps = HTMLMotionProps<"div"> & {
     id: number | string,
     preco: number | string,
     imagemUrl: string[],
@@ -31,8 +34,22 @@ type PlaceCardProps = HTMLAttributes<HTMLDivElement> & {
 
 export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, suites, quartos, bairro, 
     cidade, numeroRua, vagas, direcionamento, numeroAnunciante, ...props}: PlaceCardProps) => {
+
+        const ref = useRef(null);
+        const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+
+
+
+
+
     return (
-        <div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] border shadow-sm rounded-md overflow-hidden" {...props}>
+        <motion.div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] border shadow-sm rounded-md overflow-hidden" {...props}
+         ref={ref}
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5 }}
+        >
             <Link href={`/${direcionamento}/${codigo}`}>
             <div className="mx-auto w-[24.4rem] min-h-40 lg:min-w-[600px] lg:min-h-[340px] relative overflow-hidden object-cover">
                 {
@@ -46,8 +63,8 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
             <section className="flex flex-col flex-wrap justify-between pl-6 pt-4 lg:min-h-[340px]">
                 <h1 className="text-2xl font-bold tracking-wider"> {formatToBrl(+preco)}</h1>
 
-                <p className="flex text-xs lg:text-base lg:w-52 lg:max-w-full lg:max-h-36 text-zinc-600 tracking-wide text-ellipsis">
-                    {descricao}
+                <p className="flex text-xs lg:text-base lg:max-w-full lg:max-h-36 text-zinc-600 tracking-wide text-ellipsis">
+                    {descricao.slice(0,137)}{descricao.length >= 137 && "..."} 
                 </p>
 
 
@@ -107,7 +124,7 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
                     </div>
 
             </section>
-        </div>
+        </motion.div>
 
     
     )

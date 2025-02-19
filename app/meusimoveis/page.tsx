@@ -115,9 +115,6 @@ function Meusimoveis() {
         fetchImoveis();
         fetchConstrutora()
       }, []);
-
-   
-
     
     if(!(userProfile.role === Roles.ADMIN || userProfile.role === Roles.CORRETOR)) {
         return <p className="text-center text-3xl mt-4">Você não possui permissão para acessar essa página.</p>
@@ -179,12 +176,11 @@ function Meusimoveis() {
                     <Modal
                     codigoImovel={imovel.codigoImovel} 
                     fetchImoveis={fetchImoveis}
-                    fetchConstrutora={fetchConstrutora}
                     />
 
                     <PlaceCard 
                     areaPrivativa={imovel.areaPrivativa} bairro={imovel.bairro} cidade={imovel.cidade}
-                    codigo={imovel.codigoImovel} dataEntregaEmpreendimento={imovel.dataEntregaEmpreendimento}
+                    codigo={imovel.codigoImovel} dataEntregaEmpreendimento={imovel.receiveTime}
                     descricao={imovel.descricao}
                     direcionamento='apartmentgallery' id={String(imovel.uid)}
                     imagemUrl={imovel.imagensUrl} numeroLocal={imovel.numeroLocal} numeroRua={imovel.numeroRua} preco={imovel.preco}
@@ -233,12 +229,11 @@ function Meusimoveis() {
                         <Modal
                         codigoImovel={imovel.codigoImovel} 
                         fetchImoveis={fetchImoveis}
-                        fetchConstrutora={fetchConstrutora}
                         />
 
                         <PlaceCard 
                         areaPrivativa={imovel.areaPrivativa} bairro={imovel.bairro} cidade={imovel.cidade}
-                        codigo={imovel.codigoImovel} dataEntregaEmpreendimento={imovel.dataEntregaEmpreendimento}
+                        codigo={imovel.codigoImovel} dataEntregaEmpreendimento={imovel.receiveTime}
                         descricao={imovel.descricao}
                         direcionamento='apartmentgallery' id={String(imovel.uid)}
                         imagemUrl={imovel.imagensUrl} numeroLocal={imovel.numeroLocal} numeroRua={imovel.numeroRua} preco={imovel.preco}

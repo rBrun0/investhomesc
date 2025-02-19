@@ -34,8 +34,8 @@ const imoveisSchema = z.object({
     // areaDeLazer: z.string().array()
     videoLink: z.string().optional(),  
     receiveTime: z.string().min(1, {message: "campo deve ser preenchido"}).regex(/^\d+$/, {message: 'campo deve ser preenchido por números'}),
-    buildingInformations: z.string().array().optional(),
-    condominumInformations: z.string().array().optional(),
+    buildingInformations: z.string().array().optional().nullable(),
+    condominumInformations: z.string().array().optional().nullable(),
     buildingProfile: z.string().array().optional(),
 })      
 
@@ -45,7 +45,12 @@ export type ImoveisSubmit = SubmitHandler<ImoveisType>
 const buildingSchema = {
     useCreate: () =>
         useForm<ImoveisType>({
-            resolver:  zodResolver(imoveisSchema) ,
+            resolver:  zodResolver(imoveisSchema),
+            defaultValues: {
+                buildingInformations: [],
+                condominumInformations: [],
+                buildingProfile: [],
+            }
         })
 }
 

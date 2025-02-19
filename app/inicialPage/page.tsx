@@ -9,14 +9,14 @@ import office from "@/app/assets/office.avif"
 import { useEffect, useState } from "react";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { CondominumsType, ConstructorsType, PropertyType } from "../@Types/types";
+import { ConstructorsType, PropertyType } from "../@Types/types";
 import Link from "next/link";
 
 import { OurConstructionsCompanies } from "./components/OurConstructionsCompanies";
 import { ActingCities } from "./components/ActingCities";
-import { useDispatch, useSelector } from "react-redux";
-import { setFilterValues } from "../features/filterValues/filterValuesSlice";
-import { RootState } from "../store";
+// import { useDispatch } from "react-redux";
+// import { setFilterValues } from "../features/filterValues/filterValuesSlice";
+// import { RootState } from "../store";;
 import { MainPanel } from "../components/MainPanel/MainPanel";
 import { Footer } from "../components/Footer/Footer";
 
@@ -24,17 +24,16 @@ import { Footer } from "../components/Footer/Footer";
 
 function InicialPage () {   
     
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
-    const filterValues = useSelector((state: RootState) => state.filterValuesSlice)
+    // const filterValues = useSelector((state: RootState) => state.filterValuesSlice)
 
     const [saleApartments, setSaleApartments] = useState<PropertyType[] | null>([])
-    const [condominios, setCondominios] = useState<CondominumsType[]>([])
     const [construtoras, setConstrutoras] = useState<ConstructorsType[]>([])
 
-    const furnishedApartment = saleApartments?.filter((ap) => ap.perfil?.includes("mobiliado"))[0]
-    const quadraMarApartment = saleApartments?.filter((ap) => ap.perfil?.includes("frente mar"))[0]
-    const frenteMarApartment = saleApartments?.filter((ap) => ap.perfil?.includes("frente mar"))[0]
+    const furnishedApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Mobiliado"))[0]
+    const quadraMarApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Quadra Mar"))[0]
+    const frenteMarApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Frente Mar"))[0]
 
     const fetchData = async () => {
     
@@ -54,8 +53,6 @@ function InicialPage () {
         tempCondominius.push(doc.data())
     }
 )
-
-    setCondominios(tempCondominius)
 
     const tempConstructors = []
 
@@ -81,6 +78,7 @@ useEffect(() => {
 }, []);
 
 console.log({siteData})
+console.log("apartamentos", {saleApartments})
 
 
     useEffect(() => {
@@ -102,10 +100,11 @@ console.log({siteData})
                     <>
                     <Link href={"/advancedsearch"} className="w-40 h-12 rounded-3xl bg-customPrimary text-white font-semibold cursor-pointer ml-16 md:ml-10
             border-2 border-customPrimary hover:bg-white hover:text-customPrimary transition-colors flex justify-center items-center"
-            onClick={() =>  dispatch(setFilterValues({propertyProfile: "mobiliado"}), console.log(filterValues))}>
+            // onClick={() =>  dispatch(setFilterValues({propertyProfile: "Mobiliado"}))}
+            >
                 MOBILIADOS
             </Link>
-                    <PlaceCard areaPrivativa={furnishedApartment.areaPrivativa} bairro={furnishedApartment.bairro} cidade={furnishedApartment.cidade} codigo={furnishedApartment.codigoImovel} dataEntregaEmpreendimento={furnishedApartment.dataEntregaEmpreendimento}
+                    <PlaceCard areaPrivativa={furnishedApartment.areaPrivativa} bairro={furnishedApartment.bairro} cidade={furnishedApartment.cidade} codigo={furnishedApartment.codigoImovel} dataEntregaEmpreendimento={furnishedApartment.receiveTime}
                     descricao={furnishedApartment.descricao} id={String(furnishedApartment.uid)} imagemUrl={furnishedApartment.imagensUrl} numeroLocal={furnishedApartment.numeroLocal} numeroRua={furnishedApartment.numeroRua} preco={furnishedApartment.preco} quartos={furnishedApartment.dormitorios}
                     suites={furnishedApartment.suites} vagas={furnishedApartment.vagas} direcionamento="apartmentgallery" numeroAnunciante={furnishedApartment.numeroAnunciante}/>
                     </>
@@ -119,10 +118,11 @@ console.log({siteData})
                     <>
                      <Link href={"/advancedsearch"} className="w-40 h-12 rounded-3xl bg-customPrimary text-white font-semibold cursor-pointer ml-16 md:ml-10  mt-6 md:mb-0 
                     border-2 border-customPrimary hover:bg-white hover:text-customPrimary transition-colors flex justify-center items-center"
-                    onClick={() => dispatch(setFilterValues({propertyProfile: "frente mar"}))}>
+                    // onClick={() => dispatch(setFilterValues({propertyProfile: "Frente Mar"}))}
+                    >
                         FRENTE MAR
                     </Link>
-                    <PlaceCard areaPrivativa={quadraMarApartment.areaPrivativa} bairro={quadraMarApartment.bairro} cidade={quadraMarApartment.cidade} codigo={quadraMarApartment.codigoImovel} dataEntregaEmpreendimento={quadraMarApartment.dataEntregaEmpreendimento}
+                    <PlaceCard areaPrivativa={quadraMarApartment.areaPrivativa} bairro={quadraMarApartment.bairro} cidade={quadraMarApartment.cidade} codigo={quadraMarApartment.codigoImovel} dataEntregaEmpreendimento={quadraMarApartment.receiveTime}
                     descricao={quadraMarApartment.descricao} id={String(quadraMarApartment.uid)} imagemUrl={quadraMarApartment.imagensUrl} numeroLocal={quadraMarApartment.numeroLocal} numeroRua={quadraMarApartment.numeroRua} preco={quadraMarApartment.preco} quartos={quadraMarApartment.dormitorios}
                     suites={quadraMarApartment.suites} vagas={quadraMarApartment.vagas} direcionamento="apartmentgallery" numeroAnunciante={quadraMarApartment.numeroAnunciante}/>
                     </>
@@ -134,11 +134,12 @@ console.log({siteData})
                     <>
                     <Link href={"/advancedsearch"} className="w-40 h-12 rounded-3xl bg-customPrimary text-white font-semibold cursor-pointer ml-16 md:ml-10 mt-6 md:mb-0
                         border-2 border-customPrimary hover:bg-white hover:text-customPrimary transition-colors flex justify-center items-center"
-                        onClick={() => dispatch(setFilterValues({propertyProfile: "quadra mar"}))}>
+                        // onClick={() => dispatch(setFilterValues({propertyProfile: "Quadra Mar"}))}
+                        >
                             QUADRA MAR
                     </Link>
 
-                    <PlaceCard areaPrivativa={frenteMarApartment.areaPrivativa} bairro={frenteMarApartment.bairro} cidade={frenteMarApartment.cidade} codigo={frenteMarApartment.codigoImovel} dataEntregaEmpreendimento={frenteMarApartment.dataEntregaEmpreendimento}
+                    <PlaceCard areaPrivativa={frenteMarApartment.areaPrivativa} bairro={frenteMarApartment.bairro} cidade={frenteMarApartment.cidade} codigo={frenteMarApartment.codigoImovel} dataEntregaEmpreendimento={frenteMarApartment.receiveTime}
                     descricao={frenteMarApartment.descricao} id={String(frenteMarApartment.uid)} imagemUrl={frenteMarApartment.imagensUrl} numeroLocal={frenteMarApartment.numeroLocal} numeroRua={frenteMarApartment.numeroRua} preco={frenteMarApartment.preco} quartos={frenteMarApartment.dormitorios}
                     suites={frenteMarApartment.suites} vagas={frenteMarApartment.vagas}direcionamento="apartmentgallery" numeroAnunciante={frenteMarApartment.numeroAnunciante}/>
                     </>

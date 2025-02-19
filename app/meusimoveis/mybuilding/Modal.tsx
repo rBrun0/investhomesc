@@ -16,10 +16,9 @@ import { PropertyType } from '@/app/@Types/types';
 type ModalProps = {
     codigoImovel: string,
     fetchImoveis: () => Promise<void>
-    fetchConstrutora: () => Promise<void>
 }
 
-const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
+const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
 
         const [registeredConstructors, setRegisteredConstructors] = useState<{nome: string}[]>()
         const [buildingSavedData, setBuildingSavedData] = useState<PropertyType[]>()
@@ -145,6 +144,14 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
     
             console.log({setUploadedImages})
         };
+
+        function correctCoord(coord: number) {
+            if(String(coord).includes("-")) {
+                return coord
+            }
+        
+            return Number(`-${String(coord)}`)
+        } 
         
         async function onSubmit(data: ImoveisType) {
     
@@ -186,10 +193,11 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                         correctorNumber:
                         `(${numberWithoutSpaces.slice(0, 2)}) ${numberWithoutSpaces.slice(2, 4)} ${numberWithoutSpaces.slice(4, 9)}-${numberWithoutSpaces.slice(9, 13)}`,
                         codigoImovel: `invest-${String(uuidv4()).slice(0, 4)}`,
-                        latitude: `${data.latitude}`,
-                        longitude: `${data.longitude}`,
+                        latitude: correctCoord(Number(data.latitude)),
+                        longitude: correctCoord(Number(data.longitude)),
                     });
 
+                    fetchImoveis()
                     console.log("fooiii")
             
                     setIsDialogOpen(false);
@@ -228,15 +236,15 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
             setValue("cidade", buildingSavedData[0]?.cidade)
             setValue("estado", buildingSavedData[0]?.estado)
             setValue("rua", buildingSavedData[0]?.rua)
-            setValue("dormitorios", String(buildingSavedData[0]?.dormitorios))
+            setValue("dormitorios", buildingSavedData[0]?.dormitorios)
             setValue("banheiros", String(buildingSavedData[0]?.banheiros))
-            setValue("preco", buildingSavedData[0]?.preco)
+            setValue("preco", String(buildingSavedData[0]?.preco))
             setValue("descricao", buildingSavedData[0]?.descricao)
             setValue("numeroAnunciante", buildingSavedData[0]?.numeroAnunciante)
             setValue("propertyType", buildingSavedData[0]?.tipoDoImovel)
             setValue("receiveTime", buildingSavedData[0]?.receiveTime)
             setValue("construtora", buildingSavedData[0]?.construtora)
-            setValue("suites", buildingSavedData[0]?.suites)
+            setValue("suites", String(buildingSavedData[0]?.suites))
             setValue("vagas", String(buildingSavedData[0]?.vagas)) 
             setValue("videoLink", buildingSavedData[0]?.video)
             setValue("latitude", String(buildingSavedData[0]?.latitude))
@@ -245,6 +253,8 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
             setValue("buildingProfile", buildingSavedData[0]?.buildingProfile)
             setValue("buildingInformations", buildingSavedData[0]?.buildingInformations)
             setValue("condominumInformations", buildingSavedData[0]?.condominumInformations)
+            setValue("latitude", String(buildingSavedData[0]?.latitude))
+            setValue("longitude", String(buildingSavedData[0]?.longitude))
 
             setInformacoesImovel(buildingSavedData[0]?.informacoesImovel.map((info) => ({id: Math.random(), value: info})))
             setAreaDeLazer(buildingSavedData[0]?.informacoesLazer.map((info) => ({id: Math.random(), value: info})))
@@ -432,7 +442,7 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                                 </div>
             
                                 <div className="flex flex-col justify-center items-center space-y-3">
-                                    <h1>Informações do imovel</h1>
+                                    <h1 className='text-start'>Informações do imovel</h1>
             
                                     <label htmlFor="preco" className="w-full relative">
                                     <input type="text" placeholder="ex: numero de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
@@ -449,7 +459,7 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                                         adicionar
                                     </button>
             
-                                    <div className="flex flex-wrap justify-between gap-4">
+                                    <div className="flex flex-wrap justify-start gap-4">
             
                                         {
                                             informacoesImovel.map(info => (
@@ -463,7 +473,7 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                                 </div>
             
                                 <div className="flex flex-col justify-center items-center gap-3">
-                                    <h1 className="w-full text-center">Informações do empreendimento</h1>
+                                    <h1 className="w-full text-start">Informações do empreendimento</h1>
             
                                     <label htmlFor="preco" className="w-full flex items-center justify-center">
                                     <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 full h-14 border rounded-md"
@@ -474,7 +484,7 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                                     hover:bg-white hover:text-customPrimary transition-colors" type="button"
                                     onClick={adicionarInformacoesEmpreendimento}>Adicionar</button>
             
-                                    <div className="flex flex-wrap justify-between gap-4 mt-8" >
+                                    <div className="flex flex-wrap justify-start gap-4 mt-8" >
             
                                         {
                                             informacoesEmpreendimento.map((info) => (
@@ -489,7 +499,7 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                             </div>
             
                                 <div className="flex flex-col justify-center items-center space-y-3">
-                                    <h1>Informações do lazer</h1>
+                                    <h1 className='text-start'>Informações do lazer</h1>
             
                                     <label htmlFor="preco" className="w-full relative">
                                     <input type="text" placeholder="ex: piscina" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
@@ -500,7 +510,7 @@ const Modal = ({codigoImovel, deleteImovelPorCampo}: ModalProps) => {
                                     hover:bg-white hover:text-customPrimary transition-colors" type="button"
                                     onClick={adicionarInformacoesLazer}>Adicionar</button>
             
-                                    <div className="flex flex-wrap justify-between gap-4 w-full">
+                                    <div className="flex flex-wrap justify-start gap-4 w-full">
                                         {
                                             areaDeLazer.map((area) => (
                                                 <span className="space-x-2 flex items-center justify-center" key={area.id}> 

@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function CustomPopover({text}: {text:string}) {
+export function CustomPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>

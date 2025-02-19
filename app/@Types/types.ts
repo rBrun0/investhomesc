@@ -1,11 +1,12 @@
 export type PropertyType = {
+    rua: string,
     areaPrivativa: string,
     bairro: string,
     cidade: string,
     codigoImovel: string,
     construtora: string,
     construtoraVal: string,
-    dataEntregaEmpreendimento: string,
+    receiveTime: string,
     descricao: string,
     uid: string,
     imagensUrl: string[],
@@ -18,21 +19,21 @@ export type PropertyType = {
     numeroAnunciante: string,
     nomeCondominioVal?: "",
     numeroRua: string,
-    preco: number,
+    preco: number | string,
     dormitorios: number,
     suites: number,
     tipoDoImovel: string,
     video: string,
-    perfil: string[]
+    buildingProfile: string[]
     vagas: number,
     bairroVal: string,
     cidadeVal: string,
     estado: string,
     numeroLocal: number,
     imagensPlanta: string[],
-    bathrooms: number,
-    caracteristicasCondominio: string[],
-    caracteristicasImovel: string[],
+    banheiros: number | string,
+    condominumInformations: string[],
+    buildingInformations: string[],
     latitude: string,
     longitude: string,
     createdBy: string
@@ -82,4 +83,12 @@ export type ConstructorsType = {
     id: string,
     createdBy: string,
     name: string,
+}
+
+export type Users = {
+    uid: string,
+    password: string,
+    displayName: string,
+    email: string,
+    role: string 
 }

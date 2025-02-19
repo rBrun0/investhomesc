@@ -2,9 +2,9 @@
 
 import React from "react";
 import { setFilterValues } from "@/app/features/filterValues/filterValuesSlice";
-import { db } from "@/app/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+// import { db } from "@/app/firebaseConfig";
+// import { collection, getDocs } from "firebase/firestore";
+// import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 // type OurCities = {
@@ -33,7 +33,7 @@ const dispatch = useDispatch()
 
 function selectNeighbors(neighborhood: string) {
     dispatch(setFilterValues({
-        cities: neighborhood.toUpperCase()
+        neighborhood: neighborhood.toUpperCase()
     }))
 }
 

@@ -1,7 +1,7 @@
 
 'use client'
 
-import { db } from "@/app/firebaseConfig"
+import { Users } from "@/app/@Types/types";
 import {
     Table,
     TableBody,
@@ -12,37 +12,15 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import { collection, getDocs, query } from "firebase/firestore"
-import { useEffect, useState } from "react";
-  
-  export function UserTable() {
+import { useEffect } from "react";
 
-    type Users = {
-        uid: string,
-        displayName: string,
-        email: string,
-        role: string 
-    }
+type UserTableProps = {
+  fetchUsers: () => Promise<Users[]>
+  usersList: Users[]
+}
+  
+  export function UserTable({fetchUsers, usersList}: UserTableProps) {
       
-      const [usersList, setUsersList] = useState<Users[]>();
-    
-      async function fetchUsers() {
-        const q = query(collection(db, 'users'))
-        
-        const querySnapshot = await getDocs(q)
-        const temp = [] 
-    
-        querySnapshot.forEach((doc) => {
-          temp.push({
-            uid: doc.id,
-            displayName: doc.data().displayName,
-            email: doc.data().email,
-            role: doc.data().role
-          })
-        })
-        setUsersList(temp)
-        return usersList
-      }
 
       useEffect(() => {
         fetchUsers()

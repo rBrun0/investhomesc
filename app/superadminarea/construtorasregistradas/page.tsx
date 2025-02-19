@@ -10,6 +10,9 @@ import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import { Roles } from "@/lib/utils";
 import { toast, Toaster } from "sonner";
+import { Edit } from "lucide-react";
+import Modal from "@/app/meusimoveis/myconstructor/ConstructorModal";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 function Construtorasegistradas() {
 
@@ -40,7 +43,7 @@ const deleteConstrucaoPorCampo = async (nome: string) => {
     try {
         const imoveisRef = collection(db, "construtoras");
 
-        const q = query(imoveisRef, where("nome", "==", nome));
+        const q = query(imoveisRef, where("name", "==", nome));
         
         const querySnapshot = await getDocs(q);
         
@@ -49,13 +52,17 @@ const deleteConstrucaoPorCampo = async (nome: string) => {
         console.log(`Imóvel ${nome} deletado com sucesso!`);
         });
         fetchData()
+
         toast.success("Construtora deletada com sucesso!")
 
     } catch(e) {
         console.error(e)
 
         toast.error("Erro ao deletar construtora")
+    
     }
+    fetchData()
+
   }
 
     const procurarConstrutora = async () => {
@@ -111,23 +118,95 @@ useEffect(() => {
         <div className="w-full flex flex-wrap justify-center items-center mt-20 gap-12">
 
             {
-                search.length > 0 && construtorasFiltradas.map((construcao) => (
-                    <div className="flex flex-col justify-center items-center w-28 h-28 shadow-sm border rounded-full" key={construcao.nome}>
-                    <FaRegTrashAlt onClick={() => deleteConstrucaoPorCampo(construcao.nome)}
-                    className="text-xl text-customPrimary
-                    cursor-pointer">
-                        remover construtora</FaRegTrashAlt>
-                    <p>{construcao.nome}</p>
+                search.length > 0 && construtorasFiltradas.map((constructor) => (
+                    <div className="flex flex-col justify-center items-center w-28 h-28 shadow-sm border rounded-md" key={constructor.name}>
+                        <div className="flex justify-center items-center gap-2">
+
+                        <AlertDialog>
+                      <AlertDialogTrigger>
+                    <FaRegTrashAlt className='w-14 h-6 py-1 bg-customPrimary text-white rounded-md my-2 absolute z-10 right-2
+                    cursor-pointer'
+                      />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Tem certeza de que deseja excluir ?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Esta ação não pode ser desfeita.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+
+
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction className='bg-red-500 text-white px-4 py-2 rounded-md'
+                          onClick={() => deleteConstrucaoPorCampo(constructor.name)}>
+                            Excluir
+                          </AlertDialogAction>
+
+
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                        <FaRegTrashAlt onClick={() => deleteConstrucaoPorCampo(constructor.name)}
+                            className="text-xl text-customPrimary
+                            cursor-pointer">
+                            remover construtora
+                        </FaRegTrashAlt>
+
+
+
+                        <Edit onClick={() => deleteConstrucaoPorCampo(constructor.name)} className='text-xl text-customPrimary
+                        cursor-pointer '>
+                        remover construtora
+                        </Edit>
+
+                        </div>
+                    <p>{constructor.name}</p>
                     </div>
                 ))
             }
 
             {
-                construtoras && search.length <= 0 && construtoras.map((construcao) => (
-                    <div className="flex flex-col justify-center items-center w-28 h-28 shadow-sm border rounded-full" key={construcao.nome}>
-                    <FaRegTrashAlt onClick={() => deleteConstrucaoPorCampo(construcao.nome)} className='text-xl text-customPrimary
-                    cursor-pointer '>remover construtora</FaRegTrashAlt>
-                    <p>{construcao.nome}</p>
+                construtoras && search.length <= 0 && construtoras.map((constructor) => (
+                    <div className="flex flex-col justify-center items-center w-48 h-28 shadow-sm border rounded-md relative" key={constructor.name}>
+                        <div className="flex justify-center items-center gap-2">
+                            <Modal construtora={constructor} fetchConstrutora={fetchData}/>
+
+                            <div className="absolute bottom-8 right-3 -translate-y-[1px]">
+                                
+                        <AlertDialog>
+                      <AlertDialogTrigger>
+                    <FaRegTrashAlt className='w-14 h-6 py-1 bg-customPrimary text-white rounded-md my-2 absolute z-10 right-2
+                    cursor-pointer'
+                    />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Tem certeza de que deseja excluir ?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Esta ação não pode ser desfeita.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+
+
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction className='bg-red-500 text-white px-4 py-2 rounded-md'
+                          onClick={() => deleteConstrucaoPorCampo(constructor.name)}>
+                            Excluir
+                          </AlertDialogAction>
+
+
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    </div>
+
+
+
+                        </div>
+                    <p>{constructor.name}</p>
                     </div>
                 ))
             }

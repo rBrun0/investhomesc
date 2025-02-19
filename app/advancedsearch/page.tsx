@@ -48,10 +48,11 @@ function AdvancedSearch() {
     // let filteredProperties;
 
     console.log('filteredDataa',filteredData)
+    console.log('filteredValueess',filterValues)
     
     function removerAcentos(text: string): string {
         return text
-            .normalize("NFD") // Separa acentos
+            ?.normalize("NFD") // Separa acentos
             .replace(/[\u0300-\u036f]/g, "") // Remove acentos
             .toLowerCase(); // Deixa tudo minúsculo
     }
@@ -75,7 +76,7 @@ function AdvancedSearch() {
     
         if (filterValues.neighborhood) {
             filteredProperties = filteredProperties.filter((prp) =>
-                removerAcentos(prp.bairroVal) === removerAcentos(filterValues.neighborhood)
+                removerAcentos(prp.bairro) === removerAcentos(filterValues.neighborhood)
             );
         }
     
@@ -87,7 +88,7 @@ function AdvancedSearch() {
     
         if (filterValues.propertyProfile) {
             filteredProperties = filteredProperties.filter((prp) =>
-                prp.perfil.some((perfil) => removerAcentos(perfil).includes(removerAcentos(filterValues.propertyProfile)))
+                prp.buildingProfile.some((perfil) => removerAcentos(perfil).includes(removerAcentos(filterValues.propertyProfile)))
             );
         }
     
@@ -99,7 +100,7 @@ function AdvancedSearch() {
     
         if (filterValues.bathrooms) {
             filteredProperties = filteredProperties.filter((prp) =>
-                filterValues.bathrooms === 5 ? prp.bathrooms >= 5 : prp.bathrooms === filterValues.bathrooms
+                filterValues.bathrooms === 5 ? Number(prp.banheiros) >= 5 : prp.banheiros === filterValues.bathrooms
             );
         }
     
@@ -111,17 +112,17 @@ function AdvancedSearch() {
     
         if (filterValues.constructorInformations.length > 0 || filterValues.condominumInformations.length > 0) {
             filteredProperties = filteredProperties.filter((prp) =>
-                comparaArrays(filterValues.constructorInformations, prp.caracteristicasImovel) ||
-                comparaArrays(filterValues.condominumInformations, prp.caracteristicasCondominio)
+                comparaArrays(filterValues.constructorInformations, prp.buildingInformations) ||
+                comparaArrays(filterValues.condominumInformations, prp.condominumInformations)
             );
         }
     
         if (filterValues.minValue) {
-            filteredProperties = filteredProperties.filter((prp) => prp.preco >= filterValues.minValue);
+            filteredProperties = filteredProperties.filter((prp) => Number(prp.preco) >= filterValues.minValue);
         }
     
         if (filterValues.maxValue) {
-            filteredProperties = filteredProperties.filter((prp) => prp.preco <= filterValues.maxValue);
+            filteredProperties = filteredProperties.filter((prp) => Number(prp.preco) <= filterValues.maxValue);
         }
     
         setFilteredData(filteredProperties);
@@ -187,7 +188,7 @@ useEffect(() => {
                 {
                     saleApartments && isObjectFullyEmpty(filterValues) && saleApartments.map(apartment => {
                         return (
-                            <PlaceCard areaPrivativa={apartment.areaPrivativa} bairro={apartment.bairro} cidade={apartment.cidade} codigo={apartment.codigoImovel} dataEntregaEmpreendimento={apartment.dataEntregaEmpreendimento}
+                            <PlaceCard areaPrivativa={apartment.areaPrivativa} bairro={apartment.bairro} cidade={apartment.cidade} codigo={apartment.codigoImovel} dataEntregaEmpreendimento={apartment.receiveTime}
                                 descricao={apartment.descricao} id={String(apartment.uid)} imagemUrl={apartment.imagensUrl} numeroLocal={apartment.numeroLocal} numeroRua={apartment.numeroRua} preco={apartment.preco} quartos={apartment.dormitorios}
                                 suites={apartment.suites} vagas={apartment.vagas} direcionamento="apartmentgallery"
                                 key={apartment.uid} numeroAnunciante={apartment.numeroAnunciante}
@@ -205,7 +206,7 @@ useEffect(() => {
                 {
                     isObjectFullyEmpty(filterValues) == false && filteredData?.length >= 1 && (
                             filteredData?.map((apartment) => (
-                                <PlaceCard areaPrivativa={apartment.areaPrivativa} bairro={apartment.bairro} cidade={apartment.cidade} codigo={apartment.codigoImovel} dataEntregaEmpreendimento={apartment.dataEntregaEmpreendimento}
+                                <PlaceCard areaPrivativa={apartment.areaPrivativa} bairro={apartment.bairro} cidade={apartment.cidade} codigo={apartment.codigoImovel} dataEntregaEmpreendimento={apartment.receiveTime}
                                 descricao={apartment.descricao} id={String(apartment.uid)} imagemUrl={apartment.imagensUrl} numeroLocal={apartment.numeroLocal} numeroRua={apartment.numeroRua} preco={apartment.preco} quartos={apartment.dormitorios}
                                 suites={apartment.suites} vagas={apartment.vagas} direcionamento="apartmentgallery"
                                 key={apartment.uid} numeroAnunciante={apartment.numeroAnunciante}/>

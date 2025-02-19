@@ -47,7 +47,7 @@ export const Footer = () => {
 
     return (
         <footer className="bg-customPrimary w-full text-white flex justify-center items-start mt-12 flex-wrap py-3">
-            <main className="w-11/12 min-h-[300px] flex justify-between items-start flex-wrap pt-6 px-12 md:px-32 space-y-8 bg-customPrimary">
+            <main className="w-11/12 min-h-[300px] flex justify-between items-start flex-wrap pt-6 pl-20 px-12 md: pl-0 md:px-32 space-y-8 bg-customPrimary">
 
             <section className="flex flex-col items-center justify-center md:translate-y-7">
                 <div className="flex flex-col justify-center items-center border-2 border-solid border-white w-72 h-16 rounded-md">
@@ -57,7 +57,7 @@ export const Footer = () => {
 
                 <Link href={"/advancedsearch"} className="font-extralight mt-2" onClick={() => filtrar('Itapema', 'Frente Mar')}>Frente Mar</Link>
                 <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Itapema', 'Quadra Mar')} >Quadra Mar</Link>
-                <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Itapema', 'Mobiliados')}>Mobiliados</Link>
+                <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Itapema', 'Mobiliado')}>Mobiliados</Link>
                 <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Itapema', 'Showroom')}>Showroom</Link>
             </section>
 
@@ -69,7 +69,7 @@ export const Footer = () => {
 
                 <Link href={"/advancedsearch"} className="font-extralight mt-2" onClick={() => filtrar('Porto Belo', 'Frente Mar')}>Frente Mar</Link>
                 <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Porto Belo', 'Quadra Mar')}>Quadra Mar</Link>
-                <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Porto Belo', 'Mobiliados')}>Mobiliados</Link>
+                <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Porto Belo', 'Mobiliado')}>Mobiliados</Link>
                 <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Porto Belo', 'Showroom')}>Showroom</Link>
                 
             </section>
@@ -82,7 +82,7 @@ export const Footer = () => {
 
                 <Link href={"/advancedsearch"} className="font-extralight mt-2" onClick={() => filtrar('Balneario Camboriu', 'Frente Mar')}>Frente Mar</Link>
                 <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Balneario Camboriu', 'Quadra Mar')}>Quadra Mar</Link>
-                <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Balneario Camboriu', 'Mobiliados')}>Mobiliados</Link>
+                <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Balneario Camboriu', 'Mobiliado')}>Mobiliados</Link>
                 <Link href={"/advancedsearch"} className="font-extralight" onClick={() => filtrar('Balneario Camboriu', 'Showroom')}>Showroom</Link>
                 
             </section>

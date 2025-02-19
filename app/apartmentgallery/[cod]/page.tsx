@@ -25,6 +25,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Header } from "@/app/components/Header/Header";
 import MapComponent from "../components/MapComponent";
+import { Footer } from "@/app/components/Footer/Footer";
 
 type ApartmentGalleryProps = {
     params: {
@@ -121,11 +122,11 @@ console.log(searchedApartment)
                 </div>
 
                 {
-                    searchedApartment?.dataEntregaEmpreendimento && (
+                    searchedApartment?.receiveTime && (
                 <div className="flex flex-col justify-center items-center pr-3">
                     <span className="text-xs">Data de Entrega do Empreendimento</span>
                     <span className="font-semibold flex justify-center items-center space-x-1 text-zinc-600">
-                        <FaCalendarAlt/> <p>{searchedApartment && searchedApartment.dataEntregaEmpreendimento}</p>
+                        <FaCalendarAlt/> <p>{searchedApartment && searchedApartment.receiveTime} dia(s)</p>
                         </span>
                 </div>
                     )
@@ -245,7 +246,7 @@ console.log(searchedApartment)
 
 
                     {
-                        isLoaded && searchedApartment && searchedApartment?.latitude ? (
+                        isLoaded && searchedApartment && searchedApartment?.latitude && searchedApartment?.longitude ? (
                             <div className="flex flex-col justify-center items-start mt-16">
                                 <h1 className="text-2xl font-medium text-zinc-600" id="mapa-local">MAPA</h1>
 
@@ -267,7 +268,7 @@ console.log(searchedApartment)
                 <div className="flex flex-col justify-center items-center space-y-8 mt-3">
                     {
                         searchedApartments && searchedApartments?.filter((ap) => String(ap.codigoImovel) != cod).slice(0,3)?.map((ap) => (
-                            <PlaceCard areaPrivativa={ap.areaPrivativa} bairro={ap.bairro} cidade={ap.cidade} codigo={ap.codigoImovel} dataEntregaEmpreendimento={ap.dataEntregaEmpreendimento}
+                            <PlaceCard areaPrivativa={ap.areaPrivativa} bairro={ap.bairro} cidade={ap.cidade} codigo={ap.codigoImovel} dataEntregaEmpreendimento={ap.receiveTime}
                             descricao={ap.descricao} id={String(ap.uid)} imagemUrl={ap.imagensUrl} numeroLocal={ap.numeroLocal} numeroRua={ap.numeroRua} preco={ap.preco}
                             quartos={ap.dormitorios} suites={ap.suites} vagas={ap.vagas} key={ap.uid} direcionamento="apartmentgallery"
                             numeroAnunciante={ap.numeroAnunciante}/>
@@ -277,6 +278,7 @@ console.log(searchedApartment)
             </section>
 
         </div>
+        <Footer/>
     </>
     )
 }

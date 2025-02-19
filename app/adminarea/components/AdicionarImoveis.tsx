@@ -180,6 +180,14 @@ export const AdicionarImoveis = () => {
 
     }
 
+    function correctCoord(coord: number) {
+        if(String(coord).includes("-")) {
+            return coord
+        }
+    
+        return Number(`-${String(coord)}`)
+    } 
+
     const handleUpload = async () => {
         if (!file) return;
 
@@ -229,8 +237,8 @@ export const AdicionarImoveis = () => {
                 createdBy: curUser.uid,
                 correctorNumber: `(${numberWithoutSpaces.slice(0,2)}) ${numberWithoutSpaces.slice(2,4)} ${numberWithoutSpaces.slice(4,9)}-${numberWithoutSpaces.slice(9,13)}`,
                 codigoImovel: `invest-${String(uuidv4()).slice(0,4)}`,
-                latitude: `${data.latitude}}`,
-                longitude: `${data.longitude}}`,
+                latitude: correctCoord(Number(data.latitude)),
+                longitude: correctCoord(Number(data.longitude)),
             }
             // areaPrivativa: areaPrivativa,
             // bairro: bairro,
@@ -262,6 +270,10 @@ export const AdicionarImoveis = () => {
             // createdBy: curUser?.uid
         })
 
+        setUploadedImages([])
+        setAreaDeLazer([])
+        setInformacoesEmpreendimento([])
+        setInformacoesImovel([])
         setIsDialogOpen(false)
 
         toast.success("Imovel criado com sucesso!")
@@ -487,7 +499,7 @@ export const AdicionarImoveis = () => {
                     </div>
 
                     <div className="flex flex-col justify-center items-center space-y-3">
-                        <h1>Informações do imovel</h1>
+                        <h1 className="w-full">Informações do imovel</h1>
 
                         <label htmlFor="preco" className="w-full relative">
                         <input type="text" placeholder="ex: numero de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
@@ -504,7 +516,7 @@ export const AdicionarImoveis = () => {
                             adicionar
                         </button>
 
-                        <div className="flex flex-wrap justify-between gap-4">
+                        <div className="flex flex-wrap justify-start gap-4">
 
                             {
                                 informacoesImovel.map(info => (
@@ -518,10 +530,10 @@ export const AdicionarImoveis = () => {
                     </div>
 
                     <div className="flex flex-col justify-center items-center gap-3">
-                        <h1 className="w-full text-center">Informações do empreendimento</h1>
+                        <h1 className="w-full text-start">Informações do empreendimento</h1>
 
                         <label htmlFor="preco" className="w-full flex items-center justify-center">
-                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 full h-14 border rounded-md"
+                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                         value={informacoesEmpreendimentoInput} onChange={(e) => setInformacoesEmpreendimentoInput(e.target.value)}/>
                 </label>
 
@@ -529,7 +541,7 @@ export const AdicionarImoveis = () => {
                         hover:bg-white hover:text-customPrimary transition-colors" type="button"
                         onClick={adicionarInformacoesEmpreendimento}>Adicionar</button>
 
-                        <div className="flex flex-wrap justify-between gap-4 mt-8" >
+                        <div className="flex flex-wrap justify-start gap-4 mt-8" >
 
                             {
                                 informacoesEmpreendimento.map((info) => (
@@ -544,7 +556,7 @@ export const AdicionarImoveis = () => {
                 </div>
 
                     <div className="flex flex-col justify-center items-center space-y-3">
-                        <h1>Informações do lazer</h1>
+                        <h1 className="text-start">Informações do lazer</h1>
 
                         <label htmlFor="preco" className="w-full relative">
                         <input type="text" placeholder="ex: piscina" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
@@ -555,7 +567,7 @@ export const AdicionarImoveis = () => {
                         hover:bg-white hover:text-customPrimary transition-colors" type="button"
                         onClick={adicionarInformacoesLazer}>Adicionar</button>
 
-                        <div className="flex flex-wrap justify-between gap-4 w-full">
+                        <div className="flex flex-wrap justify-start gap-4 w-full">
                             {
                                 areaDeLazer.map((area) => (
                                     <span className="space-x-2 flex items-center justify-center" key={area.id}> 
@@ -617,10 +629,10 @@ export const AdicionarImoveis = () => {
                             <span>Lançamentos</span>
                         </label>
 
-                        <label className="flex items-center space-x-2" htmlFor="mobiliados">
-                            <input type="checkbox" name="" id="mobiliados" value={"Mobiliados"}
+                        <label className="flex items-center space-x-2" htmlFor="mobiliado">
+                            <input type="checkbox" name="" id="mobiliado" value={"Mobiliado"}
                             {...register("buildingProfile")}/>
-                            <span>Mobiliados</span>
+                            <span>Mobiliado</span>
                         </label>
 
                         <label className="flex items-center space-x-2" htmlFor="plaza-iate">

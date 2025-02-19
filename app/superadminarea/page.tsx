@@ -3,14 +3,15 @@
 import { auth, db } from '../firebaseConfig';
 import { useEffect, useState } from 'react';
 import { Footer } from '../components/Footer/Footer';
-import { PhotoConfig } from './photoConfig';
-import { collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { User } from '../features/user/userSlices';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Roles } from '@/lib/utils';
 import { UserTable } from './UserTable/UserTable';
 import { toast, Toaster } from 'sonner';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { Users } from '../@Types/types';
 
 
 
@@ -51,7 +52,25 @@ function Superadminarea()  {
 
   }
 
+  const [usersList, setUsersList] = useState<Users[]>();
+    
+  async function fetchUsers() {
+    const q = query(collection(db, 'users'))
+    
+    const querySnapshot = await getDocs(q)
+    const temp = [] 
 
+    querySnapshot.forEach((doc) => {
+      temp.push({
+        uid: doc.id,
+        displayName: doc.data().displayName,
+        email: doc.data().email,
+        role: doc.data().role
+      })
+    })
+    setUsersList(temp)
+    return usersList
+  }
 
   // const [loggedUsers, setLoggedUsers] = useState<LoggedUsers[]>([])
 
@@ -60,6 +79,11 @@ const adicionarAdmin = async (email: string) => {
 
   try {
     const foundUser = existingUsers.find((u) => u.email == email) 
+
+    if(!foundUser) {
+      toast.error("Usuário não encontrado no banco de dados")
+      return;
+    }
 
     if(foundUser) {
       const q = query(collection(db, "users"), where("email", "==", email));
@@ -74,6 +98,7 @@ const adicionarAdmin = async (email: string) => {
     });
     }
     setAdminEmail("")
+    fetchUsers()
     toast.success("Usuário elevado a corretor!")
   } catch (error) {
     toast.error("Algo deu errado!",)
@@ -85,6 +110,11 @@ async function removeAdmin(email: string) {
 
   try {
     const foundUser = existingUsers.find((u) => u.email == email) 
+
+    if(!foundUser) {
+      toast.error("Usuário não encontrado!")
+      return;
+    }
 
     if(foundUser) {
       const q = query(collection(db, "users"), where("email", "==", email));
@@ -98,6 +128,7 @@ async function removeAdmin(email: string) {
       });
     });
     }
+    fetchUsers()
     setAdminEmailToRemove("")
     toast.success("Usuário agora é comum!")
   } catch (error) {
@@ -109,13 +140,18 @@ async function removeAdmin(email: string) {
 async function deleteUser(email: string) {
   try {
 
-    // const q = query(collection(db, "users"), where("email", "==", email));
-    // const querySnapshot = await getDocs(q);
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      toast.error("Usuário não encontrado no banco de dados!");
+      return;
+    }
     
-    // querySnapshot.forEach(async (docSnap) => {
-    //   const userRef = docSnap.ref;
-    //   await deleteDoc(userRef);
-    // });
+    querySnapshot.forEach(async (docSnap) => {
+      const userRef = docSnap.ref;
+      await deleteDoc(userRef);
+    });
 
     const res = await fetch("/api/delete", {
       method: "POST",
@@ -133,6 +169,10 @@ async function deleteUser(email: string) {
       toast.error("Erro ao deletar: " + data.error);
     }
 
+    fetchUsers()
+
+    setExcludeUser("")
+
     toast.success("Usuário removido com sucesso!")
   } catch (error) {
     toast.error("Algo deu errado!")
@@ -147,25 +187,61 @@ type CreateUserProps = {
 }
 
 async function createUser({userName, userPassword, userEmail}: CreateUserProps) {
-  if(!userName || !userPassword || !!userEmail) {
+
+  const adminUser = auth.currentUser;
+
+  if(!userName || !userPassword || !userEmail) {
     toast.error("Todos os campos são obrigatórios!")
     return;
   }
 
-  try {
-    const res = await fetch("/api/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName, userPassword, userEmail }),
+  if(existingUsers.some(u => u.email === userEmail)) {
+    toast('Já existe um usuário com este email!', {
+        description: "Usuário já encontrado!",
     })
+    return
+}
 
-    console.log(res)
+          try {
+              const userCredentials = await createUserWithEmailAndPassword(auth, userEmail, userPassword)
+              const uid = userCredentials.user.uid
+  
+              await setDoc(doc(db,"users", uid), {
+                  uid: userCredentials.user.uid,
+                  displayName: userName,
+                  email: userEmail,
+                  password: userPassword,
+                  role: Roles.COMUM,
+                  createdAt: String(new Date())
+              })
 
-    toast.success("Usuário criado com sucesso!")
-  } catch(e) {
-    toast.error("Erro ao cadastrar novo usuário!")
-    console.error("Erro ao cadastrar novo usuário:", e);
-  }
+              fetchUsers()
+              setUserNameInput("")
+              setUserEmailInput("")
+              setUserPasswordInput("")
+                  if (adminUser) {
+              await signInWithEmailAndPassword(auth, adminUser.email!, "adminfiodf3049043KLKRLQW");
+    }
+              toast.success("Usuário criado com sucesso!")
+          } catch(e) {
+              console.log("error ", e)
+              toast.error("Erro ao criar usuário!")
+          }
+
+  // try {
+  //   const res = await fetch("/api/create", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ userName, userPassword, userEmail }),
+  //   })
+
+  //   console.log(res)
+
+  //   toast.success("Usuário criado com sucesso!")
+  // } catch(e) {
+  //   toast.error("Erro ao cadastrar novo usuário!")
+  //   console.error("Erro ao cadastrar novo usuário:", e);
+  // }
 }
 
 
@@ -201,7 +277,7 @@ async function createUser({userName, userPassword, userEmail}: CreateUserProps) 
 
           <div className="w-full h-screen pt-12">
           
-            <h1 className="text-center text-4xl">DASHBOARD</h1>
+            <h1 className="text-center text-4xl text-zinc-600">DASHBOARD</h1>
             
 
            <div className="w-full flex flex-col justify-center items-center mt-16">
@@ -227,7 +303,7 @@ async function createUser({userName, userPassword, userEmail}: CreateUserProps) 
                  value={userPasswordInput} onChange={(e) => setUserPasswordInput(e.target.value)}/>
                  </label>
 
-                 <button onClick={() => createUser({userName: userNameInput, userEmail: userEmailInput, userPassword: userPasswordInput})}
+                 <button onClick={() => createUser({userName: userNameInput, userPassword: userPasswordInput, userEmail: userEmailInput})}
                   className='bg-customPrimary text-white w-24 h-8 rounded-md border-2 border-customPrimary
                   hover:bg-white hover:text-customPrimary transition-colors mt-8'>
                     Adicionar
@@ -277,7 +353,7 @@ async function createUser({userName, userPassword, userEmail}: CreateUserProps) 
           <div className='w-full mt-12 flex flex-col items-center px-6'>
               {/* <h1 className='text-center text-3xl'>USUARIOS REGISTRADOS:</h1> */}
 
-              <UserTable/>
+              <UserTable fetchUsers={fetchUsers} usersList={usersList}/>
                   
             </div>
 

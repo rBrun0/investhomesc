@@ -129,7 +129,6 @@ export const SelectCamp = () => {
     const [selectedPropertyProfile, setSelectedPropertyProfile] = useState('')
 
     const dispatch = useDispatch()
-    const filters = useSelector((state: RootState) => state.filterValuesSlice)
 
     function chooseCity(e: any) {
         setCityCamp(e.target.value)

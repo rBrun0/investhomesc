@@ -5,11 +5,13 @@ import { PlaceCard } from "@/app/components/PlaceCard/PlaceCard";
 import { db } from "@/app/firebaseConfig";
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import { Roles } from "@/lib/utils";
+import Modal from "@/app/meusimoveis/mybuilding/Modal";
+import { ExcludeDialog } from "./components/ExludeDialog";
+import { toast, Toaster } from "sonner";
 
 function ApartamentosRegistrados() {
 
@@ -37,17 +39,24 @@ const deleteImovelPorCampo = async (id: string) => {
     console.log("clicado", id)
     const imoveisRef = collection(db, "imoveis");
 
-    // Criar uma query para encontrar o documento com base no campo nomeImovel
-    const q = query(imoveisRef, where("uid", "==", id));
+    try {
+        
+        const q = query(imoveisRef, where("uid", "==", id));
+        
+        const querySnapshot = await getDocs(q);
+        
+        for (const doc of querySnapshot.docs) {
+            await deleteDoc(doc.ref);
+            console.log(`Imóvel ${doc.id} deletado com sucesso!`);
+            toast.success("Imóvel deletado com sucesso")
+            fetchData()
+        }
+    } catch(e) {
+        console.error(e)
+        toast.error("Falha ao executar imóvel")
+    }
 
-    console.log(q)
-    
-    const querySnapshot = await getDocs(q);
-
-    for (const doc of querySnapshot.docs) {
-        await deleteDoc(doc.ref);
-        console.log(`Imóvel ${doc.id} deletado com sucesso!`);
-      }
+    fetchData()
   }
 
   const removerAcentos = (str: string) =>
@@ -90,6 +99,9 @@ useEffect(() => {
     }
 
     return (
+        <>
+
+
 
         <main className="w-full flex flex-col justify-center pb-8">
         <h1 className="text-center text-4xl mt-12 text-zinc-800">Apartamentos registrados</h1>    
@@ -104,11 +116,17 @@ useEffect(() => {
 
             {
                 search.length > 0 && apartamentosFiltrados.map((construcao, index) => (
-                    <div key={index} className="flex flex-col gap-4 pt-12"> 
-                    <FaRegTrashAlt onClick={() => deleteImovelPorCampo(construcao.uid)} className='text-xl text-customPrimary
-                    cursor-pointer translate-x-4 translate-y-2'>remover apartamento</FaRegTrashAlt>
+                    <div key={index} className="flex flex-col gap-4 pt-12 relative" > 
+                        <div className="absolute right-0 top-7">
+                   <ExcludeDialog deleteFunction={() => deleteImovelPorCampo(construcao.uid)}/>
+                        </div>
+
+                    <div className="absolute top-7 right-1">
+                    <Modal codigoImovel={construcao.codigoImovel} fetchImoveis={fetchData}/>
+                    </div>
+
                     <PlaceCard areaPrivativa={construcao.areaPrivativa} bairro={construcao.bairro} cidade={construcao.cidade} codigo={construcao.codigoImovel}
-                    dataEntregaEmpreendimento={construcao.dataEntregaEmpreendimento} descricao={construcao.descricao} direcionamento='/apartmentgallery' id={String(construcao.uid)}
+                    dataEntregaEmpreendimento={construcao.receiveTime} descricao={construcao.descricao} direcionamento='/apartmentgallery' id={String(construcao.uid)}
                     imagemUrl={construcao.imagensUrl} numeroLocal={construcao.numeroLocal} numeroRua={JSON.stringify(construcao.numeroLocal)} preco={construcao.preco} quartos={construcao.dormitorios}
                     suites={construcao.suites} vagas={construcao.vagas} key={index} numeroAnunciante={construcao.numeroAnunciante}/>
                     </div>
@@ -118,11 +136,20 @@ useEffect(() => {
             {
                 apartamentos && search.length <= 0 && apartamentos.map((construcao, index) => (
                     <>
-                    <div key={index} className="flex flex-col gap-4 pt-12">
-                    <FaRegTrashAlt onClick={() => deleteImovelPorCampo(construcao.uid)} className='text-xl text-customPrimary
-                    cursor-pointer translate-x-4 translate-y-2'>remover apartamento</FaRegTrashAlt>
+
+
+                    <div key={index} className="flex flex-col gap-4 pt-12 relative">
+                        <div className="absolute right-0 top-7">
+                   <ExcludeDialog deleteFunction={() => deleteImovelPorCampo(construcao.uid)}/>
+                        </div>
+
+                    <div className="absolute top-7 right-1">
+                    <Modal codigoImovel={construcao.codigoImovel} fetchImoveis={fetchData}/>
+                    </div>
+
+
                     <PlaceCard areaPrivativa={construcao.areaPrivativa} bairro={construcao.bairro} cidade={construcao.cidade} codigo={construcao.codigoImovel}
-                    dataEntregaEmpreendimento={construcao.dataEntregaEmpreendimento} descricao={construcao.descricao} direcionamento='apartmentgallery' id={construcao.uid}
+                    dataEntregaEmpreendimento={construcao.receiveTime} descricao={construcao.descricao} direcionamento='apartmentgallery' id={construcao.uid}
                     imagemUrl={construcao.imagensUrl} numeroLocal={construcao.numeroLocal} numeroRua={JSON.stringify(construcao.numeroLocal)} preco={construcao.preco} quartos={construcao.dormitorios}
                     suites={construcao.suites} vagas={construcao.vagas} key={index} numeroAnunciante={construcao.numeroAnunciante}/>
                     </div>
@@ -131,6 +158,9 @@ useEffect(() => {
             }
         </div>
         </main>
+
+        <Toaster/>
+            </>
     )
 }
 

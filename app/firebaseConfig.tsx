@@ -1,9 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import {getAuth, GoogleAuthProvider} from "firebase/auth";
+import {getAuth} from "firebase/auth";
 import {getFirestore} from "firebase/firestore"
-import { getStorage, ref } from "firebase/storage";
-import { getApp } from "firebase/app";
+// import { getStorage, ref } from "firebase/storage";
+// import { getApp } from "firebase/app";
 import { getFunctions } from "firebase/functions";
 
 
@@ -21,8 +20,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 const auth = getAuth(app)
-const storage = getStorage(app);
-const storageRef = ref(storage)
+// const storage = getStorage(app);
+// const storageRef = ref(storage)
 const functions = getFunctions(app);
 
-export {db, auth, storage, storageRef, functions}
+export {db, auth, functions}

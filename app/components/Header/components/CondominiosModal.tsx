@@ -4,7 +4,7 @@ import { setFilterValues } from "@/app/features/filterValues/filterValuesSlice";
 import { db } from "@/app/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
-import { ReactNode, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 
 

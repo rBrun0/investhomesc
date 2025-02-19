@@ -118,7 +118,6 @@ const Modal = ({construtora, fetchConstrutora}: ModalProps) => {
         <DialogContent className='max-h-96 overflow-y-scroll max-w-[40rem]'>
             <DialogHeader>
             <h2>Editando construtora</h2>
-            {JSON.stringify(registeredConstructors)}
             </DialogHeader>
 
             {/* Dialog Content */}

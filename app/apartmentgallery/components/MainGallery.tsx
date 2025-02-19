@@ -1,17 +1,28 @@
 'use client'
 
-import buildingImage from "@/app/assets/apartment1.avif"
+import { useInView, motion } from "framer-motion";
 import Image from "next/image"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css";
+
 
 export type ImagesPops = {
     src: string;
 }
 
-export const MainGallery = ({imagesList}: {imagesList: any}) => {
+export const MainGallery = ({imagesList}: {imagesList: unknown}) => {
+
+    const firstImageRef = useRef(null)
+    const secondImageRef = useRef(null)
+    const thirdImageRef = useRef(null)
+    const fourthImageRef = useRef(null)
+    const fifthImageRef = useRef(null)
+
+    const isInView = useInView(firstImageRef, {once: true, margin: '-100px'})
+
+
 
     const externImages: ImagesPops[] = [
         {
@@ -32,10 +43,8 @@ export const MainGallery = ({imagesList}: {imagesList: any}) => {
         
     ]
 
-    const galImages = [buildingImage, buildingImage, buildingImage, buildingImage, buildingImage]
+    // const galImages = [buildingImage, buildingImage, buildingImage, buildingImage, buildingImage]
     // const newGalImages = [imagesList[0], imagesList[1], imagesList[2], imagesList[3], imagesList[4]]
-
-    const [galleryOpen, setGalleryOpen] = useState(true)
     const [imageIndex, setImageIndex] = useState(-1)
 
     function changeImageIndex(ind: number) {
@@ -52,26 +61,39 @@ export const MainGallery = ({imagesList}: {imagesList: any}) => {
             index={imageIndex}
             />
 
-            <div className="w-[120rem] -translate-x-9 md:translate-x-0 h-60 md:w-3/5  max-w-[23rem] md:max-w-[46rem]  md:h-[30rem] relative object-cover overflow-hidden">
+            <motion.div className="w-[120rem] -translate-x-9 md:translate-x-0 h-60 md:w-3/5  max-w-[23rem] md:max-w-[46rem]
+             md:h-[30rem] relative object-cover overflow-hidden"
+             ref={firstImageRef}
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.2, delay: .1 }}
+             >
             <Image fill src={imagesList[0]} alt="imagem" className="hover:scale-105 duration-200"
             onClick={() => changeImageIndex(0)}/>
-            </div>
+            </motion.div>
 
             <div className="w-2/5 space-y-1">
 
                 <div className="flex gap-1">
                     {
                         imagesList[1] && (
-                    <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
+                    <motion.div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.2, delay: .2 }}
                     onClick={() => changeImageIndex(1)}><Image fill src={imagesList[1]} objectFit="cover" alt="imagem" className="hover:scale-105 duration-200"/>
-                    </div>
+                    </motion.div>
                         )
                     }
                     {
                         imagesList[2] && (
-                    <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
-                    onClick={() => changeImageIndex(2)}><Image fill src={imagesList[2]} objectFit="cover" alt="imagem" className="hover:scale-105 duration-200"/>
-                    </div>
+                    <motion.div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
+                    onClick={() => changeImageIndex(2)}
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.2, delay: .3 }}
+                    ><Image fill src={imagesList[2]} objectFit="cover" alt="imagem" className="hover:scale-105 duration-200"/>
+                    </motion.div>
                         )
                     }
 
@@ -81,19 +103,35 @@ export const MainGallery = ({imagesList}: {imagesList: any}) => {
                 <div className="flex gap-1">
                     {
                         imagesList[3] && (
-                            <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"><Image fill src={imagesList[3]} alt="imagem" objectFit="cover"
+                            <motion.div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
+                            initial={{ opacity: 0, x: -50 }}
+                            animate={isInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.2, delay: .4 }}
+                            onClick={() => changeImageIndex(3)}
+                            >
+                                
+                                <Image fill src={imagesList[3]} alt="imagem" objectFit="cover"
                             className="hover:scale-105 duration-200"
-                            onClick={() => changeImageIndex(3)}/>
-                            </div>  
+                            onClick={() => changeImageIndex(3)}
+                            />
+                            </motion.div>  
                         )
                     }
 
                     {
                         imagesList[4] && (
-                            <div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"><Image fill src={imagesList[4]} alt="imagem" objectFit="cover"
+                            <motion.div className="relative w-2/5 h-[15rem] overflow-hidden hidden md:block"
+                            initial={{ opacity: 0, x: -50 }}
+                            animate={isInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.2, delay: .5 }}
+                            onClick={() => changeImageIndex(3)}
+                            >
+                                <Image fill src={imagesList[4]} alt="imagem" objectFit="cover"
                             className="hover:scale-105 duration-200"
-                            onClick={() => changeImageIndex(4)}/>
-                            </div>  
+                            onClick={() => changeImageIndex(4)}
+                            
+                            />
+                            </motion.div>  
                         )
                     }
                 </div>
