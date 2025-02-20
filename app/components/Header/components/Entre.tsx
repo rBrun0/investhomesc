@@ -11,7 +11,6 @@ import { RootState } from "@/app/store"
 import { useSelector } from "react-redux"
 
 export const Entre = () => {
-    // const dispatch = useDispatch()
 
     // const [usuario] = useState<User>()
     // const [actualUser] = useState<User | null>(null)
