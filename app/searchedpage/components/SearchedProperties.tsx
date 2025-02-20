@@ -34,10 +34,10 @@ export const SearchedProperties = ({propertyProfile}: {propertyProfile: string})
                 {
                     // @ts-ignore
                     property.perfil.includes(propertyProfile) && <PlaceCard areaPrivativa={property.areaPrivativa} bairro={property.bairro}
-                    cidade={property.cidade}codigo={property.codigoImovel} dataEntregaEmpreendimento={property.dataEntregaEmpreendimento}
-                    descricao={property.descricao} id={property.id} imagemUrl={property.imagensUrl} numeroLocal={111} numeroRua={property.numeroRua}
-                    preco={property.preco} quartos={property.quartos}
-                    suites={JSON.stringify(property.suites)} vagas={property.vagas} />
+                    cidade={property.cidade}codigo={property.codigoImovel} dataEntregaEmpreendimento={property.receiveTime}
+                    descricao={property.descricao} id={property.uid} imagemUrl={property.imagensUrl} numeroLocal={111} numeroRua={property.numeroRua}
+                    preco={property.preco} quartos={property.dormitorios}
+                    suites={property.suites} vagas={property.vagas} />
                 }
             })
 
