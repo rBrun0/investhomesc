@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ReduxProvider } from "./features/ReduxProvider";
 import UserLoader from "./components/userLoader";
+import { ReactNode } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -22,9 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
       <body
