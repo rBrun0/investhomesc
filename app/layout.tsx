@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ReduxProvider } from "./features/ReduxProvider";
 import UserLoader from "./components/userLoader";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,13 +21,9 @@ export const metadata: Metadata = {
   description: "Negocios Imobiliarios",
 };
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
 export default function RootLayout({
   children,
-}: LayoutProps) {
+}: {children: ReactNode}) {
   return (
     <html lang="pt-BR">
       <body
