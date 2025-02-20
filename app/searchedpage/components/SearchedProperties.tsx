@@ -13,12 +13,11 @@ export const SearchedProperties = ({propertyProfile}: {propertyProfile: string})
     
     const fetchData = async () => {
         const querySnapshot = await getDocs(collection(db,"imoveis"))
+        let temp = []
         querySnapshot.forEach((doc) => {
-            setSaleProperties((prev: any) => {
-                return [...prev, doc.data()]
-            })
-        }
-    )
+            temp.push(doc.data())
+        })
+    setSaleProperties(temp)
     }
 
     useEffect(() => {
@@ -26,13 +25,12 @@ export const SearchedProperties = ({propertyProfile}: {propertyProfile: string})
     }, [])
     
     return (
-        // @ts-ignore
         <>
         {
             saleProperties && saleProperties.map((property) => {
 
                 {
-                    // @ts-ignore
+                    // @ts-expect-error expected error
                     property.perfil.includes(propertyProfile) && <PlaceCard areaPrivativa={property.areaPrivativa} bairro={property.bairro}
                     cidade={property.cidade}codigo={property.codigoImovel} dataEntregaEmpreendimento={property.receiveTime}
                     descricao={property.descricao} id={property.uid} imagemUrl={property.imagensUrl} numeroLocal={111} numeroRua={property.numeroRua}
