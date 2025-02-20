@@ -1,3 +1,4 @@
+//@ts-expect-error expected error
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
