@@ -21,9 +21,13 @@ export const metadata: Metadata = {
   description: "Negocios Imobiliarios",
 };
 
+interface LayoutProps {
+  children: ReactNode;
+}
+
 export default function RootLayout({
   children,
-}: { children: ReactNode }) {
+}: LayoutProps) {
   return (
     <html lang="pt-BR">
       <body
