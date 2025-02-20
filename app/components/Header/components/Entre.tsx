@@ -1,19 +1,22 @@
 'use client'
 
-import { signOut, User } from "firebase/auth"
+import { signOut } from "firebase/auth"
 import { auth } from "@/app/firebaseConfig"
-import {  useState } from "react"
 // import { useDispatch } from "react-redux"
 // import { clearUser, setUser } from "@/app/features/user/userSlices"
 // import { RootState } from "@/app/store"
 // import { clearUser, setUser } from "@/app/features/user/userSlices"
 import Link from "next/link"
+import { RootState } from "@/app/store"
+import { useSelector } from "react-redux"
 
 export const Entre = () => {
     // const dispatch = useDispatch()
 
     // const [usuario] = useState<User>()
-    const [actualUser] = useState<User | null>(null)
+    // const [actualUser] = useState<User | null>(null)
+    const selector = useSelector
+    const userProfile = selector((state: RootState) => state.userSlice)
     // const usuarioCorrente = auth.currentUser
 
     // const provider = new GoogleAuthProvider();
@@ -61,7 +64,7 @@ export const Entre = () => {
 
     return (<>
     {
-        actualUser && (
+        userProfile && (
             <div className="md:px-2 md:py-1 lg:px-4 lg:py-1 rounded-md text-customPrimary font-medium 
              transition-colors border border-white hover:border-gray-300 cursor-pointer" onClick={logout}>
                Sair
@@ -71,7 +74,7 @@ export const Entre = () => {
         }
 
         {
-            !actualUser && (
+            !userProfile && (
                 <Link href="/signup" className="md:px-2 md:py-1 lg:px-4 lg:py-1 text-customPrimary font-medium
                  transition-colors cursor-pointer hover:border"
             >
