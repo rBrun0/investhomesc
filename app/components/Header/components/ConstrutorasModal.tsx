@@ -1,6 +1,6 @@
 'use client'
 
-import { ConstructorsType } from "@/app/@Types/types";
+import { ConstructorsType } from "@/app/utils/types";
 import { setFilterValues } from "@/app/features/filterValues/filterValuesSlice";
 import { db } from "@/app/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";

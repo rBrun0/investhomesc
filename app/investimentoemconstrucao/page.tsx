@@ -4,7 +4,7 @@ import React from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
-import { ConstructionsType } from "../@Types/types";
+import { ConstructionsType } from "../utils/types";
 import { PlaceCard } from "../components/PlaceCard/PlaceCard";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { VscSettings } from "react-icons/vsc";

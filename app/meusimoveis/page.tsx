@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../firebaseConfig';
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { PlaceCard } from '../components/PlaceCard/PlaceCard';
-import { ConstructorsType, PropertyType } from '../@Types/types';
+import { ConstructorsType, PropertyType } from '../utils/types';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';

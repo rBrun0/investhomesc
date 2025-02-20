@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react"
-import { ConstructorsType } from "@/app/@Types/types"
+import { ConstructorsType } from "@/app/utils/types"
 import { useState } from "react"
 
 type ConstructionsProps = {

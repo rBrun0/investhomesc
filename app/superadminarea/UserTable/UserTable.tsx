@@ -1,7 +1,7 @@
 
 'use client'
 
-import { Users } from "@/app/@Types/types";
+import { Users } from "@/app/utils/types";
 import {
     Table,
     TableBody,

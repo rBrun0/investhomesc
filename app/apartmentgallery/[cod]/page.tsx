@@ -14,8 +14,8 @@ import { CompleteGallery } from "../components/CompleteGallery";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebaseConfig";
-import { PropertyType } from "@/app/@Types/types";
-import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
+import { PropertyType } from "@/app/utils/types";
+import { formatToBrl } from "@/app/utils/utilitaryCode/formatToBrl";
 import { CallABroker } from "../components/CallABroker";
 import { useJsApiLoader } from '@react-google-maps/api';
 

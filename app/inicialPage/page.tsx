@@ -9,7 +9,7 @@ import office from "@/app/assets/office.avif"
 import { useEffect, useState } from "react";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { ConstructorsType, PropertyType } from "../@Types/types";
+import { ConstructorsType, PropertyType } from "../utils/types";
 import Link from "next/link";
 
 import { OurConstructionsCompanies } from "./components/OurConstructionsCompanies";

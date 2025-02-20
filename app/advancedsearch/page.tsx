@@ -7,7 +7,7 @@ import { FilterDialog } from "../searchedpage/components/FilterDialog";
 import { IoIosSearch } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { PropertyType } from "../@Types/types";
+import { PropertyType } from "../utils/types";
 import { db } from "../firebaseConfig";
 import { PlaceCard } from "../components/PlaceCard/PlaceCard";
 import { useDispatch, useSelector } from "react-redux";

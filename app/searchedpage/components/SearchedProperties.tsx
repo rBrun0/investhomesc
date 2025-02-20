@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { PropertyType } from "@/app/@Types/types"
+import { PropertyType } from "@/app/utils/types"
 import { PlaceCard } from "@/app/components/PlaceCard/PlaceCard"
 import { db } from "@/app/firebaseConfig"
 import { collection, getDocs } from "firebase/firestore"

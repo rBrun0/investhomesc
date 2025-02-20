@@ -11,7 +11,7 @@ import { Roles } from '@/lib/utils';
 import { UserTable } from './UserTable/UserTable';
 import { toast, Toaster } from 'sonner';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { Users } from '../@Types/types';
+import { Users } from '../utils/types';
 
 
 

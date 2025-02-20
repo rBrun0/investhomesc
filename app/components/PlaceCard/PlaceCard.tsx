@@ -6,7 +6,7 @@ import { FaCar } from "react-icons/fa";
 import { FaRulerCombined } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
-import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
+import { formatToBrl } from "@/app/utils/utilitaryCode/formatToBrl";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CardDialog } from "./CardDialog";
 import { HTMLAttributes, useRef } from "react";

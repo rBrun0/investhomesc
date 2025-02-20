@@ -10,7 +10,7 @@ import { auth, db } from '../../firebaseConfig';
 import { v4 as uuidv4 } from 'uuid';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import Image from 'next/image';
-import { PropertyType } from '@/app/@Types/types';
+import { PropertyType } from '@/app/utils/types';
 
 
 type ModalProps = {

@@ -1,6 +1,6 @@
 'use client'
 
-import { ConstructorsType } from "@/app/@Types/types";
+import { ConstructorsType } from "@/app/utils/types";
 import { db } from "@/app/firebaseConfig";
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";

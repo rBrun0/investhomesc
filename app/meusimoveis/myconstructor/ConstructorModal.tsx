@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { collection,  getDocs, query, updateDoc, where } from 'firebase/firestore';
 import {  db } from '../../firebaseConfig';
 import { useCreate } from '@/app/adminarea/components/schemas/construtora';
-import { ConstructorsType } from '@/app/@Types/types';
+import { ConstructorsType } from '@/app/utils/types';
 
 
 

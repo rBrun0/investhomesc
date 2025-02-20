@@ -1,6 +1,6 @@
 'use client'
 
-import { PropertyType } from "@/app/@Types/types";
+import { PropertyType } from "@/app/utils/types";
 import { PlaceCard } from "@/app/components/PlaceCard/PlaceCard";
 import { db } from "@/app/firebaseConfig";
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";

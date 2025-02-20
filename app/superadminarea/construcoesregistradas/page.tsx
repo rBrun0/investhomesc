@@ -1,6 +1,6 @@
 'use client'
 
-import { ConstructionsType } from "@/app/@Types/types";
+import { ConstructionsType } from "@/app/utils/types";
 import { PlaceCard } from "@/app/components/PlaceCard/PlaceCard";
 import { db } from "@/app/firebaseConfig";
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";

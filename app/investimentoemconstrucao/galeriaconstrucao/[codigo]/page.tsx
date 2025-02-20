@@ -13,8 +13,8 @@ import { CompleteGallery } from "@/app/apartmentgallery/components/CompleteGalle
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebaseConfig";
-import { ConstructionsType, PropertyType } from "@/app/@Types/types";
-import { formatToBrl } from "@/app/@Types/utils/formatToBrl";
+import { ConstructionsType, PropertyType } from "@/app/utils/types";
+import { formatToBrl } from "@/app/utils/utilitaryCode/formatToBrl";
 import { CallABroker } from "@/app/apartmentgallery/components/CallABroker";
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
