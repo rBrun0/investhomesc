@@ -10,7 +10,7 @@ import { db } from '@/app/firebaseConfig';
 import { RootState } from '@/app/store';
 import { useSelector } from 'react-redux';
 import { Roles } from '@/lib/utils';
-
+import InputMask from 'react-input-mask';
 
 const SiteInfo = () => {
 
@@ -59,8 +59,8 @@ const SiteInfo = () => {
     
     try {
         await setDoc(doc(db, "settings", "site"), {
-          telOne: `(${data.telOne.slice(0,2)}) ${data.telOne.slice(2,4)} ${data.telOne.slice(4,9)}-${data.telOne.slice(9,13)}`,
-          telTwo: `(${data.telTwo.slice(0,2)}) ${data.telTwo.slice(2,4)} ${data.telTwo.slice(4,9)}-${data.telTwo.slice(9,13)}`,
+          telOne: data.telOne,
+          telTwo: data.telTwo,
           neighborhood: data.neighborhood,
           locationExplain: data.aboutLocal,
           city: data.city,
@@ -101,8 +101,8 @@ const SiteInfo = () => {
       const snap = await getDoc(docRef);
       if (snap.exists()) {
           const data = snap.data();
-          const firstTelephone = data.telOne.split(" ").join('').split("").filter((c: string) => c !== '(' && c !== ')' && c !== '-').join('');
-          const secondTelephone = data.telOne.split(" ").join('').split("").filter((c: string) => c !== '(' && c !== ')' && c !== '-').join('');
+          const firstTelephone = data.telOne
+          const secondTelephone = data.telOne
       setValue("aboutLocal", data.locationExplain);
       setValue("city", data.city);
       setValue("telOne", firstTelephone)
@@ -146,17 +146,23 @@ const SiteInfo = () => {
 
             <label htmlFor="telone">
                 <h1 className='text-sm text-zinc-700' >Telefone 1</h1>
-            <input type="text" id='telone' maxLength={13}
+            {/* <input type="text" id='telone' maxLength={13}
             {...register('telOne')} placeholder='55 47 999999999'
-            className='rounded border outline-none w-52 h-8 px-2'/>
+            className='rounded border outline-none w-52 h-8 px-2'/> */}
+            <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
+            {...register('telOne')} className="rounded border outline-none w-52 h-8 px-2"
+            />
             </label>
 
 
             <label htmlFor="teltwo">
                 <h1 className='text-sm text-zinc-700'>Telefone 2</h1>
-            <input type="text" id='teltwo' maxLength={13} placeholder='55 47 999999999'
+            {/* <input type="text" id='teltwo' maxLength={13} placeholder='55 47 999999999'
             {...register('telTwo')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+            className='rounded border outline-none w-52 h-8 px-2'/> */}
+            <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
+            {...register('telOne')} className="rounded border outline-none w-52 h-8 px-2"
+            />
             </label>
 
             <label htmlFor="neighborhood">

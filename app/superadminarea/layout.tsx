@@ -3,6 +3,7 @@
 
 import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar"
 import { Building, CornerDownLeft, Hammer, HousePlus, User } from "lucide-react"
+import { RiAdminFill } from "react-icons/ri";
 import Link from "next/link"
 import { ReactNode } from "react"
 import { RootState } from "../store"
@@ -45,6 +46,11 @@ const Layout = ({children}: {children: ReactNode}) => {
             <Link href={'/superadminarea/siteinfo'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
                 <Hammer />
                 Configurações do site
+            </Link>
+
+            <Link href={'/superadminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+                <RiAdminFill />
+                Admin
             </Link>
 
             <Link href={'/'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2

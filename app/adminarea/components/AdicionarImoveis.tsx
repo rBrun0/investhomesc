@@ -11,6 +11,10 @@ import { ImoveisType, useCreate } from "./schemas/imoveis";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { toast, Toaster } from "sonner";
 import Image from "next/image";
+import CurrencyInput from "react-currency-input-field";
+import InputMask from 'react-input-mask';
+import { brasilStates } from "./brazillianStates";
+
 
 
 export const AdicionarImoveis = () => {
@@ -32,31 +36,8 @@ export const AdicionarImoveis = () => {
     const {register, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
     const valuesWatch = getValues()
 
-    console.log({watch, valuesWatch})
+    console.log(watch())
 
-    console.log({formErrors})
-
-    // const [date, setDate] = useState<Date | undefined>()
-    
-
-    // const [dataEntregaEmpreendimento, setDataEntregaEmpreendimento] = useState('')
-    // const [descricao, setDescricao] = useState("");
-    // const [preco, setPreco] = useState("");
-    // const [areaPrivativa, setAreaPrivativa] = useState("");
-    // const [bairro, setBairro] = useState("");
-    // const [cidade, setCidade] = useState("");
-    // const [estado, setEstado] = useState("");
-    // const [rua, setRua] = useState("");
-    // const [numero, setNumero] = useState("");
-    // const [vagas, setVagas] = useState("");
-    // const [suites, setSuites] = useState("");
-    // const [videoLink, setVideoLink] = useState("");
-    // const [latitude, setLatitude] = useState("");
-    // const [longitude, setLongitude] = useState("");
-    // const [banheiros, setBanheiros] = useState("");
-    // const [dormitorios, setDormitorios] = useState(""); 
-    // const [construtora, setConstrutora] = useState("");
-    // const [numeroAnunciante, setNumeroAnunciante] = useState("");
     
     const [areaDeLazer, setAreaDeLazer] = useState<{id: number, value: string}[]>([]);
     const [areaDeLazerInput, setAreaDeLazerInput] = useState("");
@@ -77,6 +58,14 @@ export const AdicionarImoveis = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     function adicionarInformacoesImovel() {
+
+        const valueImovel = informacoesImovel.map((v) => v.value)
+
+        if(valueImovel.includes(informacoesImovelInput)) {
+            toast.error("Essa infoemação já foi adicionada!")
+            return;
+        }
+
         setInformacoesImovel([
            ...informacoesImovel,
             {id: Math.random(), value: informacoesImovelInput },
@@ -92,11 +81,18 @@ export const AdicionarImoveis = () => {
 
         const valueEmprendimento = informacoesEmpreendimento.map((v) => v.value) 
 
-        if(!informacoesEmpreendimentoInput) return;
+        if(!informacoesEmpreendimentoInput) {
+                toast.error("Por favor, insira uma informação!")
+                return;
+        }
 
-        if(valueEmprendimento.includes(informacoesEmpreendimentoInput)) return;
+        if(valueEmprendimento.includes(informacoesEmpreendimentoInput)) {
+            toast.error("Essa informação já foi adicionada!")
+            return;
+        }
 
         setInformacoesEmpreendimento((prev) => {
+
             return [...prev, {id: uuidv4(), value: informacoesEmpreendimentoInput }]
         })
 
@@ -108,6 +104,14 @@ export const AdicionarImoveis = () => {
     }
 
     function adicionarInformacoesLazer() {
+
+        const valueLazer = areaDeLazer.map((v) => v.value)
+
+        if(valueLazer.includes(areaDeLazerInput)) {
+            toast.error("Essa informação já foi adicionada!")
+            return;
+        }
+
         setAreaDeLazer([
            ...areaDeLazer,
             {id: Math.random(), value: areaDeLazerInput },
@@ -118,50 +122,6 @@ export const AdicionarImoveis = () => {
     function removerAreaDeLazer(id: number) {
         setAreaDeLazer(areaDeLazer.filter((area) => area.id!== id));
     }
-
-    // const handleCheckPerfilImovel = (e: ChangeEvent<HTMLInputElement>) => {
-    //     const isSelected = e.target.checked
-    //     const value = e.target.value
-
-    //     if(isSelected) {
-    //         setCheckBoxPerfil([...checkboxPerfi, value])
-    //     } else {
-    //         setCheckBoxPerfil((prev) => {
-    //             return prev.filter((nam) => nam != value)
-    //         })
-    //     }
-
-    //     console.log(checkboxPerfi)
-    // }
-
-    // const handleCheckImovel = (e: ChangeEvent<HTMLInputElement>) => {
-    //     const isSelected = e.target.checked
-    //     const value = e.target.value
-
-    //     if(isSelected) {
-    //         setCheckboxEmpreendimento([...checkboxEmpreendimento, value])
-    //     } else {
-    //         setCheckboxEmpreendimento((prev) => {
-    //             return prev.filter((nam) => nam != value)
-    //         })
-    //     }
-
-    // }
-
-    // const handleCheckCondominio = (e: ChangeEvent<HTMLInputElement>) => {
-    //     const isSelected = e.target.checked
-    //     const value = e.target.value
-
-    //     if(isSelected) {
-    //         setCheckboxCondominio([...checkboxCondominio, value])
-    //     } else {
-    //         setCheckboxCondominio((prev) => {
-    //             return prev.filter((nam) => nam != value)
-    //         })
-    //     }
-
-    //     console.log(checkboxCondominio)
-    // }
 
     const cloudinaryUpload = async (file: File) => {
         const formData = new FormData();
@@ -221,8 +181,6 @@ export const AdicionarImoveis = () => {
                 console.log("deu")
                 return; 
             }
-
-            const numberWithoutSpaces = data.numeroAnunciante.split(" ").join("")
             
             addDoc((collection(db, "imoveis")), {
             ...{
@@ -235,39 +193,12 @@ export const AdicionarImoveis = () => {
                 informacoesLazer: areaDeLazer.map((area) => area.value),
                 informacoesEmpreendimento: informacoesEmpreendimento.map((empreendimento) => empreendimento.value),
                 createdBy: curUser.uid,
-                correctorNumber: `(${numberWithoutSpaces.slice(0,2)}) ${numberWithoutSpaces.slice(2,4)} ${numberWithoutSpaces.slice(4,9)}-${numberWithoutSpaces.slice(9,13)}`,
+                correctorNumber: data.numeroAnunciante,
                 codigoImovel: `invest-${String(uuidv4()).slice(0,4)}`,
                 latitude: correctCoord(Number(data.latitude)),
                 longitude: correctCoord(Number(data.longitude)),
+                preco: data.preco.replace(/[^\d.-]/g, '').replace(',', '.'),
             }
-            // areaPrivativa: areaPrivativa,
-            // bairro: bairro,
-            // bathrooms: banheiros,
-            // caracteristicasCondominio: checkboxCondominio,
-            // caracteristicasImovel: checkboxEmpreendimento,
-            // cidade: cidade,
-            // codigoImovel: `invest-${String(uuidv4).slice(0,3)}`,
-            // construtora: construtora,
-            // created: new Date(),
-            // dataEntregaEmpreenimento: dataEntregaEmpreendimento,
-            // descricao: descricao,
-            // id: uuidv4().slice(0,8),
-            // imagensPlanta: uploadedImages,
-            // imagensUrl: uploadedImages,
-            // informacoesEmpreendimento: informacoesEmpreendimento,
-            // informacoesImovel: informacoesImovel,
-            // informacoesLazer: areaDeLazer,
-            // localizacao: {latitude: latitude, longitude: longitude},
-            // numeroAnunciante: numeroAnunciante,
-            // numeroRua: rua,
-            // perfil: checkboxPerfi,
-            // preco: preco,
-            // propertyVideo: videoLink,
-            // quartos: dormitorios,
-            // suites: suites,
-            // tipoDoImovel: propertyType,
-            // vagas: vagas,
-            // createdBy: curUser?.uid
         })
 
         setUploadedImages([])
@@ -289,7 +220,8 @@ export const AdicionarImoveis = () => {
         fetchConstructors()
     }, [])
 
-    console.log({registeredConstructors})
+    console.log({uploadedImages})
+    console.log({uploadedImages})
 
     useEffect(() => {
         console.log("Arquivo selecionado:", file);
@@ -316,8 +248,15 @@ export const AdicionarImoveis = () => {
 
                 <label htmlFor="preco" className="w-full relative">
                     <h1 className="absolute -top-6  ">Preço</h1>
-                <input type="number" id="preco" placeholder="R$"  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
-                {...register('preco')}/>
+                {/* <input type="number" id="preco" placeholder="R$"  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                {...register('preco')}/> */}
+                <CurrencyInput
+                decimalsLimit={2}
+                prefix="R$ "
+                id="preco"
+                {...register('preco')}
+                className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                />
                 {
                     formErrors.preco && <p className="w-full text-start text-xs text-red-500 ">{formErrors.preco.message}</p>
                 }
@@ -359,29 +298,6 @@ export const AdicionarImoveis = () => {
                     formErrors.receiveTime && <p className="w-full text-start text-xs text-red-500 ">{formErrors.receiveTime.message}</p>
                 }
 
-      {/* <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-[240px] justify-start text-left font-normal",
-            !date && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon />
-          {date ? format(date, "PPP",  { locale: ptBR }) : <span>Selecione uma data</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 z-[999999] pointer-events-auto" align="start">
-        <Calendar
-          locale={ptBR}
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover> */}
       </label>
 
 
@@ -465,10 +381,20 @@ export const AdicionarImoveis = () => {
                 
                 <label htmlFor="preco" className="w-full relative">
                     <h1 className="absolute -top-6">Estado</h1>
-                    <input type="text" placeholder="ex: SC" className="text-zinc-700 plut t-3 w-full h-14 border rounded-md"
-                    {...register('estado')}/>
+
+                    <select name="" id="" {...register('estado')} className="text-zinc-700 pl-3 w-full h-14 border rounded-md">
+                        {
+                            brasilStates.map((state) => (
+                                <option key={state.value} value={state.value}>{state.label}</option>
+                            ))
+                        }
+                    </select>
+
+                    {formErrors.estado && <p className="w-full text-start text-xs text-red-500 ">{formErrors.estado.message}</p>}
+                    
+                    {/* <input type="text" placeholder="ex: SC" className="text-zinc-700 plut t-3 w-full h-14 border rounded-md"
+                    {...register('estado')}/> */}
                                     {
-                    formErrors.estado && <p className="w-full text-start text-xs text-red-500 ">{formErrors.estado.message}</p>
                 }
                 </label>
 
@@ -585,13 +511,17 @@ export const AdicionarImoveis = () => {
 
                 <label htmlFor="preco" className="w-full relative">
                     <h1 className="absolute -top-6  ">Número do anunciante</h1>
-                    <input type="text" placeholder="55 99 999999999" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
-                    {...register('numeroAnunciante')} maxLength={13}/>
+
+                    <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
+                    {...register('numeroAnunciante')} className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    />
+
+                    {/* <input type="text" placeholder="55 99 999999999" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('numeroAnunciante')} maxLength={13}/> */}
                                     {
                     formErrors.numeroAnunciante && <p className="w-full text-start text-xs text-red-500 ">{formErrors.numeroAnunciante.message}</p>
                 }
                 </label>
-
 
                 <label htmlFor="preco" className="w-full relative">
                     <h1 className="absolute -top-6  ">Link para vídeo</h1>
@@ -800,17 +730,22 @@ export const AdicionarImoveis = () => {
 
                 </div>
 
-                <div className="mt-20 space-y-4">
+                <div className="mt-20 space-y-4 w-full flex flex-col items-center">
                         <h1 className="text-2xl">Adicionar imagens</h1>
 
-                        <input type="file" name="" id="" onChange={async (e) => {
+                        <input 
+                        type="file" 
+                        name="" 
+                        id="" 
+                        onChange={async (e) => {
                             if(e.target.files && e.target.files.length > 0) {
                                 const selectedFile = e.target.files[0];
                                 setFile(selectedFile)
-                                console.log({file})
-
                             }
-                        }}/>
+                        }}
+                        className="mx-auto"
+                        />
+
                         <div className="flex items-center justify-center gap-2 w-full">
                         <button onClick={handleUpload}
                         className="bg-customPrimary text-white w-28 h-8 rounded-md border-[1px] border-customPrimary

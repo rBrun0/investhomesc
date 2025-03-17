@@ -61,9 +61,11 @@ export const Entre = () => {
 
 // }, [])
 
+console.log(userProfile)
+
     return (<>
     {
-        userProfile && (
+        userProfile.email && (
             <div className="md:px-2 md:py-1 lg:px-4 lg:py-1 rounded-md text-customPrimary font-medium 
              transition-colors border border-white hover:border-gray-300 cursor-pointer" onClick={logout}>
                Sair
@@ -73,7 +75,7 @@ export const Entre = () => {
         }
 
         {
-            !userProfile && (
+            !userProfile.email && (
                 <Link href="/signup" className="md:px-2 md:py-1 lg:px-4 lg:py-1 text-customPrimary font-medium
                  transition-colors cursor-pointer hover:border"
             >

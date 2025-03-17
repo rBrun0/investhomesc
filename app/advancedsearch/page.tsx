@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useRef } from 'react'
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { VscSettings } from "react-icons/vsc";
 import { FilterDialog } from "../searchedpage/components/FilterDialog";
@@ -22,7 +22,22 @@ import { Toaster } from 'sonner';
 function AdvancedSearch() {
 
     const dispatch = useDispatch()
-    const filterValues = useSelector((state: RootState) => state.filterValuesSlice)
+    const filterValues = useSelector((state: RootState) => state.filterValuesSlice);
+
+    const [visibleCount, setVisibleCount] = useState(10);
+
+    const [loading, setLoading] = useState(false);
+    const observerRef = useRef<HTMLDivElement | null>(null);
+
+    const loadMoreItems = () => {
+      if (loading) return;
+  
+      setLoading(true);
+  
+      setVisibleCount((prev) => prev + 10);
+  
+      setLoading(false);
+    };
 
     function comparaArrays(arr1: string[], arr2: string[]) {
         const maiorArray = arr1.length > arr2.length ? arr1 : arr2
@@ -40,21 +55,17 @@ function AdvancedSearch() {
         return itemParecido
     };
 
-
-
-
     const [saleApartments, setSaleApartments] = useState<PropertyType[] | null>([]);
     const [filteredData, setFilteredData] = useState<PropertyType[] | null>()
-    // let filteredProperties;
 
     console.log('filteredDataa',filteredData)
     console.log('filteredValueess',filterValues)
     
     function removerAcentos(text: string): string {
         return text
-            ?.normalize("NFD") // Separa acentos
-            .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-            .toLowerCase(); // Deixa tudo minúsculo
+            ?.normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
     }
     
     function dispatchFilters() {
@@ -145,6 +156,23 @@ function AdvancedSearch() {
 }
 
 useEffect(() => {
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreItems();
+        }
+      },
+      { rootMargin: "100px" }
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+useEffect(() => {
     fetchData();
   }, []);
   
@@ -186,7 +214,7 @@ useEffect(() => {
             <div className="flex flex-col space-y-6 justify-center items-center">
 
                 {
-                    saleApartments && isObjectFullyEmpty(filterValues) && saleApartments.map(apartment => {
+                    saleApartments && isObjectFullyEmpty(filterValues) && saleApartments.slice(0, visibleCount)?.map(apartment => {
                         return (
                             <PlaceCard areaPrivativa={apartment.areaPrivativa} bairro={apartment.bairro} cidade={apartment.cidade} codigo={apartment.codigoImovel} dataEntregaEmpreendimento={apartment.receiveTime}
                                 descricao={apartment.descricao} id={String(apartment.uid)} imagemUrl={apartment.imagensUrl} numeroLocal={apartment.numeroLocal} numeroRua={apartment.numeroRua} preco={apartment.preco} quartos={apartment.dormitorios}
@@ -205,7 +233,7 @@ useEffect(() => {
 
                 {
                     isObjectFullyEmpty(filterValues) == false && filteredData?.length >= 1 && (
-                            filteredData?.map((apartment) => (
+                            filteredData?.slice(0, visibleCount)?.map((apartment) => (
                                 <PlaceCard areaPrivativa={apartment.areaPrivativa} bairro={apartment.bairro} cidade={apartment.cidade} codigo={apartment.codigoImovel} dataEntregaEmpreendimento={apartment.receiveTime}
                                 descricao={apartment.descricao} id={String(apartment.uid)} imagemUrl={apartment.imagensUrl} numeroLocal={apartment.numeroLocal} numeroRua={apartment.numeroRua} preco={apartment.preco} quartos={apartment.dormitorios}
                                 suites={apartment.suites} vagas={apartment.vagas} direcionamento="apartmentgallery"

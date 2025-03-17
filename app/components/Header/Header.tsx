@@ -6,7 +6,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ComprarModal } from "./components/ComprarModal";
 import { ConstrutorasModal } from "./components/ConstrutorasModal";
-// import siteLogo from "@/app/assets/investeLogo.png"
 import Link from "next/link";
 import { HamburguerContent } from "./components/HamburguerContent";
 import Image from "next/image";
@@ -26,6 +25,7 @@ import { Roles } from '@/lib/utils';
 export const Header = () => {
 
     const [siteImage, setSiteImage] = useState<string | null>(null);
+    const [telephone, setTelephone] = useState<string | null>(null);
 
     const selector = useSelector
 
@@ -41,6 +41,7 @@ export const Header = () => {
         if (snap.exists()) {
             const data = snap.data();
             setSiteImage(data?.logo);
+            setTelephone(data?.telOne);
           }
     }
 
@@ -122,7 +123,7 @@ export const Header = () => {
                  
 
 
-                 <Link href={'http://wa.me/999999999'} target="blank">
+                 <Link href={`http://wa.me/${String(telephone)?.split(" ")?.join("")?.replace("-", "")?.slice(4)}`} target="blank">
                  <div className="md:px-2 md:py-1 lg:px-4 lg:py-1 rounded-md  text-customPrimary font-medium 
                  transition-colors border border-white hover:border-gray-300">
                     Contato
