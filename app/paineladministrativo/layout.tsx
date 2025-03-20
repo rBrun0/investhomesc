@@ -60,8 +60,8 @@ export default function Layout({children}: {children: ReactNode}) {
             </Link>
         </Sidebar>
                 <SidebarTrigger />
-        </SidebarProvider>
             {children}
+        </SidebarProvider>
         </body>
         </html>
     )

@@ -14,22 +14,25 @@ import Link from "next/link";
 
 import { OurConstructionsCompanies } from "./components/OurConstructionsCompanies";
 import { ActingCities } from "./components/ActingCities";
-// import { useDispatch } from "react-redux";
-// import { setFilterValues } from "../features/filterValues/filterValuesSlice";
-// import { RootState } from "../store";;
 import { MainPanel } from "../components/MainPanel/MainPanel";
 import { Footer } from "../components/Footer/Footer";
-
-
+import { resetFilterValues, setFilterValues } from "../features/filterValues/filterValuesSlice";
+import { useDispatch } from "react-redux";
 
 function InicialPage () {   
-    
-    // const dispatch = useDispatch()
 
-    // const filterValues = useSelector((state: RootState) => state.filterValuesSlice)
+    const dispatch = useDispatch()
 
     const [saleApartments, setSaleApartments] = useState<PropertyType[] | null>([])
     const [construtoras, setConstrutoras] = useState<ConstructorsType[]>([])
+
+    const locObj = saleApartments.reduce<Record<string, string[]>>((acc, house) => {
+        acc[house.cidade] = acc[house.cidade] ?? [];
+        acc[house.cidade].push(house.bairro);
+        return acc;
+      }, {});
+
+      console.log("locObj", locObj)
 
     const furnishedApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Mobiliado"))[0]
     const quadraMarApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Quadra Mar"))[0]
@@ -75,6 +78,7 @@ useEffect(() => {
     }
   };
   fetchSiteData();
+  dispatch(resetFilterValues())
 }, []);
 
 console.log({siteData})
@@ -100,7 +104,7 @@ console.log("apartamentos", {saleApartments})
                     <>
                     <Link href={"/advancedsearch"} className="w-40 h-12 rounded-3xl bg-customPrimary text-white font-semibold cursor-pointer ml-16 md:ml-10
             border-2 border-customPrimary hover:bg-white hover:text-customPrimary transition-colors flex justify-center items-center"
-            // onClick={() =>  dispatch(setFilterValues({propertyProfile: "Mobiliado"}))}
+            onClick={() =>  dispatch(setFilterValues({propertyProfile: "Mobiliado"}))}
             >
                 MOBILIADOS
             </Link>
@@ -118,7 +122,7 @@ console.log("apartamentos", {saleApartments})
                     <>
                      <Link href={"/advancedsearch"} className="w-40 h-12 rounded-3xl bg-customPrimary text-white font-semibold cursor-pointer ml-16 md:ml-10  mt-6 md:mb-0 
                     border-2 border-customPrimary hover:bg-white hover:text-customPrimary transition-colors flex justify-center items-center"
-                    // onClick={() => dispatch(setFilterValues({propertyProfile: "Frente Mar"}))}
+                    onClick={() => dispatch(setFilterValues({propertyProfile: "Frente Mar"}))}
                     >
                         FRENTE MAR
                     </Link>
@@ -222,28 +226,33 @@ console.log("apartamentos", {saleApartments})
 
              {/* CONDOMINIOS */}
 
+                {
+                    construtoras.length >= 1 && (
+                        <>
             <section className="bg-zinc-100 w-[80%] flex flex-col justify-start items-center px-12 py-8 space-y-2">
                 
 
                 {/* CONSTRUTORAS */}
 
-                <div className="bg-zinc-400 h-[1px] w-full"/>
+                {/* <div className="bg-zinc-400 h-[1px] w-full"/> */}
 
-                <h1 className="w-full text-start text-xl text-customPrimary font-bold ">CONSTRUTORAS</h1>
-
-                <OurConstructionsCompanies construtoras={construtoras}/>
+                            <h1 className="w-full text-start text-xl text-customPrimary font-bold ">CONSTRUTORAS</h1>
+                            <OurConstructionsCompanies construtoras={construtoras}/>
 
             </section>
+                        </>
+                    )
+                }
 
 
-            <section className="bg-zinc-100 pt-8 w-[80%]">
+            {/* <section className="bg-zinc-100 pt-8 w-[80%]">
                 <div className="mx-auto px-6 py-6 space-y-4">
 
-                    <ActingCities />
+                    <ActingCities locObj={locObj}/>
 
                 </div>
 
-            </section>
+            </section> */}
 
         </main>
 

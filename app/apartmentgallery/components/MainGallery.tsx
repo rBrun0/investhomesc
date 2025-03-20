@@ -15,10 +15,6 @@ export type ImagesPops = {
 export const MainGallery = ({imagesList}: {imagesList: unknown}) => {
 
     const firstImageRef = useRef(null)
-    const secondImageRef = useRef(null)
-    const thirdImageRef = useRef(null)
-    const fourthImageRef = useRef(null)
-    const fifthImageRef = useRef(null)
 
     const isInView = useInView(firstImageRef, {once: true, margin: '-100px'})
 
@@ -53,7 +49,7 @@ export const MainGallery = ({imagesList}: {imagesList: unknown}) => {
     } 
 
     return (
-        <section className="flex w-full justify-center pl-28 mt-12 gap-1">
+        <section className="flex w-full justify-center pl-16 md:pl-28 mt-12 gap-1">
 
             <Lightbox slides={externImages}
             open={imageIndex >= 0}

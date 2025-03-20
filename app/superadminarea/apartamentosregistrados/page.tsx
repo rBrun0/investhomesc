@@ -122,7 +122,7 @@ useEffect(() => {
                         </div>
 
                     <div className="absolute top-7 right-1">
-                    <Modal codigoImovel={construcao.codigoImovel} fetchImoveis={fetchData}/>
+                    <Modal codigoImovel={construcao.codigoImovel} fetchImoveis={fetchData} customKey={index}/>
                     </div>
 
                     <PlaceCard areaPrivativa={construcao.areaPrivativa} bairro={construcao.bairro} cidade={construcao.cidade} codigo={construcao.codigoImovel}
@@ -144,7 +144,7 @@ useEffect(() => {
                         </div>
 
                     <div className="absolute top-7 right-1">
-                    <Modal codigoImovel={construcao.codigoImovel} fetchImoveis={fetchData}/>
+                    <Modal codigoImovel={construcao.codigoImovel} fetchImoveis={fetchData} customKey={index}/>
                     </div>
 
 

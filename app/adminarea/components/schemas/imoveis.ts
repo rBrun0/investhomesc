@@ -8,7 +8,7 @@ const imoveisSchema = z.object({
     // id: z.string(),
     descricao: z.string().min(1, {message: 'descrição precisa ser preenchida'}),
     // area: z.number().min(1, {message: 'area precisa ser preenchida'}),
-    preco: z.string().min(1, {message: "campo deve ser preenchido"}).regex(/^\d+$/, {message: 'campo deve ser preenchido por números'})
+    preco: z.string().min(1, {message: "campo deve ser preenchido"})
     ,
     areaPrivativa: z.string().min(1, {message: "campo deve ser preenchido"}).regex(/^\d+$/, {message: 'campo deve ser preenchido por números'})
     ,
@@ -25,8 +25,8 @@ const imoveisSchema = z.object({
     propertyType: z.string().min(1, {message: "campo deve ser preenchido"}),
     construtora: z.string().min(1, {message: "campo deve ser preenchido"}),
     banheiros: z.string().min(1, {message: "campo deve ser preenchido"}).regex(/^\d+$/, {message: 'campo deve ser preenchido por números'}),
-    numeroAnunciante: z.string().regex(/^\d+$/, {message: 'campo deve ser preenchido por números'})
-    .min(13, {message: 'campo precisa ser preenchido'}).max(13, {message:"Máximo 13 caracteres"}),
+    numeroAnunciante: z.string()
+    .min(13, {message: 'campo precisa ser preenchido'}),
     // imagens: z.array(z.string()),
     registroDeIncorpocao: z.string().refine((v) => typeof Number(v) == 'number', {message: 'Preco precisa ser um numero'}).optional(),
     longitude: z.string().optional(),

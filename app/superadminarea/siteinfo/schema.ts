@@ -4,11 +4,9 @@ import { z } from "zod";
 
 const defaultValues = z.object({
     telOne: z.string().regex(/^[0-9]+$/, "Apenas números")
-    .min(13, {message: "Mínimo de 13 dígitos"})
-    .max(13, {message: "Máximo de 13 dígitos"}),
+    .min(13, {message: "Mínimo de 13 dígitos"}),
     telTwo: z.string().regex(/^[0-9]+$/, "Apenas números")
-    .min(13, {message: "Mínimo de 11 dígitos"})
-    .max(13, {message: "Máximo de 11 dígitos"}),
+    .min(13, {message: "Mínimo de 11 dígitos"}),
     neighborhood: z.string(),
     street: z.string(),
     city: z.string(),

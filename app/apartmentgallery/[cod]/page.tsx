@@ -91,7 +91,7 @@ console.log(searchedApartment)
             <div className="flex justify-center flex-wrap space-x-2 w-full md:w-auto gap-6 md:gap-0 mt-8 md:mt-0">
 
                 <div className="flex flex-col justify-center items-center md:border-r-[1px] md:border-zinc-600 pr-3">
-                    <span className="text-xs">venda</span> <span className="font-semibold text-zinc-600">
+                    <span className="text-xs">Venda</span> <span className="font-semibold text-zinc-600">
                         <span>{searchedApartment && formatToBrl(Number(searchedApartment.preco))}</span>
                         </span>
                 </div>

@@ -11,14 +11,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import { PropertyType } from '@/app/utils/types';
+import CurrencyInput from 'react-currency-input-field';
+import InputMask from "react-input-mask";
+
 
 
 type ModalProps = {
     codigoImovel: string,
+    customKey: number,
     fetchImoveis: () => Promise<void>
 }
 
-const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
+const Modal = ({codigoImovel, fetchImoveis, customKey}: ModalProps) => {
 
         const [registeredConstructors, setRegisteredConstructors] = useState<{nome: string}[]>()
         const [buildingSavedData, setBuildingSavedData] = useState<PropertyType[]>()
@@ -57,6 +61,7 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
         const {register, setValue, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
         const valuesWatch = getValues()
         
+        console.log(watch())
         console.log({formErrors})
         
         const [areaDeLazer, setAreaDeLazer] = useState<{id: number, value: string}[]>([]);
@@ -172,11 +177,8 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
                     return;
                 }
             
-                const numberWithoutSpaces = data.numeroAnunciante.replace(/\s/g, ""); // Remove espaços
-
                 if(!buildingSavedData) return;
             
-                // Obtém a referência do primeiro documento encontrado
                 if (!querySnapshot.empty) {
                     const docRef = querySnapshot.docs[0].ref;
             
@@ -190,11 +192,11 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
                         informacoesLazer: areaDeLazer.map((area) => area.value),
                         informacoesEmpreendimento: informacoesEmpreendimento.map((empreendimento) => empreendimento.value),
                         createdBy: curUser.uid,
-                        correctorNumber:
-                        `(${numberWithoutSpaces.slice(0, 2)}) ${numberWithoutSpaces.slice(2, 4)} ${numberWithoutSpaces.slice(4, 9)}-${numberWithoutSpaces.slice(9, 13)}`,
+                        correctorNumber: data.numeroAnunciante,
                         codigoImovel: `invest-${String(uuidv4()).slice(0, 4)}`,
                         latitude: correctCoord(Number(data.latitude)),
                         longitude: correctCoord(Number(data.longitude)),
+                        preco: data.preco.replace(/[^\d.-]/g, '').replace(',', '.'),
                     });
 
                     fetchImoveis()
@@ -224,9 +226,7 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
 
           useEffect(() => {
             fetchSiteData();
-          }, []);
-
-          console.log(watch())
+          }, [fetchImoveis]);
 
 
           useEffect(() => {
@@ -236,7 +236,8 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
             setValue("cidade", buildingSavedData[0]?.cidade)
             setValue("estado", buildingSavedData[0]?.estado)
             setValue("rua", buildingSavedData[0]?.rua)
-            setValue("dormitorios", buildingSavedData[0]?.dormitorios)
+            // @ts-expect-error expected error
+            setValue("dormitorios", String(buildingSavedData[0]?.dormitorios))
             setValue("banheiros", String(buildingSavedData[0]?.banheiros))
             setValue("preco", String(buildingSavedData[0]?.preco))
             setValue("descricao", buildingSavedData[0]?.descricao)
@@ -261,14 +262,14 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
             setInformacoesEmpreendimento(buildingSavedData[0]?.informacoesEmpreendimento.map((info) => ({id: Math.random(), value: info})))
             setUploadedImages(buildingSavedData[0]?.imagensUrl)
 
-          }, [buildingSavedData])
+          }, [buildingSavedData, isDialogOpen])
 
           console.log('buildingSavedData', buildingSavedData)
 
           console.log('errooos', formErrors)
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} key={customKey}>
         <DialogTrigger>
             <Pencil className='w-14 h-6 py-1 bg-customPrimary text-white rounded-md my-2 absolute z-10 right-20
                 cursor-pointer'
@@ -287,8 +288,13 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
             
                             <label htmlFor="preco" className="w-full relative">
                                 <h1 className="absolute -top-6  ">Preço</h1>
-                            <input type="number" id="preco" placeholder="R$"  className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
-                            {...register('preco')}/>
+                        <CurrencyInput
+                        decimalsLimit={2}
+                        prefix="R$ "
+                        id="preco"
+                        {...register('preco')}
+                        className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                />
                             {
                                 formErrors.preco && <p className="w-full text-start text-xs text-red-500 ">{formErrors.preco.message}</p>
                             }
@@ -528,8 +534,9 @@ const Modal = ({codigoImovel, fetchImoveis}: ModalProps) => {
             
                             <label htmlFor="preco" className="w-full relative">
                                 <h1 className="absolute -top-6  ">Número do anunciante</h1>
-                                <input type="text" placeholder="55 99 999999999" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
-                                {...register('numeroAnunciante')} maxLength={13}/>
+                                <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
+                                {...register('numeroAnunciante')} className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                                />
                                                 {
                                 formErrors.numeroAnunciante && <p className="w-full text-start text-xs text-red-500 ">{formErrors.numeroAnunciante.message}</p>
                             }
