@@ -14,7 +14,7 @@ import Image from "next/image";
 import CurrencyInput from "react-currency-input-field";
 import InputMask from 'react-input-mask';
 import { brasilStates } from "./brazillianStates";
-import { useGetCitiesQuery, useGetStatesQuery } from "@/app/features/api/apiSlice";
+import { useGetCitiesQuery } from "@/app/features/api/apiSlice";
 
 
 
@@ -23,8 +23,7 @@ export const AdicionarImoveis = () => {
     const {register, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
     const valuesWatch = getValues()
 
-    const {data: dataStates} = useGetStatesQuery()
-    const [selectedState, setSelectedState] = useState('')
+    // const {data: dataStates} = useGetStatesQuery()
     const {data: citiesData} = useGetCitiesQuery(valuesWatch.estado, {skip: !valuesWatch.estado})
 
     console.log(citiesData)
