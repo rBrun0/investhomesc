@@ -14,11 +14,20 @@ import Image from "next/image";
 import CurrencyInput from "react-currency-input-field";
 import InputMask from 'react-input-mask';
 import { brasilStates } from "./brazillianStates";
+import { useGetCitiesQuery, useGetStatesQuery } from "@/app/features/api/apiSlice";
 
 
 
 export const AdicionarImoveis = () => {
 
+    const {register, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
+    const valuesWatch = getValues()
+
+    const {data: dataStates} = useGetStatesQuery()
+    const [selectedState, setSelectedState] = useState('')
+    const {data: citiesData} = useGetCitiesQuery(valuesWatch.estado, {skip: !valuesWatch.estado})
+
+    console.log(citiesData)
 
     const [registeredConstructors, setRegisteredConstructors] = useState<{name: string}[]>()
 
@@ -33,10 +42,8 @@ export const AdicionarImoveis = () => {
         setRegisteredConstructors(temp)
     }
 
-    const {register, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
-    const valuesWatch = getValues()
-
     console.log(watch())
+    console.log(`errors`, formErrors)
 
     
     const [areaDeLazer, setAreaDeLazer] = useState<{id: number, value: string}[]>([]);
@@ -359,30 +366,10 @@ export const AdicionarImoveis = () => {
                 }
                 </label>
 
-
-
-                <label htmlFor="preco" className="w-full relative">
-                    <h1 className="absolute -top-6">Bairro</h1>
-                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
-                    {...register('bairro')}/>
-                {
-                    formErrors.bairro && <p className="w-full text-start text-xs text-red-500 ">{formErrors.bairro.message}</p>
-                }
-                </label>
-
-                <label htmlFor="preco" className="w-full relative">
-                    <h1 className="absolute -top-6">Cidade</h1>
-                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
-                    {...register('cidade')}/>
-                {
-                    formErrors.cidade && <p className="w-full text-start text-xs text-red-500 ">{formErrors.cidade.message}</p>
-                }
-                </label>
-                
-                <label htmlFor="preco" className="w-full relative">
+                <label htmlFor="estado" className="w-full relative">
                     <h1 className="absolute -top-6">Estado</h1>
 
-                    <select name="" id="" {...register('estado')} className="text-zinc-700 pl-3 w-full h-14 border rounded-md">
+                    <select name="" id="estado" {...register('estado')} className="text-zinc-700 pl-3 w-full h-14 border rounded-md">
                         {
                             brasilStates.map((state) => (
                                 <option key={state.value} value={state.value}>{state.label}</option>
@@ -397,6 +384,41 @@ export const AdicionarImoveis = () => {
                                     {
                 }
                 </label>
+
+                <label htmlFor="cidade" className="w-full relative">
+                    <h1 className="absolute -top-6">Cidade</h1>
+
+                    <select name="" id="cidade" {...register('cidade')} className="text-zinc-700 pl-3 w-full h-14 border rounded-md">
+                        {
+                            citiesData?.map((city) => (
+                                <option key={city?.nome} value={city?.nome}>{city?.nome}</option>
+                            ))
+                        }
+                    </select>
+
+                    {formErrors.estado && <p className="w-full text-start text-xs text-red-500 ">{formErrors.estado.message}</p>}
+                    
+                    {/* <input type="text" placeholder="ex: SC" className="text-zinc-700 plut t-3 w-full h-14 border rounded-md"
+                    {...register('estado')}/> */}
+                </label>
+
+                <label htmlFor="preco" className="w-full relative">
+                    <h1 className="absolute -top-6">Bairro</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('bairro')}/>
+                {
+                    formErrors.bairro && <p className="w-full text-start text-xs text-red-500 ">{formErrors.bairro.message}</p>
+                }
+                </label>
+
+                {/* <label htmlFor="cidade" className="w-full relative">
+                    <h1 className="absolute -top-6">Cidade</h1>
+                    <input type="text" placeholder="" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                    {...register('cidade')}/>
+                {
+                    formErrors.cidade && <p className="w-full text-start text-xs text-red-500 ">{formErrors.cidade.message}</p>
+                }
+                </label> */}
 
                 <label htmlFor="preco" className="w-full relative">
                     <h1 className="absolute -top-6">Construtora</h1>
