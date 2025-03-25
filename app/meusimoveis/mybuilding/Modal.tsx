@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil } from 'lucide-react';
 import { ImoveisType, useCreate } from '../../adminarea/components/schemas/imoveis';
 import { toast } from 'sonner';
@@ -275,14 +275,14 @@ const Modal = ({codigoImovel, fetchImoveis, customKey}: ModalProps) => {
                 cursor-pointer'
         />
         </DialogTrigger>
-        <DialogContent className='max-h-96 overflow-y-scroll max-w-[40rem]'>
-            <DialogHeader>
+        <DialogContent className='!p-0'>
+            <DialogHeader className="flex-shrink-0 px-3 py-2">
             <h2>Editando imovel</h2>
             </DialogHeader>
 
             {/* Dialog Content */}
 
-                            <div >
+                            <div className="max-h-[26rem] overflow-y-scroll max-w-[45rem]">
             
                         <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-16 flex flex-col justify-center items-center outline-none gap-12">
             
@@ -799,12 +799,26 @@ const Modal = ({codigoImovel, fetchImoveis, customKey}: ModalProps) => {
             
                                 </div>
             
-                            <button className="bg-customPrimary text-white w-40 h-12 rounded-md border-[1px] border-customPrimary
+                            {/* <button className="bg-customPrimary text-white w-40 h-12 rounded-md border-[1px] border-customPrimary
                                     hover:bg-white hover:text-customPrimary transition-colors mt-16 font-semibold"
-                                    type="submit">Atualizar imovel</button>
+                                    type="submit">Atualizar imovel</button> */}
             
                         </form>
                     </div>
+
+                     <DialogFooter className="flex-shrink-0 max-h-[4rem] w-full px-3 py-2">
+                            <button className="bg-customPrimary text-white w-40 h-12 ml-auto rounded-md border-[1px] border-customPrimary
+                            hover:bg-white hover:text-customPrimary transition-colors font-semibold"
+                                type="button"
+                                onClick={
+                                () => {
+                                handleSubmit(onSubmit)()
+                            }
+                            }
+                            >
+                            Atualizar imovel
+                        </button>
+                     </DialogFooter>
 
 
         </DialogContent>
