@@ -10,7 +10,7 @@ export const apiSlice = createApi({
             query: () => '/estados'
         })
         ,
-        getCities: builder.query<string[], string>({
+        getCities: builder.query<{id: string, nome: string}[], string>({
             query: (uf) => `estados/${uf}/municipios`,
             // transformResponse: (r: any[]) => r.map((city) => city.name)
         }),

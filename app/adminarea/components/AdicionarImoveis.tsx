@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa"
 import { v4 as uuidv4 } from 'uuid';
 import { ImoveisType, useCreate } from "./schemas/imoveis";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { toast, Toaster } from "sonner";
 import Image from "next/image";
 import CurrencyInput from "react-currency-input-field";
@@ -16,17 +16,16 @@ import InputMask from 'react-input-mask';
 import { brasilStates } from "./brazillianStates";
 import { useGetCitiesQuery } from "@/app/features/api/apiSlice";
 
-
-
 export const AdicionarImoveis = () => {
 
     const {register, watch, getValues, handleSubmit, formState: {errors: formErrors}, reset} = useCreate()
     const valuesWatch = getValues()
 
     // const {data: dataStates} = useGetStatesQuery()
-    const {data: citiesData} = useGetCitiesQuery(valuesWatch.estado, {skip: !valuesWatch.estado})
+    const {data: citiesData} = useGetCitiesQuery(valuesWatch.estado, {skip: !valuesWatch.estado})    
 
     console.log(citiesData)
+
 
     const [registeredConstructors, setRegisteredConstructors] = useState<{name: string}[]>()
 
@@ -242,15 +241,21 @@ export const AdicionarImoveis = () => {
                     Adicionar imoveis
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="max-h-96 overflow-y-scroll max-w-[40rem]">
+                <DialogContent className="!p-0">
 
-                    <DialogHeader>
+                    <DialogHeader className="flex-shrink-0 px-3 py-2">
                     <h1 className="text-xl font-semibold">Adicionar imoveis</h1>
                     </DialogHeader>
 
-                <div >
+                    <div className="max-h-[26rem] overflow-y-scroll max-w-[45rem]">
 
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-16 flex flex-col justify-center items-center outline-none gap-12">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-16 flex flex-col justify-center items-center outline-none gap-12
+            px-4 py-3">
+
+                {/* container for the scroll */}
+                {/* <div className="flex-1 overflow-auto">
+
+                </div> */}
 
                 <label htmlFor="preco" className="w-full relative">
                     <h1 className="absolute -top-6  ">Preço</h1>
@@ -467,7 +472,9 @@ export const AdicionarImoveis = () => {
 
                             {
                                 informacoesImovel.map(info => (
-                                    <span className="space-x-2 flex items-center justify-center" key={info.id}>
+                                    <span
+                                    className="space-x-2 flex items-center justify-center bg-gray-400 text-white p-1 rounded-md"
+                                    key={info.id}>
                                         <FaRegTrashAlt onClick={() => removerInformacoesImovel(info.id)}/>
                                     <span>{info.value}</span>
                                     </span>
@@ -492,7 +499,9 @@ export const AdicionarImoveis = () => {
 
                             {
                                 informacoesEmpreendimento.map((info) => (
-                                    <span className="space-x-2 flex items-center justify-center" key={info.id}> 
+                                    <span 
+                                    className="space-x-2 flex items-center justify-center bg-gray-400 text-white p-1 rounded-md"
+                                    key={info.id}> 
                                     <FaRegTrashAlt onClick={() => removerInformacaoEmpreendimento(info.id)}/>
                                     <span>{info.value}</span></span>
                                 ))
@@ -517,7 +526,8 @@ export const AdicionarImoveis = () => {
                         <div className="flex flex-wrap justify-start gap-4 w-full">
                             {
                                 areaDeLazer.map((area) => (
-                                    <span className="space-x-2 flex items-center justify-center" key={area.id}> 
+                                    <span className="space-x-2 flex items-center justify-center bg-gray-400 text-white p-1 rounded-md"
+                                    key={area.id}> 
                                         <FaRegTrashAlt onClick={() => removerAreaDeLazer(area.id)}/>
                                         <span>{area.value}</span>
                                     </span>
@@ -805,12 +815,21 @@ export const AdicionarImoveis = () => {
 
                     </div>
 
-                <button className="bg-customPrimary text-white w-40 h-12 rounded-md border-[1px] border-customPrimary
-                        hover:bg-white hover:text-customPrimary transition-colors mt-16 font-semibold"
-                        type="submit">Criar imovel</button>
-
             </form>
         </div>
+        <DialogFooter className="flex-shrink-0 max-h-[4rem] w-full px-3 py-2">
+                    <button className="bg-customPrimary text-white w-40 h-12 ml-auto rounded-md border-[1px] border-customPrimary
+                            hover:bg-white hover:text-customPrimary transition-colors font-semibold"
+                            type="button"
+                            onClick={
+                                () => {
+                                    handleSubmit(onSubmit)()
+                                }
+                            }
+                            >
+                                Criar imovel
+                    </button>
+                </DialogFooter>
         </DialogContent>
     </Dialog>
     <Toaster/>

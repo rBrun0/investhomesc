@@ -33,7 +33,7 @@ const Layout = ({children}: {children: ReactNode}) => {
 
             <Link href={'/adminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
                 <HousePlus />
-                Adicionar Imoveis
+                Adicionar imoveis
             </Link>
             <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
                 <Building />
