@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const defaultValues = z.object({
-    telOne: z.string().regex(/^[0-9]+$/, "Apenas números")
-    .min(13, {message: "Mínimo de 13 dígitos"}),
-    telTwo: z.string().regex(/^[0-9]+$/, "Apenas números")
-    .min(13, {message: "Mínimo de 11 dígitos"}),
+    telOne: z.string()
+    .min(13, {message: "Mínimo de 13 dígitos"}).optional(),
+    telTwo: z.string()
+    .min(13, {message: "Mínimo de 11 dígitos"}).optional(),
     neighborhood: z.string(),
     street: z.string(),
     city: z.string(),

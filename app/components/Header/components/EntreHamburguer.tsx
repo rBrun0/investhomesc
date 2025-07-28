@@ -32,11 +32,11 @@ const logout = async () => {
     return (
         <>
         {
-            userProfile && <div className="border-b-[1px] border-b-zinc-200 pb-4 cursor-pointer" onClick={logout}>Sair</div>
+            userProfile && <div className="border-b-[1px] border-b-zinc-200 text-white pb-4 cursor-pointer" onClick={logout}>Sair</div>
         }
 
         {
-            !userProfile && <Link href={"/signup"} className="border-b-[1px] border-b-zinc-200 pb-4">Junte-se</Link>
+            !userProfile && <Link href={"/signup"} className="border-b-[1px] text-white border-b-zinc-200 pb-4">Junte-se</Link>
         }
         </>
     )

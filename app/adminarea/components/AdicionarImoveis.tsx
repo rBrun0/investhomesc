@@ -236,9 +236,10 @@ export const AdicionarImoveis = () => {
         <>
             <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                <Button className="text-center text-xl bg-transparent text-customPrimary border border-customPrimary hover:bg-slate-100">
+                <Button className="text-center text-xl bg-transparent text-customPrimary border border-customPrimary hover:bg-slate-100
+                ">
                 <HousePlus />
-                    Adicionar imoveis
+                    Adicionar imóveis
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="!p-0">
@@ -454,7 +455,7 @@ export const AdicionarImoveis = () => {
                         <h1 className="w-full">Informações do imovel</h1>
 
                         <label htmlFor="preco" className="w-full relative">
-                        <input type="text" placeholder="ex: numero de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                        <input type="text" placeholder="Ex: número de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                         value={informacoesImovelInput} onChange={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
@@ -487,7 +488,7 @@ export const AdicionarImoveis = () => {
                         <h1 className="w-full text-start">Informações do empreendimento</h1>
 
                         <label htmlFor="preco" className="w-full flex items-center justify-center">
-                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                        <input type="text" placeholder="Ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                         value={informacoesEmpreendimentoInput} onChange={(e) => setInformacoesEmpreendimentoInput(e.target.value)}/>
                 </label>
 

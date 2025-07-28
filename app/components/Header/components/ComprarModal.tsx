@@ -20,8 +20,8 @@ export const ComprarModal = () => {
     }
 
     return (
-        <div className={`absolute bg-customPrimary text-white w-80 h-96 transition-all
-        top-11 -left-1 overflow-x-hidden overflow-y-auto rounded-md flex flex-col justify-start items-start p-2 font-thin py-2 text-xs gap-3`}>
+        <div className={` bg-customPrimary text-white w-80 h-96 transition-all
+         overflow-x-hidden overflow-y-auto rounded-md flex flex-col justify-start items-start p-2 font-thin py-2 text-xs gap-3`}>
             <Link href={"advancedsearch"} onClick={() => addFilter()}>Apartamentos em Itapema</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("", "", "Meia Praia")}>Apartamentos em Itapema - Meia Praia</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("", "", "Quadra Mar")}>Apartamentos em Itapema - Quadra Mar</Link>

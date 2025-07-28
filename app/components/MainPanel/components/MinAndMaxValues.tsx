@@ -1,17 +1,17 @@
 "use client"
 
 import { setFilterValues } from "@/app/features/filterValues/filterValuesSlice";
-import { RootState } from "@/app/store";
+import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export const MinAndMaxValues = () => {
 
-    const [minValue, setMinValue] = useState<number>(0);
-    const [maxValue, setMaxValue] = useState<number>(0);
+    const [minValue, setMinValue] = useState<number | null>(null);
+    const [maxValue, setMaxValue] = useState<number | null>(null);
 
     const dispatch = useDispatch()
-    const filteredData = useSelector((state:RootState) => state.filterValuesSlice)
+    // const filteredData = useSelector((state:RootState) => state.filterValuesSlice)
 
     useEffect(() => {
             dispatch(setFilterValues({
@@ -23,16 +23,20 @@ export const MinAndMaxValues = () => {
     return (
 
         <>
-        <input type="number" name="" id="" className="w-56 h-10 rounded-md cursor-pointer text-zinc-600
-             text-right" placeholder="De" value={minValue !== null ? minValue : ''}
-             onChange={(e) => setMinValue(+e.target.value)} 
-             />
+            <Input 
+            type="number" 
+            className="w-60 h-10 rounded-md cursor-pointer text-zinc-600 text-right" 
+            placeholder="Valor mínimo (R$)" 
+            value={minValue !== null ? minValue : ''}
+            onChange={(e) => setMinValue(+e.target.value)} 
+            />
 
-            <input type="number" name="" id="" className="w-56 h-10 rounded-md cursor-pointer text-zinc-600
-             text-right" placeholder="Ate"
-             value={maxValue !== null ? maxValue : ''} 
-             onChange={(e) => setMaxValue(+e.target.value)}
-        />
+            <Input type="number" 
+            className="w-60 h-10 rounded-md cursor-pointer text-zinc-600 text-right" 
+            placeholder="Valor máximo (R$)"
+            value={maxValue !== null ? maxValue : ''} 
+            onChange={(e) => setMaxValue(+e.target.value)}
+            />
         </>
     )
 }

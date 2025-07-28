@@ -32,7 +32,7 @@ const FloatWhatsapp = () => {
     target='_blank'
     className='fixed bottom-5 right-5 '
     >
-        <IoLogoWhatsapp className='text-green-500 w-16 h-16 animate-bounce duration-1000'/>
+        <IoLogoWhatsapp className='text-green-500 w-16 h-16'/>
     </Link>
         ) : null
     }

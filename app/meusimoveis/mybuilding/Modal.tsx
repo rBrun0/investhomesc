@@ -451,7 +451,7 @@ const Modal = ({codigoImovel, fetchImoveis, customKey}: ModalProps) => {
                                     <h1 className='text-start'>Informações do imovel</h1>
             
                                     <label htmlFor="preco" className="w-full relative">
-                                    <input type="text" placeholder="ex: numero de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                                    <input type="text" placeholder="Ex: número de quartos" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                                     value={informacoesImovelInput} onChange={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
@@ -482,7 +482,7 @@ const Modal = ({codigoImovel, fetchImoveis, customKey}: ModalProps) => {
                                     <h1 className="w-full text-start">Informações do empreendimento</h1>
             
                                     <label htmlFor="preco" className="w-full flex items-center justify-center">
-                                    <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 full h-14 border rounded-md"
+                                    <input type="text" placeholder="Ex: coleta de lixo" className="text-zinc-700 pl-3 full h-14 border rounded-md"
                                     value={informacoesEmpreendimentoInput} onChange={(e) => setInformacoesEmpreendimentoInput(e.target.value)}/>
                             </label>
             

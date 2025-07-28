@@ -22,15 +22,18 @@ export const SideBar = () => {
                 <h1>{displayName}</h1>
             </SidebarHeader>
 
-            <Link href={'/adminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/adminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform">
                 <HousePlus />
-                Adicionar imoveis
+                Adicionar imóveisaa
             </Link>
-            <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform">
                 <Building />
                 Apartamentos Registrados
             </Link>
-            <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform">
                 <Hammer />
                 Construtoras Registradas
             </Link>
