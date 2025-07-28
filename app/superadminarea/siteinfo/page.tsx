@@ -9,13 +9,16 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/app/firebaseConfig';
 import { RootState } from '@/app/store';
 import { useSelector } from 'react-redux';
-import { Roles } from '@/lib/utils';
+import { cn, Roles } from '@/lib/utils';
 import InputMask from 'react-input-mask';
+import { OfficeImageConfig } from '../photoConfig/OfficeImageConfig';
 
 const SiteInfo = () => {
 
     const [uploadImage, setUploadImage] = useState<File | null>(null);
     const [actualImage, setActualImage] = useState<File | null>(null);
+    const [officeImage, setOfficeImage] = useState<File | null>(null);
+    const [currentOfcImage, setCurrentOfcImage] = useState<File | null>(null);
 
     const formatDate = (date: Date) => {
         return date.toLocaleDateString('pt-BR', {
@@ -40,19 +43,17 @@ const SiteInfo = () => {
       
           console.log('data cloudinary', data)
           return data.secure_url;
-      
       }
 
-        const selector = useSelector
+    const selector = useSelector
     
-        const userProfile = selector((state: RootState) => state.userSlice)
+    const userProfile = selector((state: RootState) => state.userSlice)
 
   const today = new Date();
-
   
   const onSubmit = async (data: SchemaType) => {
       
-      if(Object.keys(formErrors).length > 0) {
+    if(Object.keys(formErrors).length > 0) {
         toast.error('Preencha todos os campos corretamente')
         return;
     }
@@ -67,6 +68,7 @@ const SiteInfo = () => {
           state: data.state,
           street: data.street,
           logo: uploadImage,
+          officeImage: officeImage,
           linkFacebook: data.linkFacebook,
           linkWhatsapp: data.linkWhatsapp,
           linkInstagram: data.linkInstagram,
@@ -75,7 +77,8 @@ const SiteInfo = () => {
           linkGoogleMaps: data.linkGoogleMaps,
         });
         
-        setActualImage(uploadImage)
+        setActualImage(uploadImage);
+        setCurrentOfcImage(officeImage);
         // setUploadImage('http://')
         
         toast.success("Informações salvas com sucesso")
@@ -87,10 +90,9 @@ const SiteInfo = () => {
 
   };
   
-  const baseForm = localInfoSchema.useCreate()
+  const baseForm = localInfoSchema.useCreate();
   
   const { register, watch, setValue, handleSubmit, formState: {errors: formErrors} } = baseForm;
-  console.log('dirty', baseForm.formState.dirtyFields)
   console.log({formErrors})
   
   console.log(watch("telOne"))
@@ -116,14 +118,11 @@ const SiteInfo = () => {
       setValue("linkYoutube", data.linkYoutube);
       setActualImage(data.logo)
     }
-    console.log("data", snap.data())
   };
 
   useEffect(() => {
     carregarDados();
   }, []);
-
-  console.log({actualImage})
 
       if (userProfile.role != Roles.ADMIN) {    
           return <p className="text-center text-4xl mt-12 ">Você não tem permissão para alterar dados do site.</p>;
@@ -143,100 +142,92 @@ const SiteInfo = () => {
         <main className='w-full px-4 py-4 flex gap-4 flex-wrap'>
             <form action="" className='w-full flex flex-wrap gap-4' onSubmit={handleSubmit(onSubmit)}>
 
-
             <label htmlFor="telone">
                 <h1 className='text-sm text-zinc-700' >Telefone 1</h1>
-            {/* <input type="text" id='telone' maxLength={13}
-            {...register('telOne')} placeholder='55 47 999999999'
-            className='rounded border outline-none w-52 h-8 px-2'/> */}
-            <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
-            {...register('telOne')} className="rounded border outline-none w-52 h-8 px-2"
+                <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
+                {...register('telOne')} className="rounded border outline-none w-52 h-8 px-2"
             />
             </label>
 
-
             <label htmlFor="teltwo">
                 <h1 className='text-sm text-zinc-700'>Telefone 2</h1>
-            {/* <input type="text" id='teltwo' maxLength={13} placeholder='55 47 999999999'
-            {...register('telTwo')}
-            className='rounded border outline-none w-52 h-8 px-2'/> */}
-            <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
-            {...register('telOne')} className="rounded border outline-none w-52 h-8 px-2"
-            />
+                <InputMask mask="(99) 99 99999-9999" placeholder="(55) 47 91234-5678" 
+                {...register('telOne')} className="rounded border outline-none w-52 h-8 px-2"
+                />
             </label>
 
             <label htmlFor="neighborhood">
                 <h1 className='text-sm text-zinc-700'>Bairro</h1>
-            <input type="tel" id='neighborhood'
-            {...register('neighborhood')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="tel" id='neighborhood'
+                {...register('neighborhood')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Cidade</h1>
-            <input type="text" id='city' 
-            {...register('city')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('city')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="state" >
                 <h1 className='text-sm text-zinc-700'>Estado</h1>
-            <select id='state' {...register('state')}
-            className='rounded border outline-none w-52 h-8'>
+                <select id='state' {...register('state')}
+                className='rounded border outline-none w-52 h-8'>
                 {
                     brasillianState.map((s) => {
                         return <option key={s.value} value={s.value}>{s.label}</option>
                     })
                 }
-            </select>
+                </select>
             </label>
 
             <label htmlFor="street">
                 <h1 className='text-sm text-zinc-700'>Rua</h1>
-            <input type="text" id='street' {...register('street')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='street' {...register('street')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Link Whatsapp</h1>
-            <input type="text" id='city' 
-            {...register('linkWhatsapp')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('linkWhatsapp')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Link Instagram</h1>
-            <input type="text" id='city' 
-            {...register('linkInstagram')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('linkInstagram')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Link Facebook</h1>
-            <input type="text" id='city' 
-            {...register('linkFacebook')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('linkFacebook')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Link Youtube</h1>
-            <input type="text" id='city' 
-            {...register('linkYoutube')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('linkYoutube')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Link Waze</h1>
-            <input type="text" id='city' 
-            {...register('linkWaze')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('linkWaze')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
             
             <label htmlFor="city">
                 <h1 className='text-sm text-zinc-700'>Link Google Maps</h1>
-            <input type="text" id='city' 
-            {...register('linkGoogleMaps')}
-            className='rounded border outline-none w-52 h-8 px-2'/>
+                <input type="text" id='city' 
+                {...register('linkGoogleMaps')}
+                className='rounded border outline-none w-52 h-8 px-2'/>
             </label>
 
             <label htmlFor="aboutLocal">
@@ -251,21 +242,14 @@ const SiteInfo = () => {
 
             <div className='flex items-center justify-center'>
             <PhotoConfig cloudinaryUpload={cloudinaryUpload} setUploadImage={setUploadImage} uploadImage={uploadImage} actualImage={actualImage}/>
-            
-                {/* actualImage && 
-                <div className='absolute bottom-20 right-10'>
-                    <div className='relative w-32 h-32 border rounded-full'>
-                         <Image src={String(actualImage)} alt="Logo" className='w-20 h-20' fill objectFit='cover'/>
-                    </div>
-                </div> */}
+            <OfficeImageConfig cloudinaryUpload={cloudinaryUpload} setUploadImage={setOfficeImage} uploadImage={officeImage} actualImage={currentOfcImage}/>
             
             </div>
 
-
-
-
-
-            <Button variant='default' type='submit'>
+            <Button variant='default' type='submit' className={cn(
+                'absolute rounded-full bottom-20 right-20 w-20 h-20',
+                'bg-customPrimary hover:bg-customPrimary/80'
+            )}>
                 Salvar
             </Button>
             </form>

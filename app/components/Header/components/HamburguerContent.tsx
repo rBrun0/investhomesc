@@ -10,16 +10,21 @@ import {
   } from "@/components/ui/accordion"
 import { collection, getDocs } from "firebase/firestore"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import EntreHamburguer from "./EntreHamburguer"
 // import useAdmin from "@/app/Hooks/useAdmin"
 // import useSuperAdmin from "@/app/Hooks/useSuperAdmin"
 import { RootState } from "@/app/store"
-import { Roles } from "@/lib/utils"
-  
+import { cn, Roles } from "@/lib/utils"
+import { IoMdClose } from "react-icons/io"
 
-export const HamburguerContent = () => {
+interface HamburguerContentProps {
+  setIsHamburgerOpened: Dispatch<SetStateAction<boolean>>;
+  isHamburguerOpened: boolean
+}
+
+export const HamburguerContent = ({isHamburguerOpened, setIsHamburgerOpened}: HamburguerContentProps) => {
 
   // const isAdmin = useAdmin()
   // const {isSuperAdmin} = useSuperAdmin()
@@ -80,16 +85,27 @@ useEffect(() => {
 
 
     return (
-        <div className="w-full min-h-60 px-6">
+        <div className={
+          cn(
+            "fixed top-0 -left-[100%] w-full h-screen px-6 bg-customPrimary z-50 transition-all",
+            isHamburguerOpened && "left-0"
+          )
+        }>
+          <div className="w-full flex justify-end py-8">
+            <IoMdClose 
+            className="text-white w-14 h-14 cursor-pointer"
+            onClick={() => {
+              setIsHamburgerOpened(false)
+            }}
+            />
+
+          </div>
             <Accordion type="single" collapsible className="w-full">
 
-
-
-
       <AccordionItem value="item-1">
-        <AccordionTrigger>Comprar</AccordionTrigger>
+        <AccordionTrigger className="text-white">Comprar</AccordionTrigger>
 
-        <AccordionContent className="space-y-4 flex flex-col text-customPrimary">
+        <AccordionContent className="space-y-4 flex flex-col text-white">
             <Link href={"advancedsearch"} onClick={() => addFilter()}>Apartamentos em Itapema</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("", "", "meia praia")}>Apartamentos em Itapema - Meia Praia</Link>
             <Link href={"advancedsearch"} onClick={() => addFilter("", "", "quadra mar")}>Apartamentos em Itapema - Quadra Mar</Link>
@@ -106,30 +122,24 @@ useEffect(() => {
         </AccordionContent>
       </AccordionItem>
 
-
-
-
-
-
-
-
       <AccordionItem value="item-2">
-        <AccordionTrigger>Construtoras</AccordionTrigger>
+        <AccordionTrigger className="text-white">Construtoras</AccordionTrigger>
         <AccordionContent className="flex flex-col space-y-4 text-customPrimary">
-        {
-                construtora && construtora.map((c: any, index: number) => (
-                    
-                    <Link href="/advancedsearch" className="" onClick={() => searchProperty(c)} key={index}>
-                        {c}
-                    </Link>
-                    
-                ))
-            }
+          {
+            construtora && construtora.map((c: string, index: number) => (
+              <Link 
+              href="/advancedsearch" 
+              onClick={() => searchProperty(c)} 
+              key={index}>
+                {c}
+              </Link>      
+            ))
+          }
         </AccordionContent>
       </AccordionItem>
 
       <AccordionItem value="item-3">
-        <AccordionTrigger>Condominios</AccordionTrigger>
+        <AccordionTrigger className="text-white">Condominios</AccordionTrigger>
         <AccordionContent className="flex flex-col space-y-4  text-customPrimary">
         {
                     condominios && condominios.map((cond: string, index: number) => (
@@ -143,17 +153,19 @@ useEffect(() => {
     </Accordion>
 
     <div className="flex flex-col space-y-3 mt-3">
-    <Link href="https://wa.me" className="border-b-[1px] border-b-zinc-200 pb-4">Contato</Link>
-    <Link href="/advancedsearch" className="border-b-[1px] border-b-zinc-200 pb-4">Lançamentos</Link>
+    <Link href="https://wa.me" className="border-b-[1px] border-b-zinc-200 text-white pb-4">Contato</Link>
+    <Link href="/advancedsearch" className="border-b-[1px] border-b-zinc-200 text-white pb-4">Lançamentos</Link>
     <EntreHamburguer/>
     {
       (userProfile.role == Roles.ADMIN ||
-       userProfile.role == Roles.CORRETOR) && <Link href="/paineladministrativo" className="border-b-[1px] border-b-zinc-200 pb-4">
+       userProfile.role == Roles.CORRETOR) && <Link 
+       href="/paineladministrativo" 
+       className="border-b-[1px] border-b-zinc-200 text-white pb-4">
         Painel
         </Link>
     }
 
+      </div>
     </div>
-        </div>
     )
 }

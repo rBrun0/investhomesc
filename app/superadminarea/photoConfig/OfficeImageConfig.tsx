@@ -15,11 +15,10 @@ type PhotoConfigProps = {
 
 }
 
-
-export const PhotoConfig = ({cloudinaryUpload, setUploadImage, uploadImage, actualImage}: PhotoConfigProps) => {
+export const OfficeImageConfig = ({cloudinaryUpload, uploadImage, setUploadImage, actualImage}: PhotoConfigProps) => {
   const [siteImage, setSiteImage] = useState<string | null>(null);
 
-  console.log(siteImage)
+  console.log(siteImage);
   
   async function loadSettingsData() {
     const docRef = doc(db, "settings", "site");
@@ -27,27 +26,26 @@ export const PhotoConfig = ({cloudinaryUpload, setUploadImage, uploadImage, actu
   
     if (snap.exists()) {
       const data = snap.data();
-      setSiteImage(data?.logo);
+      setSiteImage(data?.officeImage);
     }
-  
   }
-  const [logo, setLogo] = useState<File | null>(null);
+  
+  const [officeImg, setOfficeImg] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
   
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files?.[0]) {
-        setLogo(e.target.files[0]);
+        setOfficeImg(e.target.files[0]);
       }
     };
   
     const handleUpload = async () => {
-      if (!logo) return;
+      if (!officeImg) return;
   
       setIsUploading(true);
   
       try {
-
-        const res = await cloudinaryUpload(logo)
+        const res = await cloudinaryUpload(officeImg)
         setUploadImage(res)
       } catch (error) {
         console.error("Erro ao fazer upload:", error);
@@ -64,27 +62,36 @@ export const PhotoConfig = ({cloudinaryUpload, setUploadImage, uploadImage, actu
     useEffect(() => {
       setUploadImage(actualImage)
     }, [actualImage])
+
     return (
-      <section className=" flex flex-col items-center">
+      <section className="flex flex-col items-center">
         {
          uploadImage ? (
-          <label htmlFor="inputImages" className="w-12 h-12 rounded-full bg-customPrimary hover:brightness-110 text-white flex items-center justify-center
+          <label htmlFor="inputOfficeImage" className="w-12 h-12 rounded-full bg-customPrimary hover:brightness-110 text-white flex items-center justify-center
           transition-all cursor-pointer relative">
-            <Image src={String(uploadImage) } alt="Logo" className="w-12 h-12 rounded-full" objectFit="cover" fill/>
+            <div className="relative w-full h-full rounded-full overflow-hidden">
+                <Image src={String(uploadImage) } alt="Logo" objectFit="cover" fill/>
+            </div>
           </label>
          ) : (
-          <label htmlFor="inputImages" className="w-12 h-12 rounded-full bg-customPrimary hover:brightness-110 text-white flex items-center justify-center
+          <label htmlFor="inputOfficeImage" className="w-12 h-12 rounded-full bg-customPrimary hover:brightness-110 text-white flex items-center justify-center
           transition-all cursor-pointer">
           <Aperture />
           </label>
          )
         }
-        <input id="inputImages" type="file" accept="image/*" onChange={handleFileChange} className="invisible"/>
-        <Button variant="outline" onClick={handleUpload} disabled={!logo || isUploading}
+        
+        <input id="inputOfficeImage" type="file" accept="image/*" onChange={(e) => {
+            handleFileChange(e)
+            console.log(e)
+        }} className="invisible"/>
+
+        <Button variant="outline" onClick={handleUpload} disabled={!officeImg || isUploading}
         className="cursor-pointer"
         >
-          {isUploading ? "Enviando..." : "Carregar logo"}
+          {isUploading ? "Enviando..." : "Carregar imagem"}
         </Button>
       </section>
+
     );
 } 

@@ -31,30 +31,35 @@ const Layout = ({children}: {children: ReactNode}) => {
             <SidebarContent>
                 
 
-            <Link href={'/adminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/adminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform">
                 <HousePlus />
-                Adicionar imoveis
+                Adicionar imóveis
             </Link>
-            <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform">
                 <Building />
                 Apartamentos Registrados
             </Link>
-            <Link href={'/superadminarea/construtorasregistradas'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/superadminarea/construtorasregistradas'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform duration-200">
                 <Hammer />
                 Construtoras Registradas
             </Link>
-            <Link href={'/superadminarea/siteinfo'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/superadminarea/siteinfo'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform duration-200">
                 <Hammer />
                 Configurações do site
             </Link>
 
-            <Link href={'/superadminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+            <Link href={'/superadminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+            hover:translate-x-2 transition-transform duration-200">
                 <RiAdminFill />
                 Admin
             </Link>
 
             <Link href={'/'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
-                hover:translate-x-2 transition-transform mt-6">
+                hover:translate-x-2 transition-transform duration-200 mt-6">
                     <CornerDownLeft />
             </Link>
         </SidebarContent>

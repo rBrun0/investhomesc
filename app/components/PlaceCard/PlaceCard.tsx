@@ -9,7 +9,7 @@ import Link from "next/link";
 import { formatToBrl } from "@/app/utils/utilitaryCode/formatToBrl";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CardDialog } from "./CardDialog";
-import { HTMLAttributes, useRef } from "react";
+import { useRef } from "react";
 import { HTMLMotionProps, motion, useInView } from "framer-motion";
 
 
@@ -38,17 +38,13 @@ export const PlaceCard = ({ preco, imagemUrl, descricao, areaPrivativa, codigo, 
         const ref = useRef(null);
         const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-
-
-
-
-
     return (
-        <motion.div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] border shadow-sm rounded-md overflow-hidden" {...props}
-         ref={ref}
+        <motion.div className="flex mx-auto flex-col lg:flex-row items-start w-4/5 md:w-4/5 lg:w-[72rem] shadow-md rounded-sm overflow-hidden bg-slate-50" 
+        ref={ref}
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
+        {...props}
         >
             <Link href={`/${direcionamento}/${codigo}`}>
             <div className="mx-auto w-[24.4rem] min-h-40 lg:min-w-[600px] lg:min-h-[340px] relative overflow-hidden object-cover">

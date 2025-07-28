@@ -369,7 +369,7 @@ useEffect(() => {
         <div className="flex flex-col justify-center items-center space-y-3">
                         <h1 className="text-3xl pb-6" >Informações do empreendimento</h1>
 
-                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                        <input type="text" placeholder="Ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                         value={informacoesEmpreendimentoInput} onChange={(e) => setInformacoesEmpreendimentoInput(e.target.value)}/>
                         <button className="bg-customPrimary text-white w-20 h-8 rounded-md border-[1px] border-customPrimary
                         hover:bg-white hover:text-customPrimary transition-colors" onClick={adicionarInformacaoEmpreendimento}>Adicionar</button>
@@ -392,7 +392,7 @@ useEffect(() => {
                         <h1 className="text-3xl pb-12">Informações do imovel</h1>
 
                         <label htmlFor="preco" className="w-full relative">
-                        <input type="text" placeholder="ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
+                        <input type="text" placeholder="Ex: coleta de lixo" className="text-zinc-700 pl-3 w-full h-14 border rounded-md"
                         value={informacoesImovelInput} onChange={(e) => setInformacoesImovelInput(e.target.value)}/>
                 </label>
 

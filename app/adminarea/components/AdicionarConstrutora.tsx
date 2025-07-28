@@ -13,13 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const AdicionarConstrutora = () => {
 
-    const {register, handleSubmit, getValues, watch, reset, formState: {errors: formErrors } } = useCreate()
-
-    const valuesWatch = getValues()
-
-    console.log({valuesWatch})
-    console.log(watch('name'))
-
+    const {register, handleSubmit, reset, formState: {errors: formErrors } } = useCreate()
     
     const curUser = auth.currentUser
     

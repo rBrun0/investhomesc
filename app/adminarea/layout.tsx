@@ -28,7 +28,7 @@ function Layout({children}: {children: ReactNode}) {
                 <Link href={'/adminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
                 hover:translate-x-2 transition-transform">
                     <HousePlus />
-                    Adicionar imoveis
+                    Adicionar imóveis
                 </Link>
                 <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
                 hover:translate-x-2 transition-transform">

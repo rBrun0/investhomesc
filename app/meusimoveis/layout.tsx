@@ -25,11 +25,13 @@ export default function Layout({children}: {children: ReactNode}) {
                     <h1>{displayName}</h1>
                 </SidebarHeader>
 
-                <Link href={'/superadminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+                <Link href={'/superadminarea'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+                hover:translate-x-2 transition-transform">
                     <HousePlus />
-                    Adicionar Imoveis
+                    Adicionar imóveis
                 </Link>
-                <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+                <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+                hover:translate-x-2 transition-transform">
                     <Building />
                     Apartamentos Registrados
                 </Link>
@@ -37,7 +39,8 @@ export default function Layout({children}: {children: ReactNode}) {
                     <BrickWall />
                     construcoes Registradas
                 </Link> */}
-                <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2">
+                <Link href={'/superadminarea/apartamentosregistrados'} className="flex items-center px-4 py-2 text-customPrimary font-medium gap-2
+                hover:translate-x-2 transition-transform">
                     <Hammer />
                     Construtoras Registradas
                 </Link>

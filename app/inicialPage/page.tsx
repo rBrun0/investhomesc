@@ -1,11 +1,9 @@
 'use client'
 
-import Image from "next/image"
 import { PlaceCard } from "../components/PlaceCard/PlaceCard"
 import { FaWaze } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
-import React from "react";
-import office from "@/app/assets/office.avif"
+import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -13,11 +11,14 @@ import { ConstructorsType, PropertyType } from "../utils/types";
 import Link from "next/link";
 
 import { OurConstructionsCompanies } from "./components/OurConstructionsCompanies";
-import { ActingCities } from "./components/ActingCities";
+// import { ActingCities } from "./components/ActingCities";
+import {motion, useInView} from 'framer-motion'
 import { MainPanel } from "../components/MainPanel/MainPanel";
 import { Footer } from "../components/Footer/Footer";
 import { resetFilterValues, setFilterValues } from "../features/filterValues/filterValuesSlice";
 import { useDispatch } from "react-redux";
+import { OfficeImage } from "./components/OfficeImage";
+import { ScrollToTop } from "../components/ScrollToTop";
 
 function InicialPage () {   
 
@@ -26,13 +27,11 @@ function InicialPage () {
     const [saleApartments, setSaleApartments] = useState<PropertyType[] | null>([])
     const [construtoras, setConstrutoras] = useState<ConstructorsType[]>([])
 
-    const locObj = saleApartments.reduce<Record<string, string[]>>((acc, house) => {
-        acc[house.cidade] = acc[house.cidade] ?? [];
-        acc[house.cidade].push(house.bairro);
-        return acc;
-      }, {});
-
-      console.log("locObj", locObj)
+    // const locObj = saleApartments.reduce<Record<string, string[]>>((acc, house) => {
+    //     acc[house.cidade] = acc[house.cidade] ?? [];
+    //     acc[house.cidade].push(house.bairro);
+    //     return acc;
+    //   }, {});
 
     const furnishedApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Mobiliado"))[0]
     const quadraMarApartment = saleApartments?.filter((ap) => ap.buildingProfile?.includes("Quadra Mar"))[0]
@@ -69,6 +68,13 @@ function InicialPage () {
 
 const [siteData, setSiteData] = useState(null);
 
+    const titleRef = useRef(null)
+    const isTitleOnView = useInView(titleRef, {once: true});
+    const cityNameRef = useRef(null);
+    const isCityNameOnView = useInView(cityNameRef, {once: true});
+    const employeeInfoRef = useRef(null)
+    const isEmployeeInformationsOnView = useInView(employeeInfoRef, {once: true})
+
 useEffect(() => {
   const fetchSiteData = async () => {
     const docRef = doc(db, "settings", "site");
@@ -80,9 +86,6 @@ useEffect(() => {
   fetchSiteData();
   dispatch(resetFilterValues())
 }, []);
-
-console.log({siteData})
-console.log("apartamentos", {saleApartments})
 
 
     useEffect(() => {
@@ -152,19 +155,54 @@ console.log("apartamentos", {saleApartments})
 
             </div>
         
-
-
-            <section className="w-full md:w-11/12 lg:w-10/12 pt-14 px-20 md:px-20 lg:px-28 bg-zinc-100 overflow-x-hidden">
-                <h3 className="text-xl md:text-2xl">CONHEÇA A MELHOR IMOBILIARIA DE</h3>
-                <h1 className="text-primary text-5xl lg:text-6xl font-extrabold tracking-wide">Itapema/SC</h1>
+            <section className="w-full md:w-11/12 lg:w-10/12 py-14 px-20 md:px-20 lg:px-28 bg-zinc-100 overflow-x-hidden">
+                <motion.h3
+                ref={titleRef} 
+                initial={{
+                    opacity: 0,
+                    x: -10
+                }}
+                animate={isTitleOnView ? {
+                    opacity:1,
+                    x:0
+                } : {}}
+                transition={{
+                    duration: 0.5,
+                    delay: 0.4
+                }}
+                className="text-xl md:text-2xl">CONHEÇA A MELHOR IMOBILIARIA DE</motion.h3>
+                
+                <motion.h1
+                ref={cityNameRef}
+                initial={{
+                    opacity: 0,
+                }}
+                animate={isCityNameOnView ? {
+                    opacity:1,
+                } : {}}
+                transition={{
+                    duration: 0.5,
+                    delay: 0.7
+                }}
+                className="text-primary text-5xl lg:text-6xl font-extrabold tracking-wide">Itapema/SC</motion.h1>
 
                 <div className="w-44 h-[2px] bg-black mt-3"/>
 
-                <div className="relative object-cover w-full h-80 mt-12">
-                <Image src={office} fill alt="imagem-estabelecimento"/>
-                </div>
+                <OfficeImage/>
 
-                <div className="flex flex-col lg:flex-row items-center lg:justify-around mt-7">
+                <motion.div 
+                initial={{  
+                    opacity: 0,
+                }}
+                animate={isEmployeeInformationsOnView ? {
+                    opacity:1,
+                } : {}}
+                transition={{
+                    duration: 0.5,
+                    delay: 0.6
+                }}
+                ref={employeeInfoRef}
+                className="flex flex-col lg:flex-row items-center lg:justify-around mt-7">
 
                     <div>
                         {
@@ -216,13 +254,9 @@ console.log("apartamentos", {saleApartments})
                     )
                 }
 
-                </div>
+                </motion.div>
 
             </section>
-
-
-            
-
 
              {/* CONDOMINIOS */}
 
@@ -255,6 +289,8 @@ console.log("apartamentos", {saleApartments})
             </section> */}
 
         </main>
+
+        <ScrollToTop/>
 
         <Footer/>
         </>

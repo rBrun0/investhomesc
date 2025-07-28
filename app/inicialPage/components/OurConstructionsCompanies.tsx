@@ -28,7 +28,7 @@ export const OurConstructionsCompanies = ({construtoras}: ConstructionsProps) =>
             }
         </ul>
 
-        <div onClick={() => setSeeAllConstructors(!seeAllConstructors)} className="bg-customPrimary text-white rounded-md px-2 py-1 mt-8 cursor-pointer"
+        <div onClick={() => setSeeAllConstructors(!seeAllConstructors)} className=" text-customPrimary rounded-md px-2 py-1 mt-8 cursor-pointer"
             >{seeAllConstructors ? "Ver menos construtoras" : "Ver mais construtoras"}
         </div>
 
